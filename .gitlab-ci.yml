@@ -7,9 +7,9 @@ pages:
 
   script:
   - npm install -g harp
-  - harp compile ./src www
+  - harp compile ./src public
   artifacts:
     paths:
-    - www
+    - public
   only:
   - master

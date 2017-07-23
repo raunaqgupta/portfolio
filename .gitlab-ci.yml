@@ -9,7 +9,7 @@ pages:
     - node_modules
 
   script:
-  - cp node_modules/tachyons/css/tachyons.min.css ./public/css && mv ./public ./public-src harp compile ./public-src public
+  - cp node_modules/tachyons/css/tachyons.min.css ./public/css && mv ./public public-src && harp compile ./public-src public
   artifacts:
     paths:
     - public

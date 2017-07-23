@@ -7,7 +7,7 @@ pages:
 
   script:
   - npm install -g harp
-  - cp node_modules/tachyons/css/tachyons.min.css ./src/css && harp compile ./public www
+  - cp node_modules/tachyons/css/tachyons.min.css ./public/css && harp compile ./public www
   artifacts:
     paths:
     - www

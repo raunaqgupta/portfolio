@@ -1,5 +1,5 @@
 div(id="container")
   for article, slug in public.posts._data
-    a(href="/posts/#{ slug }" class="link dim navy")
+    a(href="/posts/#{ slug }.html" class="link dim navy")
       div(id="card" class="mw6 bg-white ma2 ba b--lightest-blue pa1")
         img(src="#{ article.thumbnail }" class="db w-100")

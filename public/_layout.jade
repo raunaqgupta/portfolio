@@ -1,7 +1,5 @@
-doctype
-html
-  head
-    link(rel="stylesheet" href="css/tachyons.min.css")
-    link(rel="stylesheet" href="css/main.css")
-  body
-    != yield
+!= partial("_partials/_header")
+body(class="bg-washed-blue navy avenir center mw6-ns")
+  != partial("_partials/_nav")
+  != yield
+  != partial("_partials/_footer")

@@ -1,8 +1,9 @@
 {
-  "arkin_net": {
-    "title": "Arkin.net",
+  "arkin": {
+    "title": "Arkin",
     "link": "https://www.vmware.com/products/vrealize-network-insight.html",
-    "thumbnail": "../assets/images/arkin/thumbnail.png"
+    "thumbnail": "../assets/images/arkin/thumbnail.png",
+    "hero": true
   },
 
   "baloonr": {

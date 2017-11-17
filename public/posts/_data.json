@@ -18,12 +18,6 @@
     "thumbnail": "../assets/images/4today/thumbnail.png"
   },
 
-  // "swrm_io": {
-  //   "title": "Swrm.io",
-  //   "link": "",
-  //   "thumbnail": "../assets/images/swrm_io/thumbnail.png"
-  // },
-
   "historian": {
     "title": "Historian",
     "link": "",
@@ -34,11 +28,5 @@
     "title": "Levels",
     "link": "",
     "thumbnail": "../assets/images/levels/thumbnail.png"
-  },
-
-  // "comic_circuit": {
-  //   "title": "Comic Circuit",
-  //   "link": "",
-  //   "thumbnail": "../assets/images/comic_circuit/thumbnail.png"
-  // }
+  }
 }

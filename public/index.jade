@@ -1,25 +1,16 @@
-section(class="introduction pa4 near-black")
-  div(class="mw6-ns center")
+section(class="introduction near-black")
+  div(class="mw6-ns center pa4 pa2-ns bb b--light-gray")
     p(class="f3-ns lh-copy") I'm Raunaq Gupta. I design software.
 
-    p(class="f5 lh-copy") I have previously designed and developed software for network virtualization, team communication and crowdsourced design feedback. I also continue to mentor startups and students in UXD.
+    p(class="f5 lh-copy") I have previously designed and developed software for network virtualization, team communication and crowdsourced design feedback. I also mentor startups and students in UXD.
 
     p(class="f5 lh-copy") I have a graduate degree in HCI from Carnegie Mellon University and finished undergraduate studies in Computer Science (Amity University) from India.
 
 section(class="all-projects pv4 mw6-ns center")
 
-  section(class="hero-projects ph4 cf")
+  section(class="hero-projects pa4 pa2-ns cf")
     for article, slug in public.posts._data
-      if article.hero
-        div(class="fl w-100 pb1")
-          div(class="pa1 bg-light-gray br1")
-            a(href="/posts/#{ slug }.html" class="link dim navy")
-              img(src="#{ article.thumbnail }" class="db w-100")
-
-  section(class="projects ph4 cf")
-    each article, slug in public.posts._data
-      if !article.hero
-        div(class="fl w-100 pb1")
-          div(class="pa1 bg-light-gray br1")
-            a(href="/posts/#{ slug }.html" class="link dim navy")
-              img(src="#{ article.thumbnail }" class="db w-100")
+      div(class="fl w-100 pb1")
+        div(class="pa1 bg-light-gray br1")
+          a(href="/posts/#{ slug }.html" class="link dim navy")
+            img(src="#{ article.thumbnail }" class="db w-100")

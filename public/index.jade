@@ -10,7 +10,6 @@ section(class="all-projects pv4 mw6-ns center")
 
   section(class="hero-projects pa4 pa2-ns cf")
     for article, slug in public.posts._data
-      div(class="fl w-100 pb1")
-        div(class="pa1 bg-light-gray br1")
-          a(href="/posts/#{ slug }.html" class="link dim navy")
-            img(src="#{ article.thumbnail }" class="db w-100")
+      div(class="fl w-100 pb3")
+        a(href="/posts/#{ slug }.html" class="link dim navy")
+          img(src="#{ article.thumbnail }" class="project-card db br2 shadow-4")

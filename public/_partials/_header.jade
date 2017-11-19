@@ -10,4 +10,4 @@ html
     meta(name="viewport" content="width=device-width, initial-scale=1")
     title #{title}
     if environment == 'production'
-      script mixpanel.track("page_hit", { "title": "" + #{current.source} })
+      script mixpanel.track("page_hit", { "title": "#{current.source}" })

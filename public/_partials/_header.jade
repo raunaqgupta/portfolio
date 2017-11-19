@@ -9,4 +9,5 @@ html
     link(rel="icon" href="assets/resources/favicon.ico" type="image/x-icon") 
     meta(name="viewport" content="width=device-width, initial-scale=1")
     title #{title}
-    script mixpanel.track("page_hit", { "title": #{title} })
+    if environment == 'production'
+      script mixpanel.track("page_hit", { "title": "" + #{current.source} })

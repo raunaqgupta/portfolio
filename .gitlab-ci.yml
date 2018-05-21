@@ -1,6 +1,6 @@
-image: node:4.2.2
+image: node:latest
 
-before_script:
+before_script:  
   - npm install -g harp
 
 pages:
@@ -9,6 +9,7 @@ pages:
     - node_modules/
 
   script:
+  - npm install
   - cp node_modules/tachyons/css/tachyons.min.css ./public/css && mv ./public public-src && harp compile ./public-src public
   artifacts:
     paths:

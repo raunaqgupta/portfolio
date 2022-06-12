@@ -1,3 +1,4 @@
 # Setup
 
-Gitlab (code) -> Netlify (deployment) -> Cloudflare (DNS)
+Gitlab (code) -> Cloudflare (Deployment + DNS)
+GoDaddy (Domain registration)

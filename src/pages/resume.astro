@@ -1,0 +1,120 @@
+---
+import BaseLayout from "../layouts/baseLayout.astro";
+import WorkItem from "../components/workItem.astro";
+---
+
+<BaseLayout title="Resume">
+  <article>
+    <h2>Notes</h2>
+    <article>
+      <h3>Work permit</h3>
+      <p>H-1B authorization, USA</p>
+      <p>Citizen, India</p>
+    </article>
+  </article>
+  <article>
+    <h2>Work Experience</h2>
+    <WorkItem
+      title="Senior product designer at AppDynamics (Cisco)"
+      from="2021"
+    >
+      <p>
+        Research and design of various product features pertaining to Cisco's
+        AppDynamics division.
+      </p>
+      <p>
+        Active projects include improving overall product navigation experience,
+        and exposing Trace data via the OpenTelemetry specification.
+      </p>
+    </WorkItem>
+    <WorkItem title="UX Designer at PlanetScale" from="2018" to="2021">
+      <p>
+        Design and development of various touchpoints encompassing the web
+        application, and supporting artifacts (marketing website,
+        documentation).
+      </p>
+      <p>
+        Highlights include a simplified dashboard to create and deploy databases
+        online. Focus on making multi-cloud, multi-region, and database sharding
+        easier to grasp and be consumed by developers.
+      </p>
+    </WorkItem>
+    <article>
+      <h3>Freelance</h3>
+      <p>
+        <time datetime="2016">2016</time> - <time datetime="2018">2018</time>
+      </p>
+      <p>
+        Work on multiple projects on contractual terms spanning industries
+        including payment solutions (BillDesk), virtual networking (Juniper
+        Networks), journalism (PARI), fintech (Wobe), and team productivity
+        (Baloonr).
+      </p>
+      <p>
+        Responsibilities primarily included either redesigns of existing
+        products with emphasis on prototyping, or augmenting the in-house team
+        with a designer/developer skillset.
+      </p>
+    </article>
+    <article>
+      <h3>UX Designer at Arkin</h3>
+      <p>Acquired by VMWare; now vRealize Network Insight</p>
+      <p>
+        <time datetime="2014">2014</time> - <time datetime="2016">2016</time>
+      </p>
+      <p>
+        One of two designers tasked with building out a product from scratch to
+        complement an engineering team that grew from 8 to ~50 members before
+        acquisition.
+      </p>
+      <p>
+        Primary focus on simplifying the user experience to aid in monitoring
+        and discovery of various components that make up a datacenter.
+        Highlights include a natural language search interface and
+        highly-scalable visualizations (to accomodate devices in thousands).
+      </p>
+      <p>
+        Co-creator on patent <a
+          href="https://patents.google.com/patent/US9923782B1">US9923782B1</a
+        >
+      </p>
+    </article>
+    <article>
+      <h3>Software Engineer at Aricent Networks (CapGemini)</h3>
+      <p>
+        <time datetime="2010">2010</time> - <time datetime="2012">2012</time>
+      </p>
+      <p>
+        Wrote some C++ code inside a proprietary visual editor to define routing
+        logic for Alcatel Lucent clients in Europe.
+      </p>
+    </article>
+    <article>
+      <h3>Software Engineer at CPA Global</h3>
+      <p>
+        <time datetime="2009">2009</time> - <time datetime="2010">2010</time>
+      </p>
+      <p>
+        Wrote database migration scripts to onboard new clients on a patent
+        portfolio management system sold by CPA Global.
+      </p>
+    </article>
+  </article>
+  <article>
+    <h2>Education</h2>
+    <article>
+      <h3>
+        Master of Human-Computer Interaction from Carnegie Mellon University
+      </h3>
+      <p>
+        <time datetime="2012">2012</time> - <time datetime="2013">2013</time>
+      </p>
+    </article>
+    <article>
+      <h3>Bachelors of Technology in Computer Science from Amity University</h3>
+      <p>
+        <time datetime="2005">2005</time> - <time datetime="2009">2009</time>
+      </p>
+    </article>
+  </article>
+</BaseLayout>

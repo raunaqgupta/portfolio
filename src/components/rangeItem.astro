@@ -1,0 +1,13 @@
+---
+const { title, from, to } = Astro.props;
+---
+
+<article>
+  <h3>{title}</h3>
+  <p>
+    <time datetime={from}>{from}</time> - {
+      to ? <time datetime={to}>{to}</time> : <span>Now</span>
+    }
+  </p>
+  <slot />
+</article>

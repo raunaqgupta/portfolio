@@ -1,20 +1,20 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
-import WorkItem from "../components/workItem.astro";
+import RangeItem from "../components/rangeItem.astro";
 ---
 
 <BaseLayout title="Resume">
   <article>
     <h2>Notes</h2>
     <article>
-      <h3>Work permit</h3>
-      <p>H-1B authorization, USA</p>
+      <h3>Work authorization</h3>
+      <p>H-1B Visa, USA</p>
       <p>Citizen, India</p>
     </article>
   </article>
   <article>
     <h2>Work Experience</h2>
-    <WorkItem
+    <RangeItem
       title="Senior product designer at AppDynamics (Cisco)"
       from="2021"
     >
@@ -26,8 +26,8 @@ import WorkItem from "../components/workItem.astro";
         Active projects include improving overall product navigation experience,
         and exposing Trace data via the OpenTelemetry specification.
       </p>
-    </WorkItem>
-    <WorkItem title="UX Designer at PlanetScale" from="2018" to="2021">
+    </RangeItem>
+    <RangeItem title="UX Designer at PlanetScale" from="2018" to="2021">
       <p>
         Design and development of various touchpoints encompassing the web
         application, and supporting artifacts (marketing website,
@@ -38,12 +38,8 @@ import WorkItem from "../components/workItem.astro";
         online. Focus on making multi-cloud, multi-region, and database sharding
         easier to grasp and be consumed by developers.
       </p>
-    </WorkItem>
-    <article>
-      <h3>Freelance</h3>
-      <p>
-        <time datetime="2016">2016</time> - <time datetime="2018">2018</time>
-      </p>
+    </RangeItem>
+    <RangeItem title="Freelance" from="2016" to="2018">
       <p>
         Work on multiple projects on contractual terms spanning industries
         including payment solutions (BillDesk), virtual networking (Juniper
@@ -55,13 +51,8 @@ import WorkItem from "../components/workItem.astro";
         products with emphasis on prototyping, or augmenting the in-house team
         with a designer/developer skillset.
       </p>
-    </article>
-    <article>
-      <h3>UX Designer at Arkin</h3>
-      <p>Acquired by VMWare; now vRealize Network Insight</p>
-      <p>
-        <time datetime="2014">2014</time> - <time datetime="2016">2016</time>
-      </p>
+    </RangeItem>
+    <RangeItem title="UX Designer at Arkin" from="2014" to="2016">
       <p>
         One of two designers tasked with building out a product from scratch to
         complement an engineering team that grew from 8 to ~50 members before
@@ -74,47 +65,45 @@ import WorkItem from "../components/workItem.astro";
         highly-scalable visualizations (to accomodate devices in thousands).
       </p>
       <p>
-        Co-creator on patent <a
+        Note: Co-creator on patent <a
           href="https://patents.google.com/patent/US9923782B1">US9923782B1</a
         >
       </p>
-    </article>
-    <article>
-      <h3>Software Engineer at Aricent Networks (CapGemini)</h3>
       <p>
-        <time datetime="2010">2010</time> - <time datetime="2012">2012</time>
+        Note: Acquired by VMWare; now <a
+          href="https://www.vmware.com/in/products/vrealize-network-insight.html"
+          >VMWare Aria Operations for Networks</a>
       </p>
+    </RangeItem>
+    <RangeItem
+      title="Software Engineer at Aricent Networks (CapGemini)"
+      from="2010"
+      to="2012"
+    >
       <p>
-        Wrote some C++ code inside a proprietary visual editor to define routing
-        logic for Alcatel Lucent clients in Europe.
+        Wrote C++ functions inside a proprietary visual editor to define
+        business logic for Alcatel Lucent's clients. The product in question was
+        called Flexible Routing Calling (FRC).
       </p>
-    </article>
-    <article>
-      <h3>Software Engineer at CPA Global</h3>
-      <p>
-        <time datetime="2009">2009</time> - <time datetime="2010">2010</time>
-      </p>
+    </RangeItem>
+    <RangeItem title="Software Engineer at CPA Global" from="2009" to="2010">
       <p>
         Wrote database migration scripts to onboard new clients on a patent
         portfolio management system sold by CPA Global.
       </p>
-    </article>
+    </RangeItem>
   </article>
   <article>
     <h2>Education</h2>
-    <article>
-      <h3>
-        Master of Human-Computer Interaction from Carnegie Mellon University
-      </h3>
-      <p>
-        <time datetime="2012">2012</time> - <time datetime="2013">2013</time>
-      </p>
-    </article>
-    <article>
-      <h3>Bachelors of Technology in Computer Science from Amity University</h3>
-      <p>
-        <time datetime="2005">2005</time> - <time datetime="2009">2009</time>
-      </p>
-    </article>
+    <RangeItem
+      title="Master of Human-Computer Interaction from Carnegie Mellon University"
+      from="2012"
+      to="2013"
+    />
+    <RangeItem
+      title="Bachelors of Technology in Computer Science from Amity University"
+      from="2005"
+      to="2009"
+    />
   </article>
 </BaseLayout>

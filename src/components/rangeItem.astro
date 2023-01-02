@@ -6,7 +6,13 @@ const { title, from, to } = Astro.props;
   <h3>{title}</h3>
   <p>
     <time datetime={from}>{from}</time> - {
-      to ? <time datetime={to}>{to}</time> : <span>Now</span>
+      to ? (
+        <time datetime={to}>{to}</time>
+      ) : (
+        <time datetime={new Date().getFullYear().toString()}>
+          {new Date().getFullYear()}
+        </time>
+      )
     }
   </p>
   <slot />

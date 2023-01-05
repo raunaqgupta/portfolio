@@ -2,10 +2,11 @@
 const { title } = Astro.props;
 ---
 
-<html>
+<html lang="en">
   <head>
     <title>{title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Personal website of Raunaq Gupta" />
   </head>
   <body>
     <header>
@@ -16,16 +17,18 @@ const { title } = Astro.props;
   </body>
 </html>
 
-<style>
+<style is:global>
   @font-face {
     font-family: "Manrope";
     src: local("Manrope"), url("/fonts/Manrope-Regular.woff2");
+    font-display: swap;
   }
 
   @font-face {
     font-family: "Manrope";
     font-weight: bold;
     src: local("Manrope"), url("/fonts/Manrope-Bold.woff2");
+    font-display: swap;
   }
 
   body {
@@ -40,9 +43,14 @@ const { title } = Astro.props;
     margin-top: 0;
   }
 
+  ul {
+    list-style-type: circle;
+    padding-inline-start: 1.25em;
+  }
+
   @media only screen and (max-width: 700px) {
     body {
-      padding: 4em 2em;
+      padding: 2em;
     }
   }
 </style>

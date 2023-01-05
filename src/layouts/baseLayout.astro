@@ -7,6 +7,7 @@ const { title } = Astro.props;
     <title>{title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Personal website of Raunaq Gupta" />
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
   </head>
   <body>
     <header>
@@ -34,18 +35,30 @@ const { title } = Astro.props;
   body {
     margin: 0;
     padding: 4em;
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 28px;
     font-family: "Manrope", sans-serif;
     max-width: 69ch;
   }
 
   h1 {
-    margin-top: 0;
+    margin-top: 0.5em;
   }
 
   ul {
-    list-style-type: circle;
-    padding-inline-start: 1.25em;
+    list-style-type: none;
+    padding-inline-start: 0;
+    gap: 8px;
+  }
+
+  a {
+    display: inline;
+    box-sizing: border-box;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 
   @media only screen and (max-width: 700px) {

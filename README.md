@@ -1,5 +1,4 @@
 # Setup
 
-Gitlab (code) -> Cloudflare (Deployment + DNS)
-
+Cloudflare (Deployment + DNS)
 GoDaddy (Domain registration)

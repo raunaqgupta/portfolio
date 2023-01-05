@@ -16,10 +16,22 @@ const { title } = Astro.props;
 </html>
 
 <style>
+  @font-face {
+    font-family: "Manrope";
+    src: local("Manrope"), url("./fonts/Manrope-Regular.woff2");
+  }
+
+  @font-face {
+    font-family: "Manrope";
+    font-weight: bold;
+    src: local("Manrope"), url("./fonts/Manrope-Bold.woff2");
+  }
+
   body {
     margin: 0;
     padding: 4em;
     font-size: 16px;
-    max-width: 75ch;
+    font-family: "Manrope", sans-serif;
+    max-width: 69ch;
   }
 </style>

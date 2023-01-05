@@ -4,19 +4,20 @@ import RangeItem from "../components/rangeItem.astro";
 ---
 
 <BaseLayout title="Resume">
-  <article>
+  <section>
     <h2>Notes</h2>
-    <article>
+    <section>
       <h3>Work authorization</h3>
       <p>H-1B Visa, USA</p>
       <p>Citizen, India</p>
-    </article>
-  </article>
-  <article>
+    </section>
+  </section>
+  <section>
     <h2>Work Experience</h2>
     <RangeItem
       title="Senior product designer at AppDynamics (Cisco)"
       from="2021"
+      to="2023"
     >
       <p>
         Research and design of various product features pertaining to Cisco's
@@ -103,8 +104,8 @@ import RangeItem from "../components/rangeItem.astro";
         portfolio management system sold by CPA Global.
       </p>
     </RangeItem>
-  </article>
-  <article>
+  </section>
+  <section>
     <h2>Education</h2>
     <RangeItem
       title="Master of Human-Computer Interaction from Carnegie Mellon University"
@@ -116,5 +117,5 @@ import RangeItem from "../components/rangeItem.astro";
       from="2005"
       to="2009"
     />
-  </article>
+  </section>
 </BaseLayout>

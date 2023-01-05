@@ -3,40 +3,31 @@ import BaseLayout from "../layouts/baseLayout.astro";
 ---
 
 <BaseLayout title="Home">
-  <article>
+  <section>
     <h2>Contact</h2>
     <address>
-      <h3>Email</h3>
-      <a href="mailto: mail@raunaqgupta.com">mail@raunaqgupta.com</a>
-      <h3>Location</h3>
-      <p>San Francisco, CA</p>
+      <ul>
+        <li>
+          Email: <a href="mailto: mail@raunaqgupta.com">mail@raunaqgupta.com</a>
+        </li>
+        <li>
+          Social: <a
+            rel="external noopener"
+            href="https://linkedin.com/in/raunaqgupta">LinkedIn</a
+          >, <a rel="external noopener" href="https://twitter.com/raunaqgupta"
+            >Twitter</a
+          >, <a rel="external noopener" href="https://github.com/raunaqgupta"
+            >Github</a
+          >
+        </li>
+      </ul>
     </address>
-  </article>
-  <article>
+  </section>
+  <section>
     <h2>Links</h2>
     <ul>
       <li><a href="/resume">Resume</a></li>
       <li><a href="/projects">Projects</a></li>
     </ul>
-  </article>
-  <article>
-    <h2>External Links</h2>
-    <ul>
-      <li>
-        <a rel="external noopener" href="https://linkedin.com/in/raunaqgupta"
-          >LinkedIn</a
-        >
-      </li>
-      <li>
-        <a rel="external noopener" href="https://twitter.com/raunaqgupta"
-          >Twitter</a
-        >
-      </li>
-      <li>
-        <a rel="external noopener" href="https://github.com/raunaqgupta"
-          >Github</a
-        >
-      </li>
-    </ul>
-  </article>
+  </section>
 </BaseLayout>

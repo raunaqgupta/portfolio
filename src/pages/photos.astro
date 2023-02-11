@@ -3,5 +3,17 @@ import BaseLayout from "../layouts/baseLayout.astro";
 ---
 
 <BaseLayout title="Photos">
-  <p>TODO</p>
+  <div class="photo">
+    <img src="/photos/IMG_4382.jpeg" />
+  </div>
 </BaseLayout>
+
+<style>
+  .photo {
+    width: 400px;
+  }
+
+  .photo > img {
+    width: 100%;
+  }
+</style>

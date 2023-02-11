@@ -20,15 +20,8 @@ const { title } = Astro.props;
 
 <style is:global>
   @font-face {
-    font-family: "Manrope";
-    src: local("Manrope"), url("/fonts/Manrope-Regular.woff2");
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: "Manrope";
-    font-weight: bold;
-    src: local("Manrope"), url("/fonts/Manrope-Bold.woff2");
+    font-family: "Urbanist";
+    src: local("Urbanist"), url("/fonts/Urbanist-VariableFont_wght.ttf");
     font-display: swap;
   }
 
@@ -40,10 +33,17 @@ const { title } = Astro.props;
     font-family: "Manrope", sans-serif;
     max-width: 69ch;
     background-color: #f6f6f6;
+    color: #333;
   }
 
   h1 {
     margin-top: 0.5em;
+    font-weight: 200;
+  }
+
+  h2 {
+    margin-top: 2em;
+    font-weight: 200;
   }
 
   ul {

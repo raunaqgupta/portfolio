@@ -59,16 +59,24 @@ const { title } = Astro.props;
     color: rgb(78, 78, 185);
   }
 
+  a:hover {
+    border-bottom: 2px solid;
+    transition: border-bottom ease-out 100ms;
+  }
+
   a.subtle {
     display: inline;
+    padding-bottom: 2px;
     box-sizing: border-box;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #ccc;
     color: rgb(0, 0, 0);
   }
 
-  a:hover {
-    border-bottom: 2px solid;
-    transition: border-bottom ease 100ms;
+  a.subtle:hover {
+    border-bottom-width: 2px;
+    border-bottom-color: #000;
+    transition: border-bottom-width ease-out 100ms,
+      border-bottom-color ease-in 50ms;
   }
 
   @media only screen and (max-width: 700px) {

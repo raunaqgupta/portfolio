@@ -8,29 +8,21 @@ const jobs = await Astro.glob("../data/*.work-experience.md");
   <section id="work-experience">
     <h2>Work Experience</h2>
     {
-      jobs.map((job) => (
-        <RangeItem
-          title={`${job.frontmatter.role} at ${job.frontmatter.organization}`}
-          from={job.frontmatter.from}
-          to={job.frontmatter.to}
-        >
-          <job.Content />
-        </RangeItem>
-      ))
+      jobs
+        .sort((a, b) => {
+          return b.frontmatter.from - a.frontmatter.from;
+        })
+        .map((job) => (
+          <RangeItem
+            title={job.frontmatter.role}
+            org={job.frontmatter.organization}
+            from={job.frontmatter.from}
+            to={job.frontmatter.to}
+          >
+            <job.Content />
+          </RangeItem>
+        ))
     }
-    <RangeItem title="Freelance" from="2016" to="2018">
-      <p>
-        Work on multiple projects on contractual terms spanning industries
-        including payment solutions (BillDesk), virtual networking (Juniper
-        Networks), journalism (PARI), fintech (Wobe), and team productivity
-        (Baloonr).
-      </p>
-      <p>
-        Responsibilities primarily included either redesigns of existing
-        products with emphasis on prototyping, or augmenting the in-house team
-        with a designer/developer skillset.
-      </p>
-    </RangeItem>
     <RangeItem title="UX Designer at Arkin" from="2014" to="2016">
       <p>
         One of two designers tasked with building out a product from scratch to

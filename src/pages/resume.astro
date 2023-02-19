@@ -2,110 +2,47 @@
 import BaseLayout from "../layouts/baseLayout.astro";
 import RangeItem from "../components/rangeItem.astro";
 const jobs = await Astro.glob("../data/*.work-experience.md");
+const education = await Astro.glob("../data/*.education.md");
 ---
 
 <BaseLayout title="Resume">
   <section id="work-experience">
     <h2>Work Experience</h2>
     {
-      jobs.map((job) => (
-        <RangeItem
-          title={`${job.frontmatter.role} at ${job.frontmatter.organization}`}
-          from={job.frontmatter.from}
-          to={job.frontmatter.to}
-        >
-          <job.Content />
-        </RangeItem>
-      ))
+      jobs
+        .sort((a, b) => {
+          return b.frontmatter.from - a.frontmatter.from;
+        })
+        .map((job) => (
+          <RangeItem
+            title={job.frontmatter.role}
+            org={job.frontmatter.organization}
+            from={job.frontmatter.from}
+            to={job.frontmatter.to}
+          >
+            <job.Content />
+          </RangeItem>
+        ))
     }
-    <RangeItem title="Freelance" from="2016" to="2018">
-      <p>
-        Work on multiple projects on contractual terms spanning industries
-        including payment solutions (BillDesk), virtual networking (Juniper
-        Networks), journalism (PARI), fintech (Wobe), and team productivity
-        (Baloonr).
-      </p>
-      <p>
-        Responsibilities primarily included either redesigns of existing
-        products with emphasis on prototyping, or augmenting the in-house team
-        with a designer/developer skillset.
-      </p>
-    </RangeItem>
-    <RangeItem title="UX Designer at Arkin" from="2014" to="2016">
-      <p>
-        One of two designers tasked with building out a product from scratch to
-        complement an engineering team that grew from 8 to ~50 members before
-        acquisition.
-      </p>
-      <p>
-        Primary focus on simplifying the user experience to aid in monitoring
-        and discovery of various components that make up a datacenter.
-        Highlights include a natural language search interface and
-        highly-scalable visualizations (to accomodate devices in thousands).
-      </p>
-      <p>
-        Note: Co-creator on patent <a
-          class="subtle"
-          href="https://patents.google.com/patent/US9923782B1">US9923782B1</a
-        >
-      </p>
-      <p>
-        Note: Acquired by VMWare; now <a
-          class="subtle"
-          href="https://www.vmware.com/in/products/vrealize-network-insight.html"
-          >VMWare Aria Operations for Networks</a
-        >
-      </p>
-    </RangeItem>
-    <RangeItem title="UX Engineer intern at IBM" from="2013" to="2013">
-      <p>
-        3 month stint at IBM Watson Pittsburgh learning and utilizing various
-        skills around software design and development and fucking up while using
-        git.
-      </p>
-    </RangeItem>
-    <RangeItem
-      title="Software Engineer at Aricent Networks (CapGemini)"
-      from="2010"
-      to="2012"
-    >
-      <p>
-        Wrote C++ functions inside a proprietary visual editor to define
-        business logic for Alcatel Lucent's clients. The product in question was
-        called <a
-          class="subtle"
-          href="https://www.industry-plaza.com/alcatel-lucent-8642-flexible-routing-and-p57238.html"
-          >ALU 8642 Flexible Routing and Charging <abbr>(FRC)</abbr>
-        </a>.
-      </p>
-    </RangeItem>
-    <RangeItem title="Software Engineer at CPA Global" from="2009" to="2010">
-      <p>
-        Wrote database migration scripts to onboard new clients on a patent
-        portfolio management system sold by CPA Global.
-      </p>
-    </RangeItem>
   </section>
   <section id="education">
     <h2>Education</h2>
-    <RangeItem
-      title="Master of Human-Computer Interaction from Carnegie Mellon University"
-      from="2012"
-      to="2013"
-    />
-    <RangeItem
-      title="Bachelors of Technology in Computer Science from Amity University"
-      from="2005"
-      to="2009"
-    />
-  </section>
-  <section id="notes">
-    <h2>Notes</h2>
-    <section>
-      <h3>Work authorization</h3>
-      <p>H-1B Visa, USA</p>
-      <p>Citizen, India</p>
-    </section>
+    {
+      education
+        .sort((a, b) => {
+          return b.frontmatter.from - a.frontmatter.from;
+        })
+        .map((item) => (
+          <RangeItem
+            title={item.frontmatter.role}
+            org={item.frontmatter.organization}
+            from={item.frontmatter.from}
+            to={item.frontmatter.to}
+          >
+            <item.Content />
+          </RangeItem>
+        ))
+    }
   </section>
 </BaseLayout>
 

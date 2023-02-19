@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/baseLayout.astro";
 import RangeItem from "../components/rangeItem.astro";
 const jobs = await Astro.glob("../data/*.work-experience.md");
+const education = await Astro.glob("../data/*.education.md");
 ---
 
 <BaseLayout title="Resume">
@@ -26,16 +27,22 @@ const jobs = await Astro.glob("../data/*.work-experience.md");
   </section>
   <section id="education">
     <h2>Education</h2>
-    <RangeItem
-      title="Master of Human-Computer Interaction from Carnegie Mellon University"
-      from="2012"
-      to="2013"
-    />
-    <RangeItem
-      title="Bachelors of Technology in Computer Science from Amity University"
-      from="2005"
-      to="2009"
-    />
+    {
+      education
+        .sort((a, b) => {
+          return b.frontmatter.from - a.frontmatter.from;
+        })
+        .map((item) => (
+          <RangeItem
+            title={item.frontmatter.role}
+            org={item.frontmatter.organization}
+            from={item.frontmatter.from}
+            to={item.frontmatter.to}
+          >
+            <item.Content />
+          </RangeItem>
+        ))
+    }
   </section>
   <section id="notes">
     <h2>Notes</h2>

@@ -1,5 +1,5 @@
 ---
-role: Software Engineer
+role: Software engineer
 organization: CPA Global
 from: 2009
 to: 2010

@@ -1,5 +1,5 @@
 ---
-role: UX Engineer Intern
+role: Design engineer intern
 organization: IBM
 from: 2013
 to: 2013

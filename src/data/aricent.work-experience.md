@@ -1,5 +1,5 @@
 ---
-role: Software Engineer
+role: Software engineer
 organization: Aricent Networks
 from: 2010
 to: 2012

@@ -1,5 +1,5 @@
 ---
-role: Interaction (UX) designer
+role: Product designer
 organization: Arkin
 from: 2014
 to: 2016

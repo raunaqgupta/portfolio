@@ -11,7 +11,7 @@ const { title } = Astro.props;
   </head>
   <body>
     <header>
-      <nav><div><a href="/">Raunaq Gupta</a> /</div></nav>
+      <nav><div><a class="muted" href="/">Raunaq Gupta</a> /</div></nav>
       <h1>{title}</h1>
     </header>
     <slot />
@@ -46,11 +46,6 @@ const { title } = Astro.props;
     color: #ccc;
   }
 
-  nav a {
-    color: #666;
-    border-bottom-color: transparent;
-  }
-
   h1 {
     margin-top: 0.25em;
     font-weight: 200;
@@ -78,10 +73,15 @@ const { title } = Astro.props;
     color: rgb(0, 0, 0);
   }
 
+  a.muted {
+    color: #666;
+    border-bottom-color: transparent;
+  }
+
   a:hover {
     border-bottom-width: 2px;
     border-bottom-color: #000;
-    transition: border-bottom-width ease-out 100ms,
+    transition: border -bottom-width ease-out 100ms,
       border-bottom-color ease-in 50ms;
   }
 
@@ -90,4 +90,5 @@ const { title } = Astro.props;
       padding: 2em;
     }
   }
+</style>
 </style>

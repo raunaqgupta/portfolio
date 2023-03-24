@@ -43,7 +43,9 @@ const { title } = Astro.props;
   }
 
   nav {
+    font-size: 14px;
     color: #ccc;
+    font-weight: 100;
   }
 
   h1 {
@@ -74,7 +76,7 @@ const { title } = Astro.props;
   }
 
   a.muted {
-    color: #666;
+    color: #999;
     border-bottom-color: transparent;
   }
 
@@ -85,10 +87,14 @@ const { title } = Astro.props;
       border-bottom-color ease-in 50ms;
   }
 
+  a.muted:hover {
+    border-bottom-width: 1px;
+    border-bottom-color: #ccc;
+  }
+
   @media only screen and (max-width: 700px) {
     body {
       padding: 2em;
     }
   }
-</style>
 </style>

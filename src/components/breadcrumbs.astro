@@ -1,0 +1,22 @@
+---
+const { links } = Astro.props;
+---
+
+<nav>
+  {
+    links.map((link) => (
+      <>
+        <a href={link.url}>{link.text}</a>
+        <span>/</span>
+      </>
+    ))
+  }
+</nav>
+
+<style>
+  nav {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+</style>

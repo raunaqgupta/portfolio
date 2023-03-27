@@ -1,5 +1,6 @@
 ---
-const { title } = Astro.props;
+const { title, links } = Astro.props;
+import Breadcrumbs from "../components/breadcrumbs.astro";
 ---
 
 <html lang="en">
@@ -11,9 +12,7 @@ const { title } = Astro.props;
   </head>
   <body>
     <header>
-      <nav>
-        <a class="muted" href="/"><img id="logo" src="/logo.svg" /></a>
-      </nav>
+      <Breadcrumbs links={links} />
       <h1>{title}</h1>
     </header>
     <slot />
@@ -49,17 +48,6 @@ const { title } = Astro.props;
     font-size: 14px;
     color: #ccc;
     font-weight: 100;
-  }
-
-  nav a {
-    display: flex;
-    padding: 0;
-    margin: 0;
-    border: 0;
-  }
-
-  nav img#logo {
-    width: 16px;
   }
 
   h1 {

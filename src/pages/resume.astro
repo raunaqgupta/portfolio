@@ -3,9 +3,10 @@ import BaseLayout from "../layouts/baseLayout.astro";
 import RangeItem from "../components/rangeItem.astro";
 const jobs = await Astro.glob("../data/*.work-experience.md");
 const education = await Astro.glob("../data/*.education.md");
+const links = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
-<BaseLayout title="Resume">
+<BaseLayout title="Resume" links={links}>
   <section id="work-experience">
     <h2>Work experience</h2>
     {

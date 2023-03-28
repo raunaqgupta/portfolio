@@ -1,41 +1,28 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
+import Card from "../components/card.astro";
+const sundries = await Astro.glob("../data/*.sundries.md");
 const links = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
 <BaseLayout title="Sundries" links={links}>
-  <div class="card">
-    <h2>PlanetScale docs</h2>
-    <img src="/sundries/planetscale_docs_homepage.png" />
-    <p>
-      PlanetScale documentation refresh in 2021. Illustrations by <a
-        href="https://www.linkedin.com/in/shaun-middlebusher"
-        >Shaun Middlebusher</a
-      >. Design work included maintaining parity with ongoing visual refresh of
-      app.planetscale.com. Development work included migration from Gatsby to
-      Next.js alongside stitches.js as the styling framework.
-    </p>
-
-    <img src="/sundries/planetscale_docs_inline_image_zoom.png" />
-    <p>
-      In a 3-column layout, clicking on an image zooms it to take up space equal
-      to last 2 columns. The image will overlay the in-page navigation but zooms
-      out on scrolling out of view.
-    </p>
-  </div>
+  {
+    sundries
+      .sort((a, b) => {
+        return b.frontmatter.from - a.frontmatter.from;
+      })
+      .map((sundry) => (
+        <Card title={sundry.frontmatter.title}>
+          <sundry.Content />
+        </Card>
+      ))
+  }
 </BaseLayout>
 
 <style>
-  figure.card {
+  div.card {
     margin: 0;
     width: 100%;
     max-width: 69ch;
-  }
-
-  .card img {
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    /* background-color: white; */
   }
 </style>

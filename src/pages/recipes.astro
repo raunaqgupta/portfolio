@@ -1,19 +1,10 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
+import List from "../components/list.astro";
 const recipes = await Astro.glob("../data/*.recipe.md");
 const links = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
 <BaseLayout title="Recipes" links={links}>
-  <ul>
-    {
-      recipes
-        .sort((a, b) => a.frontmatter.title.localeCompare(b.frontmatter.title))
-        .map((recipe) => (
-          <li>
-            <a href={recipe.frontmatter.url}>{recipe.frontmatter.title}</a>
-          </li>
-        ))
-    }
-  </ul>
+  <List list={recipes} />
 </BaseLayout>

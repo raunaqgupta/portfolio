@@ -34,7 +34,7 @@ import Breadcrumbs from "../components/breadcrumbs.astro";
 
   body {
     margin: 0;
-    padding: 4em;
+    padding: 4em 8em;
     font-size: 18px;
     line-height: 28px;
     font-family: "Manrope", sans-serif;
@@ -104,6 +104,12 @@ import Breadcrumbs from "../components/breadcrumbs.astro";
 
   a.muted:hover {
     border-bottom-width: 0;
+  }
+
+  @media only screen and (max-width: 1024px) {
+    body {
+      padding: 4em;
+    }
   }
 
   @media only screen and (max-width: 700px) {

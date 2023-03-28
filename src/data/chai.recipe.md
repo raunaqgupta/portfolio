@@ -1,5 +1,6 @@
 ---
 title: Chai
+tags: ["chai", "beverage", "recipe", "drink"]
 ---
 
 ## Ingredients

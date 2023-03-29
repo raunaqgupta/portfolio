@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../layouts/baseLayout.astro";
+import List from "../components/list.astro";
+const recipes = await Astro.glob("../data/*.recipe.md");
+const links = [{ text: "Raunaq Gupta", url: "/" }];
+---
+
+<BaseLayout title="Recipes" links={links}>
+  <List list={recipes} />
+</BaseLayout>

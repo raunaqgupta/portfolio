@@ -1,0 +1,15 @@
+---
+const { list } = Astro.props;
+---
+
+<ul>
+  {
+    list
+      .sort((a, b) => a.frontmatter.title.localeCompare(b.frontmatter.title))
+      .map((list) => (
+        <li>
+          <a href={list.frontmatter.url}>{list.frontmatter.title}</a>
+        </li>
+      ))
+  }
+</ul>

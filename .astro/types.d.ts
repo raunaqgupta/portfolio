@@ -1,5 +1,15 @@
 declare module 'astro:content' {
 	interface Render {
+		'.mdx': Promise<{
+			Content: import('astro').MarkdownInstance<{}>['Content'];
+			headings: import('astro').MarkdownHeading[];
+			remarkPluginFrontmatter: Record<string, any>;
+		}>;
+	}
+}
+
+declare module 'astro:content' {
+	interface Render {
 		'.md': Promise<{
 			Content: import('astro').MarkdownInstance<{}>['Content'];
 			headings: import('astro').MarkdownHeading[];
@@ -87,13 +97,13 @@ declare module 'astro:content' {
 
 	const entryMap: {
 		"projects": {
-"planetscale-docs-refresh.md": {
-  id: "planetscale-docs-refresh.md",
+"planetscale-docs-refresh.mdx": {
+  id: "planetscale-docs-refresh.mdx",
   slug: "planetscale-docs-refresh",
   body: string,
   collection: "projects",
   data: InferEntrySchema<"projects">
-} & { render(): Render[".md"] },
+} & { render(): Render[".mdx"] },
 },
 
 	};

@@ -4,8 +4,6 @@ import List from "../components/list.astro";
 import { getCollection } from "astro:content";
 const projects = await getCollection("projects");
 const links = [{ text: "Raunaq Gupta", url: "/" }];
-
-console.log(projects);
 ---
 
 <BaseLayout title="Projects" links={links}>

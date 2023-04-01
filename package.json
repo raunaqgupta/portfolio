@@ -13,6 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "astro": "^1.6.14"
+    "astro": "^2.1.8"
   }
 }

@@ -1,8 +1,6 @@
 ---
 title: PlanetScale Docs Refresh
 organization: PlanetScale
-from: 2021
-to: 2021
 ---
 
 ### Before

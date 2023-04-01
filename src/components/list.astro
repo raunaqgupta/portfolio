@@ -5,10 +5,10 @@ const { list } = Astro.props;
 <ul>
   {
     list
-      .sort((a, b) => a.frontmatter.title.localeCompare(b.frontmatter.title))
+      .sort((a, b) => a.data.title.localeCompare(b.data.title))
       .map((list) => (
         <li>
-          <a href={list.frontmatter.url}>{list.frontmatter.title}</a>
+          <a href={"/projects/" + list.slug}>{list.data.title}</a>
         </li>
       ))
   }

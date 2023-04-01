@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../layouts/baseLayout.astro";
+import Imgmdx from "../../components/img.mdx.astro";
+
 import { getCollection } from "astro:content";
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -10,7 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content, components } = await entry.render();
 const links = [
   { text: "Raunaq Gupta", url: "/" },
   { text: "Projects", url: "/projects" },
@@ -18,5 +20,5 @@ const links = [
 ---
 
 <BaseLayout title={entry.data.title} links={links}>
-  <Content />
+  <Content components={{...components, img: Imgmdx}} />
 </BaseLayout>

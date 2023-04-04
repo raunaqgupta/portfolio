@@ -1,11 +1,8 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
-import List from "../components/list.astro";
-import { getCollection } from "astro:content";
-const projects = await getCollection("projects");
 const links = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
 <BaseLayout title="404" links={links}>
-  <p>{Astro.url.pathname} does not exist. <a href="/">Go home</a></p>
+  <p>The request artifact does not exist.
 </BaseLayout>

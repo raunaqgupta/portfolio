@@ -7,5 +7,5 @@ const links = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
 <BaseLayout title="404" links={links}>
-  <p>{Astro.url.pathname} does not exist. <a href="/">Go home</a></p>
+  <p>{Astro.request.url} does not exist. <a href="/">Go home</a></p>
 </BaseLayout>

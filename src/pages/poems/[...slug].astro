@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../layouts/baseLayout.astro";
+import Imgmdx from "../../components/img.mdx.astro";
+
+import { getCollection } from "astro:content";
+export async function getStaticPaths() {
+  const poems = await getCollection("poems");
+  return poems.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, components } = await entry.render();
+const links = [
+  { text: "Raunaq Gupta", url: "/" },
+  { text: "Poems", url: "/poems" },
+];
+---
+
+<BaseLayout title={entry.data.title} links={links}>
+  <Content components={{...components, img: Imgmdx}} />
+</BaseLayout>

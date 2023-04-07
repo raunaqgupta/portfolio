@@ -96,7 +96,16 @@ declare module 'astro:content' {
 	>;
 
 	const entryMap: {
-		"projects": {
+		"poems": {
+"bowl.md": {
+  id: "bowl.md",
+  slug: "bowl",
+  body: string,
+  collection: "poems",
+  data: InferEntrySchema<"poems">
+} & { render(): Render[".md"] },
+},
+"projects": {
 "planetscale-docs-refresh.mdx": {
   id: "planetscale-docs-refresh.mdx",
   slug: "planetscale-docs-refresh",

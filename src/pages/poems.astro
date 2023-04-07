@@ -2,10 +2,10 @@
 import BaseLayout from "../layouts/baseLayout.astro";
 import List from "../components/list.astro";
 import { getCollection } from "astro:content";
-const projects = await getCollection("projects");
+const poems = await getCollection("poems");
 const links = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
-<BaseLayout title="Projects" links={links}>
-  <List parent="projects" list={projects} />
+<BaseLayout title="Poems" links={links}>
+  <List parent="poems" list={poems} />
 </BaseLayout>

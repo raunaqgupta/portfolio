@@ -1,5 +1,5 @@
 ---
-const { list } = Astro.props;
+const { parent, list } = Astro.props;
 ---
 
 <ul>
@@ -8,7 +8,7 @@ const { list } = Astro.props;
       .sort((a, b) => a.data.title.localeCompare(b.data.title))
       .map((list) => (
         <li>
-          <a href={"/projects/" + list.slug}>{list.data.title}</a>
+          <a href={`/${parent}/` + list.slug}>{list.data.title}</a>
         </li>
       ))
   }

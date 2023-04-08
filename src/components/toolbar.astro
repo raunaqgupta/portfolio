@@ -1,0 +1,22 @@
+---
+const { date } = Astro.props
+const format = { year: 'numeric', month: 'long', day: 'numeric' }
+const formattedDate = date.toLocaleDateString('en-US', format )
+---
+
+<div class="toolbar">
+  <div class="children">
+    <span>{formattedDate}</span>
+  </div>
+</div>
+
+<style>
+  .toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    font-size: 12px;
+    font-weight: 100;
+    color: #999;
+  }
+</style>

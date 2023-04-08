@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/baseLayout.astro";
 import Imgmdx from "../../components/img.mdx.astro";
 
 import { getCollection } from "astro:content";
+import Toolbar from "../../components/toolbar.astro";
 export async function getStaticPaths() {
   const poems = await getCollection("poems");
   return poems.map((entry) => ({
@@ -19,6 +20,7 @@ const links = [
 ];
 ---
 
-<BaseLayout title={entry.data.title} links={links}>
+<BaseLayout title={entry.data.title} links={links}>  
   <Content components={{...components, img: Imgmdx}} />
+  <Toolbar date={entry.data.date}/>
 </BaseLayout>

@@ -104,6 +104,13 @@ declare module 'astro:content' {
   collection: "poems",
   data: InferEntrySchema<"poems">
 } & { render(): Render[".md"] },
+"throat.md": {
+  id: "throat.md",
+  slug: "throat",
+  body: string,
+  collection: "poems",
+  data: InferEntrySchema<"poems">
+} & { render(): Render[".md"] },
 },
 "projects": {
 "planetscale-docs-refresh.mdx": {

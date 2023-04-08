@@ -10,5 +10,5 @@ Crudely made
 
 Bumps, ridges, patches of glaze  
 I have wondered if they were deliberate  
-Or hands me down  
+Or hand me downs  
 Is the purpose betrayed?

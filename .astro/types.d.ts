@@ -111,6 +111,13 @@ declare module 'astro:content' {
   collection: "poems",
   data: InferEntrySchema<"poems">
 } & { render(): Render[".md"] },
+"yellow.md": {
+  id: "yellow.md",
+  slug: "yellow",
+  body: string,
+  collection: "poems",
+  data: InferEntrySchema<"poems">
+} & { render(): Render[".md"] },
 },
 "projects": {
 "planetscale-docs-refresh.mdx": {

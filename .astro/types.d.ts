@@ -97,6 +97,13 @@ declare module 'astro:content' {
 
 	const entryMap: {
 		"poems": {
+"Unravel.md": {
+  id: "Unravel.md",
+  slug: "unravel",
+  body: string,
+  collection: "poems",
+  data: InferEntrySchema<"poems">
+} & { render(): Render[".md"] },
 "bowl.md": {
   id: "bowl.md",
   slug: "bowl",

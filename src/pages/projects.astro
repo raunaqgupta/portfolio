@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
-import List from "../components/list.astro";
 import { getCollection } from "astro:content";
 import Grid from "../components/grid.astro";
 const projects = await getCollection("projects");
@@ -8,5 +7,5 @@ const links = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
 <BaseLayout title="Projects" links={links}>
-  <Grid collection={projects}/>
+  <Grid parent="projects" collection={projects}/>
 </BaseLayout>

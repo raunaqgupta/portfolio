@@ -1,17 +1,14 @@
 ---
 const { title, links } = Astro.props;
 import Breadcrumbs from "../components/breadcrumbs.astro";
+import MetaTags from "../components/metaTags.astro";
 import Footer from "../components/footer.astro";
 ---
 
 <html lang="en">
   <head>
     <title>Raunaq Gupta / {title}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Personal website of Raunaq Gupta" />
-    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <meta property="og:title" content="Raunaq Gupta" />
-    <meta property="og:type" content="website" />
+    <MetaTags />
   </head>
   <body>
     <header>

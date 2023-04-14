@@ -5,7 +5,7 @@ const { parent, list } = Astro.props;
 <ul>
   {
     list
-      .sort((a, b) => a.data.title.localeCompare(b.data.title))
+      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime() )
       .map((list) => (
         <li>
           <a href={`/${parent}/` + list.slug}>{list.data.title}</a>

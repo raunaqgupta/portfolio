@@ -1,0 +1,31 @@
+---
+import Thumbnail from "./thumbnail..astro";
+
+const { collection } = Astro.props
+---
+
+<section>
+  {
+    collection
+      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime() )
+      .map((item) => (
+        <Thumbnail image={item.data.thumbnail} title={item.data.title}/>
+      ))
+  }
+</section>
+
+<style>
+  section {
+    margin: 18px 0;
+    display: grid;
+    grid-template-columns: repeat(2, 0.5fr);
+    grid-auto-flow: row;
+    gap: 16px;
+  }
+
+  @media only screen and (max-width: 700px) {
+    section {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

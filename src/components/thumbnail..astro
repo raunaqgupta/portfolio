@@ -1,0 +1,30 @@
+---
+const { image, title } = Astro.props;
+---
+
+<article>
+  <div class="thumbnail">
+    <img src={image} />
+  </div>
+  <h2>{title}</h2>
+</article>
+
+<style>
+  article {
+    border: 1px solid #eaeaea;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .thumbnail {
+    padding: 48px 128px;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    align-items: center;
+  }
+
+  h2 {
+    margin: 8px 16px;
+    font-size: 1em;
+  }
+</style>

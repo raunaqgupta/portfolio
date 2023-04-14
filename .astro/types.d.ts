@@ -134,6 +134,13 @@ declare module 'astro:content' {
   collection: "projects",
   data: InferEntrySchema<"projects">
 } & { render(): Render[".mdx"] },
+"planetscale-v1.mdx": {
+  id: "planetscale-v1.mdx",
+  slug: "planetscale-v1",
+  body: string,
+  collection: "projects",
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".mdx"] },
 "planetscale-v2-vision-login.mdx": {
   id: "planetscale-v2-vision-login.mdx",
   slug: "planetscale-v2-vision-login",

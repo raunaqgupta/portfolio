@@ -3,9 +3,17 @@ import BaseLayout from "../layouts/baseLayout.astro";
 import List from "../components/list.astro";
 import { getCollection } from "astro:content";
 const poems = await getCollection("poems");
+const newPoems = poems.map(({
+    slug,
+    ...rest
+  }) => ({
+    slug: `/poems/` + slug,
+    ...rest
+  })
+)
 const links = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
 <BaseLayout title="Poems" links={links}>
-  <List parent="poems" list={poems} />
+  <List collection={newPoems} />
 </BaseLayout>

@@ -1,14 +1,14 @@
 ---
-const { parent, list } = Astro.props;
+const { collection } = Astro.props;
 ---
 
 <ul>
   {
-    list
+    collection
       .sort((a, b) => b.data.date.getTime() - a.data.date.getTime() )
-      .map((list) => (
+      .map((item) => (
         <li>
-          <a href={`/${parent}/` + list.slug}>{list.data.title}</a>
+          <a href={item.slug}>{item.data.title}</a>
         </li>
       ))
   }

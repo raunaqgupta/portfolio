@@ -1,0 +1,51 @@
+---
+import { Recipe } from 'cooklang'
+const { recipe } = Astro.props
+const newRecipe = new Recipe(recipe)
+---
+
+<ul class='ingredients'>
+  {
+    newRecipe.metadata.map((metadatum) => (
+      <li>{metadatum.key}: {metadatum.value}</li>
+    ))
+  }
+</ul>
+
+<h2>Ingredients</h2>
+
+<ul class='ingredients'>
+  {
+    newRecipe.ingredients.map((ingredient) => (
+      <li>{ingredient.amount} {ingredient.units} {ingredient.name}</li>
+    ))
+  }
+</ul>
+
+<h2>Instructions</h2>
+
+<ul class="instructions">
+  {
+    newRecipe.steps.map((step) => (
+      <li>
+        {
+          step.line.map((token) => (
+            typeof token === 'string'
+            ? <span>{token}</span> : <span>{token.name}</span>
+          ))
+        }
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .ingredients {
+    gap: 1px;
+  }
+
+  .instructions {
+    list-style: decimal;
+    padding-inline-start: 24px;
+  }
+</style>

@@ -4,7 +4,7 @@ const { recipe } = Astro.props
 const newRecipe = new Recipe(recipe)
 ---
 
-<ul class='ingredients'>
+<ul class='meta'>
   {
     newRecipe.metadata.map((metadatum) => (
       <li>{metadatum.key}: {metadatum.value}</li>
@@ -40,7 +40,7 @@ const newRecipe = new Recipe(recipe)
 </ul>
 
 <style>
-  .ingredients {
+  .meta, .ingredients {
     gap: 1px;
   }
 

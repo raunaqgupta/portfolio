@@ -16,6 +16,12 @@ const poemCollection = defineCollection({
   })
 })
 
+const recipeCollection = defineCollection({
+  schema: z.object({
+    title: z.string()
+  })
+})
+
 export const collections = {
   'projects': projectCollection,
   'poems': poemCollection

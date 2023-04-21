@@ -157,6 +157,13 @@ declare module 'astro:content' {
   collection: "recipes",
   data: any
 } & { render(): Render[".mdx"] },
+"potato-chip-sandwich.mdx": {
+  id: "potato-chip-sandwich.mdx",
+  slug: "potato-chip-sandwich",
+  body: string,
+  collection: "recipes",
+  data: any
+} & { render(): Render[".mdx"] },
 },
 
 	};

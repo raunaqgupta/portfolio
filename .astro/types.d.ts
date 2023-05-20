@@ -150,9 +150,23 @@ declare module 'astro:content' {
 } & { render(): Render[".mdx"] },
 },
 "recipes": {
+"asparagus-cottage-cheese-sandwich.mdx": {
+  id: "asparagus-cottage-cheese-sandwich.mdx",
+  slug: "asparagus-cottage-cheese-sandwich",
+  body: string,
+  collection: "recipes",
+  data: any
+} & { render(): Render[".mdx"] },
 "chai.mdx": {
   id: "chai.mdx",
   slug: "chai",
+  body: string,
+  collection: "recipes",
+  data: any
+} & { render(): Render[".mdx"] },
+"mango-lassi.mdx": {
+  id: "mango-lassi.mdx",
+  slug: "mango-lassi",
   body: string,
   collection: "recipes",
   data: any

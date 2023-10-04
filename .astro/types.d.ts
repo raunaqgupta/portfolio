@@ -111,6 +111,13 @@ declare module 'astro:content' {
   collection: "poems",
   data: InferEntrySchema<"poems">
 } & { render(): Render[".md"] },
+"grace.md": {
+  id: "grace.md",
+  slug: "grace",
+  body: string,
+  collection: "poems",
+  data: InferEntrySchema<"poems">
+} & { render(): Render[".md"] },
 "throat.md": {
   id: "throat.md",
   slug: "throat",
@@ -155,28 +162,28 @@ declare module 'astro:content' {
   slug: "asparagus-cottage-cheese-sandwich",
   body: string,
   collection: "recipes",
-  data: any
+  data: InferEntrySchema<"recipes">
 } & { render(): Render[".mdx"] },
 "chai.mdx": {
   id: "chai.mdx",
   slug: "chai",
   body: string,
   collection: "recipes",
-  data: any
+  data: InferEntrySchema<"recipes">
 } & { render(): Render[".mdx"] },
 "mango-lassi.mdx": {
   id: "mango-lassi.mdx",
   slug: "mango-lassi",
   body: string,
   collection: "recipes",
-  data: any
+  data: InferEntrySchema<"recipes">
 } & { render(): Render[".mdx"] },
 "potato-chip-sandwich.mdx": {
   id: "potato-chip-sandwich.mdx",
   slug: "potato-chip-sandwich",
   body: string,
   collection: "recipes",
-  data: any
+  data: InferEntrySchema<"recipes">
 } & { render(): Render[".mdx"] },
 },
 

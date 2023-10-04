@@ -18,11 +18,21 @@ const poemCollection = defineCollection({
 
 const recipeCollection = defineCollection({
   schema: z.object({
-    title: z.string()
+    title: z.string(),
+    date: z.date()
+  })
+})
+
+const blogCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    date: z.date()
   })
 })
 
 export const collections = {
   'projects': projectCollection,
-  'poems': poemCollection
+  'poems': poemCollection,
+  'recipes': recipeCollection,
+  'blog': blogCollection
 };

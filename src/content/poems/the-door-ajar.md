@@ -1,5 +1,5 @@
 ---
-title: The door ajar
+title: The Door Ajar
 date: 2023-12-19
 ---
 

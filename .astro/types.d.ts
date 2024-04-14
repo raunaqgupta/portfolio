@@ -19,175 +19,240 @@ declare module 'astro:content' {
 }
 
 declare module 'astro:content' {
-	export { z } from 'astro/zod';
-	export type CollectionEntry<C extends keyof typeof entryMap> =
-		(typeof entryMap)[C][keyof (typeof entryMap)[C]];
+	type Flatten<T> = T extends { [K: string]: infer U } ? U : never;
 
-	// This needs to be in sync with ImageMetadata
-	export const image: () => import('astro/zod').ZodObject<{
-		src: import('astro/zod').ZodString;
-		width: import('astro/zod').ZodNumber;
-		height: import('astro/zod').ZodNumber;
-		format: import('astro/zod').ZodUnion<
-			[
-				import('astro/zod').ZodLiteral<'png'>,
-				import('astro/zod').ZodLiteral<'jpg'>,
-				import('astro/zod').ZodLiteral<'jpeg'>,
-				import('astro/zod').ZodLiteral<'tiff'>,
-				import('astro/zod').ZodLiteral<'webp'>,
-				import('astro/zod').ZodLiteral<'gif'>,
-				import('astro/zod').ZodLiteral<'svg'>
-			]
-		>;
-	}>;
+	export type CollectionKey = keyof AnyEntryMap;
+	export type CollectionEntry<C extends CollectionKey> = Flatten<AnyEntryMap[C]>;
 
-	type BaseSchemaWithoutEffects =
-		| import('astro/zod').AnyZodObject
-		| import('astro/zod').ZodUnion<import('astro/zod').AnyZodObject[]>
-		| import('astro/zod').ZodDiscriminatedUnion<string, import('astro/zod').AnyZodObject[]>
-		| import('astro/zod').ZodIntersection<
-				import('astro/zod').AnyZodObject,
-				import('astro/zod').AnyZodObject
-		  >;
+	export type ContentCollectionKey = keyof ContentEntryMap;
+	export type DataCollectionKey = keyof DataEntryMap;
 
-	type BaseSchema =
-		| BaseSchemaWithoutEffects
-		| import('astro/zod').ZodEffects<BaseSchemaWithoutEffects>;
-
-	type BaseCollectionConfig<S extends BaseSchema> = {
-		schema?: S;
-		slug?: (entry: {
-			id: CollectionEntry<keyof typeof entryMap>['id'];
-			defaultSlug: string;
-			collection: string;
-			body: string;
-			data: import('astro/zod').infer<S>;
-		}) => string | Promise<string>;
-	};
-	export function defineCollection<S extends BaseSchema>(
-		input: BaseCollectionConfig<S>
-	): BaseCollectionConfig<S>;
-
-	type EntryMapKeys = keyof typeof entryMap;
 	type AllValuesOf<T> = T extends any ? T[keyof T] : never;
-	type ValidEntrySlug<C extends EntryMapKeys> = AllValuesOf<(typeof entryMap)[C]>['slug'];
+	type ValidContentEntrySlug<C extends keyof ContentEntryMap> = AllValuesOf<
+		ContentEntryMap[C]
+	>['slug'];
 
 	export function getEntryBySlug<
-		C extends keyof typeof entryMap,
-		E extends ValidEntrySlug<C> | (string & {})
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
 	>(
 		collection: C,
 		// Note that this has to accept a regular string too, for SSR
 		entrySlug: E
-	): E extends ValidEntrySlug<C>
+	): E extends ValidContentEntrySlug<C>
 		? Promise<CollectionEntry<C>>
 		: Promise<CollectionEntry<C> | undefined>;
-	export function getCollection<C extends keyof typeof entryMap, E extends CollectionEntry<C>>(
+
+	export function getDataEntryById<C extends keyof DataEntryMap, E extends keyof DataEntryMap[C]>(
+		collection: C,
+		entryId: E
+	): Promise<CollectionEntry<C>>;
+
+	export function getCollection<C extends keyof AnyEntryMap, E extends CollectionEntry<C>>(
 		collection: C,
 		filter?: (entry: CollectionEntry<C>) => entry is E
 	): Promise<E[]>;
-	export function getCollection<C extends keyof typeof entryMap>(
+	export function getCollection<C extends keyof AnyEntryMap>(
 		collection: C,
 		filter?: (entry: CollectionEntry<C>) => unknown
 	): Promise<CollectionEntry<C>[]>;
 
-	type InferEntrySchema<C extends keyof typeof entryMap> = import('astro/zod').infer<
-		Required<ContentConfig['collections'][C]>['schema']
+	export function getEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(entry: {
+		collection: C;
+		slug: E;
+	}): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof DataEntryMap,
+		E extends keyof DataEntryMap[C] | (string & {}),
+	>(entry: {
+		collection: C;
+		id: E;
+	}): E extends keyof DataEntryMap[C]
+		? Promise<DataEntryMap[C][E]>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(
+		collection: C,
+		slug: E
+	): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof DataEntryMap,
+		E extends keyof DataEntryMap[C] | (string & {}),
+	>(
+		collection: C,
+		id: E
+	): E extends keyof DataEntryMap[C]
+		? Promise<DataEntryMap[C][E]>
+		: Promise<CollectionEntry<C> | undefined>;
+
+	/** Resolve an array of entry references from the same collection */
+	export function getEntries<C extends keyof ContentEntryMap>(
+		entries: {
+			collection: C;
+			slug: ValidContentEntrySlug<C>;
+		}[]
+	): Promise<CollectionEntry<C>[]>;
+	export function getEntries<C extends keyof DataEntryMap>(
+		entries: {
+			collection: C;
+			id: keyof DataEntryMap[C];
+		}[]
+	): Promise<CollectionEntry<C>[]>;
+
+	export function reference<C extends keyof AnyEntryMap>(
+		collection: C
+	): import('astro/zod').ZodEffects<
+		import('astro/zod').ZodString,
+		C extends keyof ContentEntryMap
+			? {
+					collection: C;
+					slug: ValidContentEntrySlug<C>;
+				}
+			: {
+					collection: C;
+					id: keyof DataEntryMap[C];
+				}
+	>;
+	// Allow generic `string` to avoid excessive type errors in the config
+	// if `dev` is not running to update as you edit.
+	// Invalid collection names will be caught at build time.
+	export function reference<C extends string>(
+		collection: C
+	): import('astro/zod').ZodEffects<import('astro/zod').ZodString, never>;
+
+	type ReturnTypeOrOriginal<T> = T extends (...args: any[]) => infer R ? R : T;
+	type InferEntrySchema<C extends keyof AnyEntryMap> = import('astro/zod').infer<
+		ReturnTypeOrOriginal<Required<ContentConfig['collections'][C]>['schema']>
 	>;
 
-	const entryMap: {
-		"poems": {
+	type ContentEntryMap = {
+		"blog": {
+};
+"poems": {
 "Unravel.md": {
-  id: "Unravel.md",
-  slug: "unravel",
-  body: string,
-  collection: "poems",
+	id: "Unravel.md";
+  slug: "unravel";
+  body: string;
+  collection: "poems";
   data: InferEntrySchema<"poems">
-} & { render(): Render[".md"] },
+} & { render(): Render[".md"] };
 "bowl.md": {
-  id: "bowl.md",
-  slug: "bowl",
-  body: string,
-  collection: "poems",
+	id: "bowl.md";
+  slug: "bowl";
+  body: string;
+  collection: "poems";
   data: InferEntrySchema<"poems">
-} & { render(): Render[".md"] },
+} & { render(): Render[".md"] };
 "grace.md": {
-  id: "grace.md",
-  slug: "grace",
-  body: string,
-  collection: "poems",
+	id: "grace.md";
+  slug: "grace";
+  body: string;
+  collection: "poems";
   data: InferEntrySchema<"poems">
-} & { render(): Render[".md"] },
+} & { render(): Render[".md"] };
+"my-heart.md": {
+	id: "my-heart.md";
+  slug: "my-heart";
+  body: string;
+  collection: "poems";
+  data: InferEntrySchema<"poems">
+} & { render(): Render[".md"] };
+"the-door-ajar.md": {
+	id: "the-door-ajar.md";
+  slug: "the-door-ajar";
+  body: string;
+  collection: "poems";
+  data: InferEntrySchema<"poems">
+} & { render(): Render[".md"] };
 "throat.md": {
-  id: "throat.md",
-  slug: "throat",
-  body: string,
-  collection: "poems",
+	id: "throat.md";
+  slug: "throat";
+  body: string;
+  collection: "poems";
   data: InferEntrySchema<"poems">
-} & { render(): Render[".md"] },
+} & { render(): Render[".md"] };
 "yellow.md": {
-  id: "yellow.md",
-  slug: "yellow",
-  body: string,
-  collection: "poems",
+	id: "yellow.md";
+  slug: "yellow";
+  body: string;
+  collection: "poems";
   data: InferEntrySchema<"poems">
-} & { render(): Render[".md"] },
-},
+} & { render(): Render[".md"] };
+};
 "projects": {
 "planetscale-docs-refresh.mdx": {
-  id: "planetscale-docs-refresh.mdx",
-  slug: "planetscale-docs-refresh",
-  body: string,
-  collection: "projects",
+	id: "planetscale-docs-refresh.mdx";
+  slug: "planetscale-docs-refresh";
+  body: string;
+  collection: "projects";
   data: InferEntrySchema<"projects">
-} & { render(): Render[".mdx"] },
+} & { render(): Render[".mdx"] };
 "planetscale-v1.mdx": {
-  id: "planetscale-v1.mdx",
-  slug: "planetscale-v1",
-  body: string,
-  collection: "projects",
+	id: "planetscale-v1.mdx";
+  slug: "planetscale-v1";
+  body: string;
+  collection: "projects";
   data: InferEntrySchema<"projects">
-} & { render(): Render[".mdx"] },
+} & { render(): Render[".mdx"] };
 "planetscale-v2-vision-login.mdx": {
-  id: "planetscale-v2-vision-login.mdx",
-  slug: "planetscale-v2-vision-login",
-  body: string,
-  collection: "projects",
+	id: "planetscale-v2-vision-login.mdx";
+  slug: "planetscale-v2-vision-login";
+  body: string;
+  collection: "projects";
   data: InferEntrySchema<"projects">
-} & { render(): Render[".mdx"] },
-},
+} & { render(): Render[".mdx"] };
+};
 "recipes": {
 "asparagus-cottage-cheese-sandwich.mdx": {
-  id: "asparagus-cottage-cheese-sandwich.mdx",
-  slug: "asparagus-cottage-cheese-sandwich",
-  body: string,
-  collection: "recipes",
+	id: "asparagus-cottage-cheese-sandwich.mdx";
+  slug: "asparagus-cottage-cheese-sandwich";
+  body: string;
+  collection: "recipes";
   data: InferEntrySchema<"recipes">
-} & { render(): Render[".mdx"] },
+} & { render(): Render[".mdx"] };
 "chai.mdx": {
-  id: "chai.mdx",
-  slug: "chai",
-  body: string,
-  collection: "recipes",
+	id: "chai.mdx";
+  slug: "chai";
+  body: string;
+  collection: "recipes";
   data: InferEntrySchema<"recipes">
-} & { render(): Render[".mdx"] },
+} & { render(): Render[".mdx"] };
 "mango-lassi.mdx": {
-  id: "mango-lassi.mdx",
-  slug: "mango-lassi",
-  body: string,
-  collection: "recipes",
+	id: "mango-lassi.mdx";
+  slug: "mango-lassi";
+  body: string;
+  collection: "recipes";
   data: InferEntrySchema<"recipes">
-} & { render(): Render[".mdx"] },
+} & { render(): Render[".mdx"] };
 "potato-chip-sandwich.mdx": {
-  id: "potato-chip-sandwich.mdx",
-  slug: "potato-chip-sandwich",
-  body: string,
-  collection: "recipes",
+	id: "potato-chip-sandwich.mdx";
+  slug: "potato-chip-sandwich";
+  body: string;
+  collection: "recipes";
   data: InferEntrySchema<"recipes">
-} & { render(): Render[".mdx"] },
-},
+} & { render(): Render[".mdx"] };
+};
 
 	};
 
-	type ContentConfig = typeof import("../src/content/config");
+	type DataEntryMap = {
+		"education": {
+};
+"work-experience": {
+};
+
+	};
+
+	type AnyEntryMap = ContentEntryMap & DataEntryMap;
+
+	export type ContentConfig = typeof import("../src/content/config.js");
 }

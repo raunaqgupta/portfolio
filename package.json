@@ -13,8 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@astrojs/mdx": "^0.18.2",
-    "astro": "^2.1.8",
+    "@astrojs/mdx": "^2.3.0",
+    "astro": "^4.6.1",
     "cooklang": "^0.3.0"
   }
 }

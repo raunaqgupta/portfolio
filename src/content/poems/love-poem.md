@@ -1,5 +1,5 @@
 ---
-title: Love poem in the hotel room number one
+title: Love poem
 date: 2024-04-28
 ---
 

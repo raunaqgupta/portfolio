@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
 import List from "../components/list.astro";
+import Info from "../components/info.astro";
 import { getCollection } from "astro:content";
 const recipes = await getCollection("recipes");
 const newRecipes = recipes.map(({
@@ -16,5 +17,5 @@ const links = [{ text: "Raunaq Gupta", url: "/" }];
 
 <BaseLayout title="Recipes" links={links}>
   <List collection={newRecipes} />
-  <i>All recipes written in <a href="https://cooklang.org">CookLang</a></i>
+  <Info>All recipes written in <a href="https://cooklang.org">CookLang</a></Info>
 </BaseLayout>

@@ -1,6 +1,6 @@
 ---
 title: Loss
-date: 2024-03-30
+date: 2024-04-30
 ---
 
 There's loss and then there's loss  

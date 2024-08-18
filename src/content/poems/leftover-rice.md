@@ -10,9 +10,9 @@ Researching the internet of which ones to get
 And still undecided
 
 Half a red onion, half serrano pepper, a quarter of red bell pepper  
-All chopped up and thrown into a heavy cast iron skillet  
-One by one, some salt, and followed by the leftover rice  
-Two beaten eggs thrown in, scrambling with the rest  
+All chopped up and thrown one by one into a heavy cast iron skillet  
+Followed by some salt, and leftover rice  
+Two beaten eggs go in as well, rapidly scrambling with the rest  
 The smell is familiar, and the body wants to cry
 
 I cry, and in the middle of it  

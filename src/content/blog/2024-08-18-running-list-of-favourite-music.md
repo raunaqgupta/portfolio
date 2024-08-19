@@ -8,6 +8,7 @@ date: 2024-08-18
 - Light Grenades - Incubus
 - Modern Guilt - Beck
 - California - Mr. Bungle
+- The Process of Belief - Bad Religion
 
 ## Songs
 

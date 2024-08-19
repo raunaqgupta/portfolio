@@ -13,5 +13,3 @@ date: 2024-08-18
 
 * Don’t Tell Me - Madonna
 * If I Can’t Dance - Sophie Ellis-Baxter
-
-  

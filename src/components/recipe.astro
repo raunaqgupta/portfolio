@@ -7,7 +7,7 @@ const newRecipe = new Recipe(recipe)
 <ul class='meta'>
   {
     newRecipe.metadata.map((metadatum) => (
-      <li>{metadatum.key}: {metadatum.value}</li>
+      <li class="property">{metadatum.key}: {metadatum.value}</li>
     ))
   }
 </ul>
@@ -42,6 +42,10 @@ const newRecipe = new Recipe(recipe)
 <style>
   .meta, .ingredients {
     gap: 1px;
+  }
+
+  .property {
+    text-transform: capitalize;
   }
 
   .instructions {

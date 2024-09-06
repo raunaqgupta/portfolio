@@ -16,4 +16,4 @@ highly-scalable visualizations (to accomodate devices in thousands).
 
 Note: Co-creator on patent [US9923782B1](https://patents.google.com/patent/US9923782B1)
 
-Note: Acquired by VMWare; now [VMWare Aria Operations for Networks](https://www.vmware.com/in/products/vrealize-network-insight.html)
+Note: Acquired by VMWare; now [VMWare Aria Operations for Networks](https://www.vmware.com/products/cloud-infrastructure/aria-operations-for-networks)

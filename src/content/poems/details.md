@@ -1,5 +1,5 @@
 ---
-title: Love poem
+title: Details
 date: 2023-04-28
 ---
 

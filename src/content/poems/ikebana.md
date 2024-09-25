@@ -9,7 +9,7 @@ Ikebana, arranging flowers, I don't know any better
 Guess I'll go and buy some from the store nearby
 
 The lady directs my gaze towards a crooked branch  
-It's beautiful in it's own odd sort of way
+It's beautiful in it's own odd sort of way  
 There's a rhythm, and I say yes immediately
 Billy balls catch my eye next, finishing up with some tiny dahlias
 

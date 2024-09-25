@@ -4,8 +4,8 @@ date: 2024-09-24
 ---
 
 I bought flower frogs online  
-Hoping to use this old glass vase to display flowers  
-Ikebana, arranging flowers, I don't know any better
+Hoping to use this old glass vase of mine  
+Ikebana, arranging flowers, I don't know any better  
 Guess I'll go and buy some from the store nearby
 
 The lady directs my gaze towards a crooked branch  

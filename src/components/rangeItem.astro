@@ -9,9 +9,7 @@ const { title, org, from, to } = Astro.props;
     to ? (
       <time datetime={to}>{to}</time>
     ) : (
-      <time datetime={new Date().getFullYear().toString()}>
-        {new Date().getFullYear()}
-      </time>
+      <span>Current</span>
     )
   }
   <div></div>
@@ -23,7 +21,7 @@ const { title, org, from, to } = Astro.props;
     margin-bottom: 2em;
   }
 
-  time {
+  time, span {
     color: #666;
   }
 </style>

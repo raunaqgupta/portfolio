@@ -16,5 +16,8 @@
     "@astrojs/mdx": "^4.2.6",
     "astro": "^5.7.12",
     "cooklang": "^0.3.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.14.4"
   }
 }

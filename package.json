@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "pnpm astro build && pnpm wrangler@latest deploy",
+    "build": "pnpm astro build",
     "preview": "astro preview"
   },
   "keywords": [],

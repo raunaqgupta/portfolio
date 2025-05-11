@@ -1,7 +1,12 @@
 {
   "name": "portfolio",
-  // Update to today's date
   "compatibility_date": "2025-05-10",
+  "routes": [
+    {
+      "pattern": "raunaqgupta.com",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./dist"
   }

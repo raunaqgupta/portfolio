@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/baseLayout.astro";
+import List from "../components/list.astro";
+import { getCollection } from "astro:content";
+const blog = await getCollection("blog");
+const newBlog = blog.map(({
+    slug,
+    ...rest
+  }) => ({
+    slug: `/blog/` + slug,
+    ...rest
+  })
+)
+const links = [{ text: "Raunaq Gupta", url: "/" }];
+---
+
+<BaseLayout title="Blog" links={links}>
+  <List collection={newBlog} />
+</BaseLayout>

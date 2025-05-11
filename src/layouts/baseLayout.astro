@@ -15,9 +15,9 @@ import Footer from "../components/footer.astro";
       <Breadcrumbs links={links} />
       <h1>{title}</h1>
     </header>
-    <div class="content">
+    <main>
       <slot />
-    </div>
+    </main>
     <Footer />
   </body>
 </html>
@@ -56,7 +56,7 @@ import Footer from "../components/footer.astro";
     flex-grow: 1;
   }
 
-  .content {
+  main {
     flex-grow: 1;
   }
 
@@ -100,6 +100,10 @@ import Footer from "../components/footer.astro";
 
   time {
     color: #666;
+  }
+
+  ol {
+    padding-inline-start: 1.5em;
   }
 
   ul {

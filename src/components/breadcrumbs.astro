@@ -3,14 +3,15 @@ const { links } = Astro.props;
 ---
 
 <nav>
+  <ol>
   {
     links.map((link) => (
-      <>
+      <li class="breadcrumb">
         <a href={link.url}>{link.text}</a>
-        <span>/</span>
-      </>
+      </li>
     ))
   }
+  </ol>
 </nav>
 
 <style>
@@ -21,6 +22,27 @@ const { links } = Astro.props;
     font-size: 14px;
     color: #ccc;
     font-weight: 100;
+  }
+
+  nav ol {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  nav li.breadcrumb {
+    display: flex;
+    align-items: center;
+  }
+
+  nav li.breadcrumb + li::before {
+    display: inline-block;
+    margin: 0 0.5em;
+    transform: rotate(15deg);
+    border-right: 0.1em solid currentcolor;
+    height: 0.8em;
+    content: "";
   }
 
   nav a {

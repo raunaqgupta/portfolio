@@ -6,15 +6,18 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "pnpm astro build",
     "preview": "astro preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@astrojs/mdx": "^0.18.2",
-    "astro": "^2.1.8",
+    "@astrojs/mdx": "^4.2.6",
+    "astro": "^5.7.12",
     "cooklang": "^0.3.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.14.4"
   }
 }

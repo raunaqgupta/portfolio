@@ -114,6 +114,11 @@ import Footer from "../components/footer.astro";
     gap: 8px;
   }
 
+  ul.styled {
+    list-style-type: disc;
+    padding-inline-start: 1em;
+  }
+
   a {
     display: inline;
     text-decoration: none;
@@ -131,7 +136,8 @@ import Footer from "../components/footer.astro";
   a:hover {
     border-bottom-width: 2px;
     border-bottom-color: #000;
-    transition: border -bottom-width ease-out 100ms,
+    transition:
+      border -bottom-width ease-out 100ms,
       border-bottom-color ease-in 50ms;
   }
 

@@ -1,0 +1,27 @@
+---
+const { items } = Astro.props;
+---
+
+<style>
+  .custom-ul {
+    padding-left: 1.25rem;
+    margin: 0.5rem 0;
+  }
+  .custom-ul li {
+    margin: 0.25rem 0;
+  }
+</style>
+
+{
+  items ? (
+    <ul class="custom-ul">
+      {items.map((item) => (
+        <li>hello: {item}</li>
+      ))}
+    </ul>
+  ) : (
+    <ul class="custom-ul">
+      <slot />
+    </ul>
+  )
+}

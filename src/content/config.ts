@@ -30,9 +30,19 @@ const blogCollection = defineCollection({
   })
 })
 
+const jobCollection = defineCollection({
+  schema: z.object({
+    role: z.string(),
+    organization: z.string(),
+    from: z.date(),
+    to: z.date().optional()
+  })
+})
+
 export const collections = {
   'projects': projectCollection,
   'poems': poemCollection,
   'recipes': recipeCollection,
-  'blog': blogCollection
+  'blog': blogCollection,
+  'jobs': jobCollection
 };

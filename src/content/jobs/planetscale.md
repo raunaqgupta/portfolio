@@ -1,8 +1,8 @@
 ---
 role: Design engineer
 organization: PlanetScale
-from: 2018
-to: 2021
+from: 2018-01-01
+to: 2021-01-01
 ---
 
 First design hire. Design and development of various touchpoints encompassing the web application, and supporting artifacts (marketing website, documentation).

@@ -3,14 +3,10 @@ const { title, org, from, to } = Astro.props;
 ---
 
 <section>
-  <h3>{title}</h3>
-  <div>{org}</div>
-  <time datetime={from}>{from}</time> - {
-    to ? (
-      <time datetime={to}>{to}</time>
-    ) : (
-      <span>Current</span>
-    )
+  <h3>{org}</h3>
+  <div>{title}</div>
+  <time datetime={from}>{from.getFullYear()}</time> - {
+    to ? <time datetime={to}>{to.getFullYear()}</time> : <span>Current</span>
   }
   <div></div>
   <slot />
@@ -21,7 +17,8 @@ const { title, org, from, to } = Astro.props;
     margin-bottom: 2em;
   }
 
-  time, span {
+  time,
+  span {
     color: #666;
   }
 </style>

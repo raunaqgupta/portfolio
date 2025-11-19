@@ -1,8 +1,8 @@
 ---
 role: Product designer
 organization: Arkin
-from: 2014
-to: 2016
+from: 2014-01-01
+to: 2016-01-01
 ---
 
 One of two designers tasked with building out a product from scratch to

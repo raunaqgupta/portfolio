@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/baseLayout.astro";
+import Card from "../components/card.astro";
+const links = [{ text: "Raunaq Gupta", url: "/" }];
+---
+
+<BaseLayout title="Work" links={links}>
+  <section id="summary">
+    <h2>TL;DR</h2>
+    <p>
+      I have a decade+ experience in shipping web applications from
+      conceptualization, design to UI development. I bring deep expertise in
+      systems design, an intuitive sense for building developer tools and
+      simplifying complex enterprise software across multiple startups and large
+      organizations.
+    </p>
+    <p>
+      If you want to complement your product team with a system thinker,
+      designer, prototyper, and UI engineer, email me at <a
+        href="mailto:mail@raunaqgupta.com">mail@raunaqgupta.com</a
+      >.
+    </p>
+  </section>
+  <section id="resume">
+    <h2>Resume</h2>
+    <p>
+      I'm currently working on Splunk Observability products at Cisco. View my
+      resume <a href="/resume">here</a>.
+    </p>
+  </section>
+</BaseLayout>

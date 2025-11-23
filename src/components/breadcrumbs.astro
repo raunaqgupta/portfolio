@@ -32,10 +32,14 @@ const { links } = Astro.props;
     align-items: center;
   }
 
+  nav li.breadcrumb a {
+    text-decoration: none;
+  }
+
   nav li.breadcrumb + li::before {
     display: inline-block;
-    margin: 0 0.5em 0 1em;
-    transform: rotate(16deg) translateY(6px);
+    margin: 0 0.4em 0 0.9em;
+    transform: rotate(16deg) translateY(4px);
     border-right: 0.1em solid currentcolor;
     height: 1.2em;
     content: "";

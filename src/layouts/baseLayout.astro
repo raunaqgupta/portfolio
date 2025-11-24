@@ -29,7 +29,24 @@ import Footer from "../components/footer.astro";
     --space-2: 16px;
     --space-3: 24px;
     --color-bg: #f6f6f6;
-    --color-text: #111;
+    --color-heading: #333;
+    --color-body-primary: #111;
+    --color-body-secondary: #666;
+    --color-body-tertiary: #999;
+    --color-highlight: #00659b;
+    --color-border: #eaeaea;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bg: #0f1113;
+      --color-heading: #e8e8e8;
+      --color-body-primary: #f2f2f2;
+      --color-body-secondary: #b8b8b8;
+      --color-body-tertiary: #8d8d8d;
+      --color-highlight: #4fb7ff;
+      --color-border: #2a2d31;
+    }
   }
 
   @font-face {
@@ -55,7 +72,7 @@ import Footer from "../components/footer.astro";
     font-family: sans-serif;
     max-width: 69ch;
     background-color: var(--color-bg);
-    color: #111;
+    color: var(--color-body-primary);
     flex-grow: 1;
   }
 
@@ -74,7 +91,7 @@ import Footer from "../components/footer.astro";
     margin-top: 2em;
     font-weight: 200;
     font-size: 1.2em;
-    color: #333;
+    color: var(--color-heading);
   }
 
   h3 {
@@ -91,12 +108,12 @@ import Footer from "../components/footer.astro";
 
   figure > img {
     padding-bottom: 8px;
-    border-bottom: 1px solid #d8d8d8;
+    border-bottom: 1px solid var(--color-border);
   }
 
   figcaption {
     font-size: 14px;
-    color: #666;
+    color: var(--color-body-secondary);
     padding: 4px 0px;
   }
 
@@ -105,7 +122,7 @@ import Footer from "../components/footer.astro";
   }
 
   time {
-    color: #666;
+    color: var(--color-body-secondary);
   }
 
   ol {
@@ -130,12 +147,12 @@ import Footer from "../components/footer.astro";
     text-decoration: none;
     padding-bottom: 1px;
     box-sizing: border-box;
-    color: rgb(0, 0, 0);
+    color: var(--color-body-primary);
     position: relative;
     text-decoration-line: underline;
     text-decoration-style: solid;
     text-underline-offset: 5px;
-    text-decoration-color: #ccc;
+    text-decoration-color: var(--color-body-tertiary);
     text-decoration-skip-ink: auto;
     transition: text-decoration-color 0.5s ease-out;
   }
@@ -146,7 +163,7 @@ import Footer from "../components/footer.astro";
     left: 0;
     bottom: -1px;
     width: 100%;
-    border-bottom: 2px solid #00659b;
+    border-bottom: 2px solid var(--color-highlight);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.2s ease-out;
@@ -159,11 +176,11 @@ import Footer from "../components/footer.astro";
 
   a:hover,
   a:focus {
-    text-decoration: none;
+    text-decoration-color: var(--color-highlight);
   }
 
   a.muted {
-    color: #999;
+    color: var(--color-body-tertiary);
     border-bottom-color: transparent;
   }
 

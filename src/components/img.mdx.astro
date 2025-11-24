@@ -1,9 +1,9 @@
 ---
 const { src, alt } = Astro.props;
+import { Image } from "astro:assets";
 ---
 
 <figure>
-  <img alt={alt} src={src} />
+  <img alt={alt} src={src} decoding="async" loading="lazy" />
   <figcaption>{alt}</figcaption>
 </figure>
-

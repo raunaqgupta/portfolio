@@ -23,10 +23,13 @@ import Footer from "../components/footer.astro";
 </html>
 
 <style is:global>
-  @font-face {
-    font-family: "Urbanist";
-    src: local("Urbanist"), url("/fonts/Urbanist-VariableFont_wght.ttf");
-    font-display: swap;
+  :root {
+    --space-0: 4px;
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --color-bg: #f6f6f6;
+    --color-text: #111;
   }
 
   @font-face {
@@ -49,9 +52,9 @@ import Footer from "../components/footer.astro";
     padding: 4em 8em 0;
     font-size: 18px;
     line-height: 28px;
-    font-family: "Manrope", sans-serif;
+    font-family: sans-serif;
     max-width: 69ch;
-    background-color: #f6f6f6;
+    background-color: var(--color-bg);
     color: #111;
     flex-grow: 1;
   }

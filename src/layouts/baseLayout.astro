@@ -39,13 +39,13 @@ import Footer from "../components/footer.astro";
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --color-bg: #0f1113;
-      --color-heading: #e8e8e8;
-      --color-body-primary: #f2f2f2;
-      --color-body-secondary: #b8b8b8;
-      --color-body-tertiary: #8d8d8d;
-      --color-highlight: #4fb7ff;
-      --color-border: #2a2d31;
+      --color-bg: #1e2227;
+      --color-heading: #e7e7e7;
+      --color-body-primary: #dcdcdc;
+      --color-body-secondary: #a9b0b7;
+      --color-body-tertiary: #7f8891;
+      --color-highlight: #39a5e6;
+      --color-border: #2c3238;
     }
   }
 
@@ -177,15 +177,6 @@ import Footer from "../components/footer.astro";
   a:hover,
   a:focus {
     text-decoration-color: var(--color-highlight);
-  }
-
-  a.muted {
-    color: var(--color-body-tertiary);
-    border-bottom-color: transparent;
-  }
-
-  a.muted:hover {
-    border-bottom-width: 0;
   }
 
   @media only screen and (max-width: 1024px) {

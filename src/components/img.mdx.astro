@@ -3,7 +3,6 @@ const { src, alt } = Astro.props;
 ---
 
 <figure>
-  <img alt={alt} src={src} />
+  <img alt={alt} src={src} decoding="async" loading="lazy" />
   <figcaption>{alt}</figcaption>
 </figure>
-

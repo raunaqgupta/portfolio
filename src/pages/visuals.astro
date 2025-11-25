@@ -1,6 +1,49 @@
 ---
+import Card from "../components/img.mdx.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
-const links = [{ text: "Raunaq Gupta", url: "/" }];
+const links = [
+  { text: "Raunaq Gupta", url: "/" },
+  { text: "Work", url: "/work" },
+];
 ---
 
-<BaseLayout title="Visuals" links={links} />
+<BaseLayout title="Visuals" links={links}>
+  <p>
+    Gallery of visual artifacts across multiple commercial and personal
+    projects.
+  </p>
+  <div class="grid">
+    <Card
+      src="https://pub-24aadda14d3d4e29ac13d69484bcfad9.r2.dev/planetscale-login-concept/login.png"
+      alt="PlanetScale login concept - Login"
+    />
+    <Card
+      src="https://pub-24aadda14d3d4e29ac13d69484bcfad9.r2.dev/planetscale-login-concept/verify-email.png"
+      alt="PlanetScale login concept - Verify email"
+    />
+    <Card
+      src="https://pub-24aadda14d3d4e29ac13d69484bcfad9.r2.dev/planetscale-login-concept/create-account.png"
+      alt="PlanetScale login concept - Create account"
+    />
+    <Card
+      src="https://pub-24aadda14d3d4e29ac13d69484bcfad9.r2.dev/planetscale-login-concept/create-project.png"
+      alt="PlanetScale login concept - Create project"
+    />
+    <Card
+      src="https://pub-24aadda14d3d4e29ac13d69484bcfad9.r2.dev/planetscale-login-concept/create-database.png"
+      alt="PlanetScale login concept - Create database"
+    />
+    <Card
+      src="https://pub-24aadda14d3d4e29ac13d69484bcfad9.r2.dev/planetscale-login-concept/add-card.png"
+      alt="PlanetScale login concept - Add card"
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  div.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+</style>

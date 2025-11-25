@@ -1,11 +1,11 @@
 ---
-const { links } = Astro.props;
+const { breadcrumbs } = Astro.props;
 ---
 
 <nav>
   <ol>
     {
-      links.map((link) => (
+      breadcrumbs.map((link) => (
         <li class="breadcrumb">
           <a href={link.url}>{link.text}</a>
         </li>

@@ -18,9 +18,11 @@ const links = [
   { text: "Raunaq Gupta", url: "/" },
   { text: "Poems", url: "/poems" },
 ];
+
+const format = { year: "numeric", month: "long", day: "numeric" };
 ---
 
-<BaseLayout title={entry.data.title} links={links}>  
-  <Content components={{...components, img: Imgmdx}} />
-  <Toolbar date={entry.data.date}/>
+<BaseLayout title={entry.data.title} breadcrumbs={links}>
+  <Content components={{ ...components, img: Imgmdx }} />
+  <Toolbar>{entry.data.date.toLocaleDateString("en-US", format)}</Toolbar>
 </BaseLayout>

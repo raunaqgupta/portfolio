@@ -4,18 +4,18 @@ import List from "../components/list.astro";
 import Info from "../components/info.astro";
 import { getCollection } from "astro:content";
 const recipes = await getCollection("recipes");
-const newRecipes = recipes.map(({
-    slug,
-    ...rest
-  }) => ({
-    slug: `/recipes/` + slug,
-    ...rest
-  })
-)
+const newRecipes = recipes.map(({ slug, ...rest }) => ({
+  slug: `/recipes/` + slug,
+  ...rest,
+}));
 const links = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
-<BaseLayout title="Recipes" links={links}>
+<BaseLayout title="Recipes" breadcrumbs={links}>
   <List collection={newRecipes} />
-  <Info>All recipes written in <a href="https://cooklang.org" target="_blank">CookLang</a></Info>
+  <Info
+    >All recipes written in <a href="https://cooklang.org" target="_blank"
+      >CookLang</a
+    ></Info
+  >
 </BaseLayout>

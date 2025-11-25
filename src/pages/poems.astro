@@ -10,6 +10,6 @@ const newPoems = poems.map(({ slug, ...rest }) => ({
 const links = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
-<BaseLayout title="Poems" links={links}>
+<BaseLayout title="Poems" breadcrumbs={links}>
   <List collection={newPoems} />
 </BaseLayout>

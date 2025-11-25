@@ -13,15 +13,23 @@ const jobs = await Promise.all(
 );
 
 const education = await getCollection("education");
-const links = [
+const breadcrumbs = [
   { text: "Raunaq Gupta", url: "/" },
-  { text: "Work", url: "/work" },
+  { text: "Portfolio", url: "/portfolio" },
+];
+
+const actions = [
+  {
+    label: "Download",
+    url: "/resume.raunaqgupta.pdf",
+    isLink: true,
+  },
 ];
 ---
 
-<BaseLayout title="Resume" links={links}>
-  <section id="work-experience">
-    <h2>Work experience</h2>
+<BaseLayout title="Resume" breadcrumbs={breadcrumbs} actions={actions}>
+  <section id="experience">
+    <h2>Experience</h2>
     {
       jobs
         .sort((a, b) => {

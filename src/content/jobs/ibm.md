@@ -5,4 +5,4 @@ from: 2013-01-01
 to: 2013-01-01
 ---
 
-3 month stint at IBM Watson Pittsburgh learning and utilizing skills around software design and development.
+Shadowed a product team on IBM Watson comprising of a product manager, product designer, user researcher, and multiple frontend engineers for 2 months.

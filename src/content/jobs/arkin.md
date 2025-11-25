@@ -5,14 +5,9 @@ from: 2014-01-01
 to: 2016-01-01
 ---
 
-One of two designers tasked with building out a product from scratch to
-complement an engineering team that grew from 8 to ~50 members before
-acquisition.
-
-Primary focus on simplifying the user experience to aid in monitoring
-and discovery of various components that make up a datacenter.
-Highlights include a natural language search interface and
-highly-scalable visualizations (to accomodate devices in thousands).
+1. Designed and developed a 0→1 product to acquisition (VMWare) while supporting an engineering team of 40 engineers in a 2-person design team.
+2. Simplified software-defined datacenter monitoring with emphasis on highly-scalable visualizations to accommodate thousands of monitored devices.
+3. Other notable design pieces include a natural language search interface, and a novel icon design kit.
 
 Note: Co-creator on patent [US9923782B1](https://patents.google.com/patent/US9923782B1)
 

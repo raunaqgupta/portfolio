@@ -22,7 +22,7 @@ const links = [
 const format = { year: "numeric", month: "long", day: "numeric" };
 ---
 
-<BaseLayout title={entry.data.title} links={links}>
+<BaseLayout title={entry.data.title} breadcrumbs={links}>
   <Content components={{ ...components, img: Imgmdx }} />
   <Toolbar>{entry.data.date.toLocaleDateString("en-US", format)}</Toolbar>
 </BaseLayout>

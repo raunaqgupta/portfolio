@@ -1,18 +1,34 @@
 ---
-const { label } = Astro.props;
+const { label, url, isLink } = Astro.props;
 ---
 
-<button>{label}</button>
+{
+  isLink ? (
+    <a class="button" href={url} download>
+      {label}
+    </a>
+  ) : (
+    <button onclick={url}>{label}</button>
+  )
+}
 
 <style>
-  button {
+  button,
+  a.button {
+    text-decoration: none;
+    font-size: 0.8em;
     background-color: unset;
     border: 1px solid #d8d8d8;
     padding: 8px;
     border-radius: 4px;
   }
 
-  button:hover {
+  button:hover,
+  a.button:hover {
     border-color: #aaa;
+  }
+
+  a.button:after {
+    content: none;
   }
 </style>

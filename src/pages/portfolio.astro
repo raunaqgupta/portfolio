@@ -1,15 +1,15 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
-const links = [{ text: "Raunaq Gupta", url: "/" }];
+const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
-<BaseLayout title="Work" links={links}>
+<BaseLayout title="Portfolio" breadcrumbs={breadcrumbs}>
   <section id="summary">
     <p>
-      I have a decade+ experience in shipping web applications from concept to
-      design and development. I bring deep expertise in systems design, an
-      intuitive sense for building developer tools and simplifying complex
-      enterprise software across multiple startups and large organizations.
+      I'm a design technologist with 10+ experience shipping enterprise web
+      applications and developer tools across startups and large organizations.
+      I complement product teams with expertise in systems design, an intuition
+      for designing for developers and simplifying complex enterprise workflows.
     </p>
     <p>
       Hire me to complement your product team with an expert in modeling complex
@@ -22,7 +22,10 @@ const links = [{ text: "Raunaq Gupta", url: "/" }];
     <h2>Resume</h2>
     <p>
       I'm currently designing various Splunk Observability products at Cisco.
-      View my resume <a href="/resume">here</a>.
+      View my resume <a href="/resume">here</a>. Download it <a
+        href="/resume.raunaqgupta.pdf"
+        download>here</a
+      >.
     </p>
   </section>
   <section id="case-studies">

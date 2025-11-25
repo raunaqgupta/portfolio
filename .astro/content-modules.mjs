@@ -31,5 +31,7 @@ export default new Map([
 ["src/content/casestudies/planetscale-v1.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fplanetscale-v1.mdx&astroContentModuleFlag=true")],
 ["src/content/casestudies/objects.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fobjects.mdx&astroContentModuleFlag=true")],
 ["src/content/casestudies/planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fplanetscale.mdx&astroContentModuleFlag=true")],
-["src/content/casestudies/planetscale-v2-vision-login.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fplanetscale-v2-vision-login.mdx&astroContentModuleFlag=true")]]);
+["src/content/casestudies/planetscale-v2-vision-login.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fplanetscale-v2-vision-login.mdx&astroContentModuleFlag=true")],
+["src/content/casestudies/appsec-for-appdynamics.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fappsec-for-appdynamics.mdx&astroContentModuleFlag=true")],
+["src/content/casestudies/appopt-for-splunk-o11y-cloud.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fappopt-for-splunk-o11y-cloud.mdx&astroContentModuleFlag=true")]]);
 		

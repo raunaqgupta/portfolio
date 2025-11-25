@@ -10,7 +10,6 @@ const newCaseStudies = caseStudies.map(({ slug, ...rest }) => ({
   slug: `/casestudies/` + slug,
   ...rest,
 }));
-console.log(caseStudies);
 ---
 
 <BaseLayout title="Portfolio" breadcrumbs={breadcrumbs}>

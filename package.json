@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "pnpm astro build",
+    "build": "astro build",
     "preview": "astro preview"
   },
   "keywords": [],
@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@astrojs/mdx": "^4.3.11",
-    "astro": "^5.15.9",
+    "astro": "^5.16.0",
     "cooklang": "^0.3.0"
   },
   "devDependencies": {

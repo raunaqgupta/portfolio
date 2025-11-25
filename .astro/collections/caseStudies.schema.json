@@ -1,7 +1,7 @@
 {
-  "$ref": "#/definitions/projects",
+  "$ref": "#/definitions/casestudies",
   "definitions": {
-    "projects": {
+    "casestudies": {
       "type": "object",
       "properties": {
         "title": {

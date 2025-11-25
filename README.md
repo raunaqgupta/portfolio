@@ -7,6 +7,5 @@ GoDaddy (Domain registration)
 
 1. Install nvm
 2. Install npm (`nvm install node`)
-3. Install pnpm (`npm install -g pnpm`)
-4. Install dependencies (`pnpm install`)
-5. Run dev server (`pnpm dev`)
+3. Install dependencies (`npm install`)
+4. Run dev server (`npm run dev`)

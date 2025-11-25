@@ -1,11 +1,12 @@
 import { z, defineCollection } from 'astro:content';
 
-const projectCollection = defineCollection({
+const casestudyCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     organization: z.string(),
     date: z.date(),
-    thumbnail: z.string().url()
+    thumbnail: z.string().url(),
+    caseStudy: z.boolean().optional()
   }),
 });
 
@@ -40,7 +41,7 @@ const jobCollection = defineCollection({
 })
 
 export const collections = {
-  'projects': projectCollection,
+  'casestudies': casestudyCollection,
   'poems': poemCollection,
   'recipes': recipeCollection,
   'blog': blogCollection,

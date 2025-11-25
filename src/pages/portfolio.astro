@@ -1,6 +1,16 @@
 ---
+import { getCollection } from "astro:content";
+import List from "../components/list.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
 const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
+const caseStudies = await getCollection("casestudies", ({ data }) => {
+  return data.caseStudy === true;
+});
+const newCaseStudies = caseStudies.map(({ slug, ...rest }) => ({
+  slug: `/casestudies/` + slug,
+  ...rest,
+}));
+console.log(caseStudies);
 ---
 
 <BaseLayout title="Portfolio" breadcrumbs={breadcrumbs}>
@@ -30,10 +40,10 @@ const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
   </section>
   <section id="case-studies">
     <h2>Case studies</h2>
-    <p>TODO</p>
+    <List collection={newCaseStudies} />
   </section>
-  <section id="visuals">
-    <h2>Visuals</h2>
+  <section id="gallery">
+    <h2>Gallery</h2>
     <p>TODO</p>
   </section>
 </BaseLayout>

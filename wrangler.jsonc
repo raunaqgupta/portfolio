@@ -5,6 +5,10 @@
     {
       "pattern": "raunaqgupta.com",
       "custom_domain": true
+    },
+    {
+      "pattern": "www.raunaqgupta.com",
+      "custom_domain": true
     }
   ],
   "assets": {

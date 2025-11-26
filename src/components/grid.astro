@@ -1,18 +1,19 @@
 ---
 import Thumbnail from "./thumbnail..astro";
 
-const { parent, collection } = Astro.props
+const { collection } = Astro.props;
 ---
 
 <section>
   {
     collection
-      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime() )
+      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
       .map((item) => (
         <Thumbnail
           image={item.data.thumbnail}
           title={item.data.title}
-          url={`/${parent}/` + item.slug}
+          description={item.data.description}
+          url={item.slug}
         />
       ))
   }
@@ -22,7 +23,7 @@ const { parent, collection } = Astro.props
   section {
     margin: 18px 0;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     grid-auto-flow: row;
     gap: 16px;
   }

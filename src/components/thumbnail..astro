@@ -1,19 +1,23 @@
 ---
-const { image, title, url } = Astro.props;
+const { image, title, description, url } = Astro.props;
 ---
 
 <a href={url}>
   <article>
-    <div class="thumbnail">
-      <img src={image} />
-    </div>
+    <img src={image} />
     <h2>{title}</h2>
+    <p>{description}</p>
   </article>
 </a>
 
 <style>
   a {
     border: unset;
+    text-decoration: none;
+  }
+
+  a:after {
+    content: none;
   }
 
   a:hover article {
@@ -21,22 +25,20 @@ const { image, title, url } = Astro.props;
   }
 
   article {
-    background-color: white;
+    display: flex;
+    flex-direction: row;
+    background-color: #eaeaea;
     border: 1px solid #eaeaea;
     border-radius: 6px;
-    overflow: hidden;
+    padding: var(--space-3);
+    gap: var(--space-2);
   }
 
-  .thumbnail {
-    padding: 48px 128px;
-    border-bottom: 1px solid #eaeaea;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .thumbnail img {
-    max-width: 48px;
+  img {
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
   }
 
   h2 {

@@ -79,10 +79,10 @@ import Button from "../components/button.astro";
     flex-direction: column;
     margin: 0;
     padding: 4em 8em 0;
-    font-size: 18px;
+    font-size: 1.23em;
+    max-width: 77ch;
     line-height: 28px;
     font-family: sans-serif;
-    max-width: 69ch;
     background-color: var(--color-bg);
     color: var(--color-body-primary);
     flex-grow: 1;
@@ -118,19 +118,16 @@ import Button from "../components/button.astro";
     width: 100%;
   }
 
-  figure > img {
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--color-border);
-  }
-
   figcaption {
     font-size: 14px;
     color: var(--color-body-secondary);
     padding: 4px 0px;
   }
 
-  img {
+  figure > img {
     width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
   }
 
   time {

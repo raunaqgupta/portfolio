@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import List from "../components/list.astro";
+import Grid from "../components/grid.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
 const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
 const caseStudies = await getCollection("casestudies", ({ data }) => {
@@ -39,10 +39,6 @@ const newCaseStudies = caseStudies.map(({ slug, ...rest }) => ({
   </section>
   <section id="case-studies">
     <h2>Case studies</h2>
-    <List collection={newCaseStudies} />
-  </section>
-  <section id="gallery">
-    <h2>Gallery</h2>
-    <p>TODO</p>
+    <Grid collection={newCaseStudies} />
   </section>
 </BaseLayout>

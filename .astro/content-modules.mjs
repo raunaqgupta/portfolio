@@ -8,7 +8,7 @@ export default new Map([
 ["src/content/recipes/california-breakfast-bowl.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fcalifornia-breakfast-bowl.mdx&astroContentModuleFlag=true")],
 ["src/content/recipes/chai.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fchai.mdx&astroContentModuleFlag=true")],
 ["src/content/recipes/feta-sausage-tomato-mustard-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Ffeta-sausage-tomato-mustard-sandwich.mdx&astroContentModuleFlag=true")],
-["src/content/recipes/mango-lassi.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fmango-lassi.mdx&astroContentModuleFlag=true")],
 ["src/content/recipes/potato-chip-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fpotato-chip-sandwich.mdx&astroContentModuleFlag=true")],
+["src/content/recipes/mango-lassi.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fmango-lassi.mdx&astroContentModuleFlag=true")],
 ["src/content/recipes/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fyogurt-dip.mdx&astroContentModuleFlag=true")]]);
 		

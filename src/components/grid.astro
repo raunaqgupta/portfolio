@@ -2,7 +2,7 @@
 import Thumbnail from "./thumbnail..astro";
 
 const { parent, collection } = Astro.props
-const sortedCollection = [...collection].sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+const sortedCollection = [...collection].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <section>

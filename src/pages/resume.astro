@@ -11,8 +11,11 @@ const jobs = await Promise.all(
     return { ...job, Content: rendered.Content };
   })
 );
+const sortedJobs = [...jobs].sort((a, b) => b.data.from.getTime() - a.data.from.getTime());
 
 const education = await getCollection("education");
+const sortedEducation = [...education].sort((a, b) => b.data.from.getTime() - a.data.from.getTime());
+
 const breadcrumbs = [
   { text: "Raunaq Gupta", url: "/" },
   { text: "Portfolio", url: "/portfolio" },
@@ -31,39 +34,31 @@ const actions = [
   <section id="experience">
     <h2>Experience</h2>
     {
-      jobs
-        .sort((a, b) => {
-          return b.data.from.getFullYear() - a.data.from.getFullYear();
-        })
-        .map((job) => (
-          <RangeItem
-            title={job.data.role}
-            org={job.data.organization}
-            from={job.data.from}
-            to={job.data.to}
-          >
-            <job.Content components={{ ul: UlMdx }} />
-          </RangeItem>
-        ))
+      sortedJobs.map((job) => (
+        <RangeItem
+          title={job.data.role}
+          org={job.data.organization}
+          from={job.data.from}
+          to={job.data.to}
+        >
+          <job.Content components={{ ul: UlMdx }} />
+        </RangeItem>
+      ))
     }
   </section>
   <section id="education">
     <h2>Education</h2>
     {
-      education
-        .sort((a, b) => {
-          return b.data.from - a.data.from;
-        })
-        .map((item) => (
-          <RangeItem
-            title={item.data.role}
-            org={item.data.organization}
-            from={item.data.from}
-            to={item.data.to}
-          >
-            {/* <item.Content /> */}
-          </RangeItem>
-        ))
+      sortedEducation.map((item) => (
+        <RangeItem
+          title={item.data.role}
+          org={item.data.organization}
+          from={item.data.from}
+          to={item.data.to}
+        >
+          {/* <item.Content /> */}
+        </RangeItem>
+      ))
     }
   </section>
 </BaseLayout>

@@ -14,5 +14,12 @@ export default new Map([
 ["src/content/recipes/chai.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fchai.mdx&astroContentModuleFlag=true")],
 ["src/content/recipes/mango-lassi.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fmango-lassi.mdx&astroContentModuleFlag=true")],
 ["src/content/recipes/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fyogurt-dip.mdx&astroContentModuleFlag=true")],
-["src/content/recipes/potato-chip-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fpotato-chip-sandwich.mdx&astroContentModuleFlag=true")]]);
+["src/content/recipes/potato-chip-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Frecipes%2Fpotato-chip-sandwich.mdx&astroContentModuleFlag=true")],
+["src/content/blog/asparagus-cottage-cheese-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fasparagus-cottage-cheese-sandwich.mdx&astroContentModuleFlag=true")],
+["src/content/blog/california-breakfast-bowl.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fcalifornia-breakfast-bowl.mdx&astroContentModuleFlag=true")],
+["src/content/blog/chai.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fchai.mdx&astroContentModuleFlag=true")],
+["src/content/blog/feta-sausage-tomato-mustard-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Ffeta-sausage-tomato-mustard-sandwich.mdx&astroContentModuleFlag=true")],
+["src/content/blog/mango-lassi.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fmango-lassi.mdx&astroContentModuleFlag=true")],
+["src/content/blog/potato-chip-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fpotato-chip-sandwich.mdx&astroContentModuleFlag=true")],
+["src/content/blog/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fyogurt-dip.mdx&astroContentModuleFlag=true")]]);
 		

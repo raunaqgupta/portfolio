@@ -1,6 +1,7 @@
 ---
 title: Ikebana
 date: 2024-09-24
+category: poems
 ---
 
 I bought flower frogs online  

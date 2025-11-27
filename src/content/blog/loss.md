@@ -1,6 +1,7 @@
 ---
 title: Loss
 date: 2024-04-30
+category: poems
 ---
 
 There's loss and then there's loss  

@@ -28,7 +28,8 @@ const recipeCollection = defineCollection({
 const blogCollection = defineCollection({
   schema: z.object({
     title: z.string(),
-    date: z.date()
+    date: z.date(),
+    category: z.enum(['recipe', 'poems', 'post']).optional()
   })
 })
 

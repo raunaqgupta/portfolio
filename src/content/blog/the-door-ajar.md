@@ -1,6 +1,7 @@
 ---
 title: The Door Ajar
 date: 2023-12-19
+category: poems
 ---
 
 I’m leaving this door ajar  

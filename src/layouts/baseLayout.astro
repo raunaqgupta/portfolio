@@ -74,6 +74,10 @@ import Button from "../components/button.astro";
     height: -webkit-fill-available;
   }
 
+  header {
+    margin-bottom: var(--space-3);
+  }
+
   body {
     display: flex;
     flex-direction: column;
@@ -94,6 +98,7 @@ import Button from "../components/button.astro";
 
   h1 {
     margin: 0;
+    font-size: 2.5em;
     font-weight: 200;
     line-height: 1.12em;
     font-family: "DMSerifDisplay";
@@ -196,11 +201,15 @@ import Button from "../components/button.astro";
 
   @media only screen and (max-width: 1024px) {
     body {
-      padding: 4e 4em 0;
+      padding: 4em 4em 0;
     }
   }
 
   @media only screen and (max-width: 700px) {
+    h1 {
+      font-size: 1.5em;
+    }
+
     body {
       padding: 2em 1.5em 0;
     }

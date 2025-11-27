@@ -8,7 +8,7 @@ const caseStudies = await getCollection("casestudies", ({ data }) => {
   return data.caseStudy === true;
 });
 const newCaseStudies = caseStudies.map(({ slug, ...rest }) => ({
-  slug: `/casestudies/` + slug,
+  slug: `/case-studies/` + slug,
   ...rest,
 }));
 ---

@@ -195,9 +195,11 @@ declare module 'astro:content' {
 }>;
 "education": Record<string, {
   id: string;
-  body?: string;
+  render(): Render[".md"];
+  slug: string;
+  body: string;
   collection: "education";
-  data: any;
+  data: InferEntrySchema<"education">;
   rendered?: RenderedContent;
   filePath?: string;
 }>;
@@ -208,26 +210,6 @@ declare module 'astro:content' {
   body: string;
   collection: "jobs";
   data: InferEntrySchema<"jobs">;
-  rendered?: RenderedContent;
-  filePath?: string;
-}>;
-"poems": Record<string, {
-  id: string;
-  render(): Render[".md"];
-  slug: string;
-  body: string;
-  collection: "poems";
-  data: InferEntrySchema<"poems">;
-  rendered?: RenderedContent;
-  filePath?: string;
-}>;
-"recipes": Record<string, {
-  id: string;
-  render(): Render[".md"];
-  slug: string;
-  body: string;
-  collection: "recipes";
-  data: InferEntrySchema<"recipes">;
   rendered?: RenderedContent;
   filePath?: string;
 }>;

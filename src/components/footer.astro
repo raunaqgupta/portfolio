@@ -1,15 +1,24 @@
 ---
-
+const initialYear = new Date().getFullYear();
 ---
 
 <footer>
-  <small>© 2025 Raunaq Gupta</small>
+  <small>© <span id="year">{initialYear}</span> Raunaq Gupta</small>
 </footer>
+
+<script type="module">
+  const el = document.getElementById("year");
+  if (el) {
+    const current = new Date().getFullYear();
+    if (el.textContent !== String(current)) el.textContent = String(current);
+  }
+</script>
 
 <style>
   footer {
     color: var(--color-body-tertiary);
-    padding: 16px 0;
+    padding: var(--space-2) 0;
+    margin-top: var(--space-2);
     border-top: 1px solid var(--color-border);
   }
 </style>

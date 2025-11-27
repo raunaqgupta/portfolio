@@ -11,20 +11,6 @@ const casestudyCollection = defineCollection({
   }),
 });
 
-const poemCollection = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    date: z.date(),
-  })
-})
-
-const recipeCollection = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    date: z.date()
-  })
-})
-
 const blogCollection = defineCollection({
   schema: z.object({
     title: z.string(),
@@ -42,10 +28,18 @@ const jobCollection = defineCollection({
   })
 })
 
+const educationCollection = defineCollection({
+  schema: z.object({
+    role: z.string(),
+    organization: z.string(),
+    from: z.date(),
+    to: z.date().optional()
+  })
+})
+
 export const collections = {
   'casestudies': casestudyCollection,
-  'poems': poemCollection,
-  'recipes': recipeCollection,
   'blog': blogCollection,
-  'jobs': jobCollection
+  'jobs': jobCollection,
+  'education': educationCollection
 };

@@ -10,6 +10,13 @@ import Button from "../components/button.astro";
   <head>
     <title>Raunaq Gupta / {title}</title>
     <MetaTags />
+    <link
+      rel="preload"
+      href="/fonts/DMSerifDisplay-Italic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
   </head>
   <body>
     <header>
@@ -63,7 +70,11 @@ import Button from "../components/button.astro";
 
   @font-face {
     font-family: "DMSerifDisplay";
-    src: local("DMSerifDisplay"), url("/fonts/DMSerifDisplay-Italic.ttf");
+    src:
+      local("DMSerifDisplay"),
+      url("/fonts/DMSerifDisplay-Italic.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
     font-display: swap;
   }
 

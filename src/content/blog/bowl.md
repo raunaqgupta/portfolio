@@ -1,6 +1,7 @@
 ---
 title: Bowl
 date: 2023-04-06
+category: poems
 ---
 
 I get lost in the randomness  

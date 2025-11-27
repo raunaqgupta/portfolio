@@ -10,6 +10,13 @@ import Button from "../components/button.astro";
   <head>
     <title>Raunaq Gupta / {title}</title>
     <MetaTags />
+    <link
+      rel="preload"
+      href="/fonts/DMSerifDisplay-Italic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
   </head>
   <body>
     <header>
@@ -63,7 +70,11 @@ import Button from "../components/button.astro";
 
   @font-face {
     font-family: "DMSerifDisplay";
-    src: local("DMSerifDisplay"), url("/fonts/DMSerifDisplay-Italic.ttf");
+    src:
+      local("DMSerifDisplay"),
+      url("/fonts/DMSerifDisplay-Italic.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
     font-display: swap;
   }
 
@@ -74,15 +85,19 @@ import Button from "../components/button.astro";
     height: -webkit-fill-available;
   }
 
+  header {
+    margin-bottom: var(--space-3);
+  }
+
   body {
     display: flex;
     flex-direction: column;
     margin: 0;
     padding: 4em 8em 0;
-    font-size: 18px;
+    font-size: 1.23em;
+    max-width: 77ch;
     line-height: 28px;
     font-family: sans-serif;
-    max-width: 69ch;
     background-color: var(--color-bg);
     color: var(--color-body-primary);
     flex-grow: 1;
@@ -94,6 +109,7 @@ import Button from "../components/button.astro";
 
   h1 {
     margin: 0;
+    font-size: 2.5em;
     font-weight: 200;
     line-height: 1.12em;
     font-family: "DMSerifDisplay";
@@ -118,19 +134,16 @@ import Button from "../components/button.astro";
     width: 100%;
   }
 
-  figure > img {
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--color-border);
-  }
-
   figcaption {
     font-size: 14px;
     color: var(--color-body-secondary);
     padding: 4px 0px;
   }
 
-  img {
+  figure > img {
     width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
   }
 
   time {
@@ -199,11 +212,15 @@ import Button from "../components/button.astro";
 
   @media only screen and (max-width: 1024px) {
     body {
-      padding: 4e 4em 0;
+      padding: 4em 4em 0;
     }
   }
 
   @media only screen and (max-width: 700px) {
+    h1 {
+      font-size: 1.5em;
+    }
+
     body {
       padding: 2em 1.5em 0;
     }

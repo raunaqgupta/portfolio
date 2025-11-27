@@ -30,6 +30,9 @@
           "type": "string",
           "format": "uri"
         },
+        "caseStudy": {
+          "type": "boolean"
+        },
         "$schema": {
           "type": "string"
         }

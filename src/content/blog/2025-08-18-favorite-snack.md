@@ -1,6 +1,7 @@
 ---
 title: Current favorite snack
 date: 2025-08-18
+category: post
 ---
 
 Lately, my go-to snack has been ridged Ruffles salted potato chips paired with 5% fat Fage Greek yogurt. Interestingly, I've lost my taste for kettle chips, even though they used to be the only type I craved until not long ago.

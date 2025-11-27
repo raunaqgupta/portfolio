@@ -1,13 +1,16 @@
 {
-  "$ref": "#/definitions/blog",
+  "$ref": "#/definitions/education",
   "definitions": {
-    "blog": {
+    "education": {
       "type": "object",
       "properties": {
-        "title": {
+        "role": {
           "type": "string"
         },
-        "date": {
+        "organization": {
+          "type": "string"
+        },
+        "from": {
           "anyOf": [
             {
               "type": "string",
@@ -23,12 +26,20 @@
             }
           ]
         },
-        "category": {
-          "type": "string",
-          "enum": [
-            "recipe",
-            "poems",
-            "post"
+        "to": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
           ]
         },
         "$schema": {
@@ -36,8 +47,9 @@
         }
       },
       "required": [
-        "title",
-        "date"
+        "role",
+        "organization",
+        "from"
       ],
       "additionalProperties": false
     }

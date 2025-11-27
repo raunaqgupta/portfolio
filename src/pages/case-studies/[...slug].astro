@@ -4,7 +4,7 @@ import Imgmdx from "../../components/img.mdx.astro";
 
 import { getCollection } from "astro:content";
 export async function getStaticPaths() {
-  const projects = await getCollection("recipes");
+  const projects = await getCollection("casestudies");
   return projects.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },
@@ -15,7 +15,7 @@ const { entry } = Astro.props;
 const { Content, components } = await entry.render();
 const links = [
   { text: "Raunaq Gupta", url: "/" },
-  { text: "Recipes", url: "/recipes" },
+  { text: "Portfolio", url: "/portfolio" },
 ];
 ---
 

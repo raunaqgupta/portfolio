@@ -1,10 +1,16 @@
 {
-  "$ref": "#/definitions/blog",
+  "$ref": "#/definitions/casestudies",
   "definitions": {
-    "blog": {
+    "casestudies": {
       "type": "object",
       "properties": {
         "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "organization": {
           "type": "string"
         },
         "date": {
@@ -23,13 +29,12 @@
             }
           ]
         },
-        "category": {
+        "thumbnail": {
           "type": "string",
-          "enum": [
-            "recipe",
-            "poems",
-            "post"
-          ]
+          "format": "uri"
+        },
+        "caseStudy": {
+          "type": "boolean"
         },
         "$schema": {
           "type": "string"
@@ -37,7 +42,9 @@
       },
       "required": [
         "title",
-        "date"
+        "organization",
+        "date",
+        "thumbnail"
       ],
       "additionalProperties": false
     }

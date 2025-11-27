@@ -1,32 +1,21 @@
 import { z, defineCollection } from 'astro:content';
 
-const projectCollection = defineCollection({
+const casestudyCollection = defineCollection({
   schema: z.object({
     title: z.string(),
+    description: z.string().optional(),
     organization: z.string(),
     date: z.date(),
-    thumbnail: z.string().url()
+    thumbnail: z.string().url(),
+    caseStudy: z.boolean().optional()
   }),
 });
-
-const poemCollection = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    date: z.date(),
-  })
-})
-
-const recipeCollection = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    date: z.date()
-  })
-})
 
 const blogCollection = defineCollection({
   schema: z.object({
     title: z.string(),
-    date: z.date()
+    date: z.date(),
+    category: z.enum(['recipe', 'poems', 'post']).optional()
   })
 })
 
@@ -39,10 +28,18 @@ const jobCollection = defineCollection({
   })
 })
 
+const educationCollection = defineCollection({
+  schema: z.object({
+    role: z.string(),
+    organization: z.string(),
+    from: z.date(),
+    to: z.date().optional()
+  })
+})
+
 export const collections = {
-  'projects': projectCollection,
-  'poems': poemCollection,
-  'recipes': recipeCollection,
+  'casestudies': casestudyCollection,
   'blog': blogCollection,
-  'jobs': jobCollection
+  'jobs': jobCollection,
+  'education': educationCollection
 };

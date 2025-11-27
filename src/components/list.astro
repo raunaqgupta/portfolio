@@ -1,15 +1,14 @@
 ---
 const { collection, isStyled } = Astro.props;
+const sortedCollection = [...collection].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <ul class={isStyled ? "styled" : ""}>
   {
-    collection
-      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-      .map((item) => (
-        <li>
-          <a href={item.slug}>{item.data.title}</a>
-        </li>
-      ))
+    sortedCollection.map((item) => (
+      <li>
+        <a href={item.slug}>{item.data.title}</a>
+      </li>
+    ))
   }
 </ul>

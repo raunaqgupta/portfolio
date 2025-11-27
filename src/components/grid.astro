@@ -1,21 +1,22 @@
 ---
 import Thumbnail from "./thumbnail..astro";
 
-const { collection } = Astro.props;
+const { parent, collection } = Astro.props;
+const sortedCollection = [...collection].sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
 ---
 
 <section>
   {
-    collection
-      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-      .map((item) => (
-        <Thumbnail
-          image={item.data.thumbnail}
-          title={item.data.title}
-          description={item.data.description}
-          url={item.slug}
-        />
-      ))
+    sortedCollection.map((item) => (
+      <Thumbnail
+        image={item.data.thumbnail}
+        title={item.data.title}
+        description={item.data.description}
+        url={item.slug}
+      />
+    ))
   }
 </section>
 

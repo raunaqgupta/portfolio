@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 
 import mdx from "@astrojs/mdx";
 
@@ -7,5 +7,17 @@ export default defineConfig({
   integrations: [mdx()],
   image: {
     layout: "constrained"
+  },
+  experimental: {
+    fonts: [{
+      provider: 'local',
+      name: 'DMSerifDisplay-Italic',
+      cssVariable: '--font-dm-serif-display-italic',
+      variants: [{
+        src: ["./src/assets/fonts/DMSerifDisplay-Italic.woff2"],
+        weight: 400,
+        style: 'normal'
+      }]
+    }]
   }
 });

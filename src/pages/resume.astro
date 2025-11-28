@@ -11,10 +11,14 @@ const jobs = await Promise.all(
     return { ...job, Content: rendered.Content };
   })
 );
-const sortedJobs = [...jobs].sort((a, b) => b.data.from.getTime() - a.data.from.getTime());
+const sortedJobs = [...jobs].sort(
+  (a, b) => b.data.from.getTime() - a.data.from.getTime()
+);
 
 const education = await getCollection("education");
-const sortedEducation = [...education].sort((a, b) => b.data.from.getTime() - a.data.from.getTime());
+const sortedEducation = [...education].sort(
+  (a, b) => b.data.from.getTime() - a.data.from.getTime()
+);
 
 const breadcrumbs = [
   { text: "Raunaq Gupta", url: "/" },
@@ -27,6 +31,7 @@ const actions = [
     url: "/resume.raunaqgupta.pdf",
     isLink: true,
     isDownload: true,
+    icon: "download",
   },
 ];
 ---

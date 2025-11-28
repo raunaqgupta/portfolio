@@ -1,0 +1,11 @@
+---
+const { name, size = 24, color = "currentColor" } = Astro.props;
+---
+
+<img
+  src={`/icons/${name}.svg`}
+  alt={name}
+  width={size}
+  height={size}
+  style={`color: ${color};`}
+/>

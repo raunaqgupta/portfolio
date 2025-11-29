@@ -1,17 +1,16 @@
 ---
-import ArrowRightIcon from "../assets/icons/arrow-right.svg";
-const { label, url, isLink, isDownload, Icon } = Astro.props;
+const { label, url, iconOnly = false, isLink, isDownload, Icon } = Astro.props;
 ---
 
 {
   isLink ? (
     <a class="button" href={url} {...(isDownload ? { download: true } : {})}>
-      {label}
+      {iconOnly ? "" : label}
       {Icon && <Icon />}
     </a>
   ) : (
     <button onclick={url}>
-      {label}
+      {iconOnly ? "" : label}
       {Icon && <Icon />}
     </button>
   )
@@ -39,5 +38,11 @@ const { label, url, isLink, isDownload, Icon } = Astro.props;
 
   a.button:after {
     content: none;
+  }
+
+  @media only screen and (max-width: 700px) {
+    article {
+      flex-direction: column;
+    }
   }
 </style>

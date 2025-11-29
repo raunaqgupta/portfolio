@@ -63,14 +63,12 @@ const actions = [
           {job.caseStudies.length > 0 && (
             <div class="projects">
               {job.caseStudies.map((caseStudy) => (
-                <a href={`/case-studies/${caseStudy.slug}`}>
-                  <Thumbnail
-                    image={caseStudy.data.thumbnail}
-                    title={caseStudy.data.title}
-                    url={`/case-studies/${caseStudy.slug}`}
-                    size="small"
-                  />
-                </a>
+                <Thumbnail
+                  image={caseStudy.data.thumbnail}
+                  title={caseStudy.data.title}
+                  url={`/case-studies/${caseStudy.slug}`}
+                  size="small"
+                />
               ))}
             </div>
           )}
@@ -97,6 +95,6 @@ const actions = [
   .projects {
     display: flex;
     flex-direction: row;
-    gap: var(--space-1);
+    gap: var(--space-2);
   }
 </style>

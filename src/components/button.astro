@@ -1,10 +1,25 @@
 ---
-const { label, url, iconOnly = false, isLink, isDownload, Icon } = Astro.props;
+const {
+  label,
+  url,
+  iconOnly = false,
+  isLink,
+  isExternalLink,
+  isDownload,
+  Icon,
+} = Astro.props;
 ---
 
 {
   isLink ? (
-    <a class="button" href={url} {...(isDownload ? { download: true } : {})}>
+    <a
+      class="button"
+      href={url}
+      {...(isExternalLink
+        ? { target: "_blank", rel: "noopener noreferrer" }
+        : {})}
+      {...(isDownload ? { download: true } : {})}
+    >
       {iconOnly ? "" : label}
       {Icon && <Icon />}
     </a>

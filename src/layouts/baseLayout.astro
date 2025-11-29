@@ -1,23 +1,13 @@
 ---
 const { title, breadcrumbs, actions } = Astro.props;
 import Breadcrumbs from "../components/breadcrumbs.astro";
-import MetaTags from "../components/metaTags.astro";
+import Head from "../components/head.astro";
 import Footer from "../components/footer.astro";
 import Button from "../components/button.astro";
 ---
 
 <html lang="en">
-  <head>
-    <title>Raunaq Gupta / {title}</title>
-    <MetaTags />
-    <link
-      rel="preload"
-      href="/fonts/DMSerifDisplay-Italic.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-  </head>
+  <Head title={title} />
   <body>
     <header>
       <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -68,16 +58,6 @@ import Button from "../components/button.astro";
     }
   }
 
-  @font-face {
-    font-family: "DMSerifDisplay";
-    src:
-      local("DMSerifDisplay"),
-      url("/fonts/DMSerifDisplay-Italic.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-
   html {
     display: flex;
     flex-direction: column;
@@ -112,7 +92,7 @@ import Button from "../components/button.astro";
     font-size: 2.5em;
     font-weight: 200;
     line-height: 1.12em;
-    font-family: "DMSerifDisplay";
+    font-family: var(--font-dm-serif-display-italic), serif;
   }
 
   h2 {

@@ -1,9 +1,15 @@
 ---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
 const { name, size = 24, color = "currentColor" } = Astro.props;
+const icons = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/icons/*.svg"
+);
+const iconUrl = `/src/assets/icons/${name}.svg`;
 ---
 
-<img
-  src={`/icons/${name}.svg`}
+<Image
+  src={icons[iconUrl]()}
   alt={name}
   width={size}
   height={size}

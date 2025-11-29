@@ -1,18 +1,18 @@
 ---
-const { label, url, isLink, isDownload, icon } = Astro.props;
-import Icon from "./icon.astro";
+import ArrowRightIcon from "../assets/icons/arrow-right.svg";
+const { label, url, isLink, isDownload, Icon } = Astro.props;
 ---
 
 {
   isLink ? (
     <a class="button" href={url} {...(isDownload ? { download: true } : {})}>
       {label}
-      {icon && <Icon name={icon} size={16} />}
+      {Icon && <Icon />}
     </a>
   ) : (
     <button onclick={url}>
       {label}
-      {icon && <Icon name={icon} size={16} />}
+      {Icon && <Icon />}
     </button>
   )
 }

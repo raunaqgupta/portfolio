@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Grid from "../components/grid.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
 import Button from "../components/button.astro";
+import ArrowRightIcon from "../assets/icons/arrow-right.svg";
 const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
 const caseStudies = await getCollection("casestudies", ({ data }) => {
   return data.caseStudy === true;
@@ -37,7 +38,7 @@ const newCaseStudies = caseStudies.map(({ slug, ...rest }) => ({
       label="View Resume"
       url="/resume"
       isLink={true}
-      icon="arrow-right"
+      Icon={ArrowRightIcon}
     />
   </section>
   <section id="case-studies">

@@ -33,36 +33,36 @@ import Button from "../components/button.astro";
 
 <style is:global>
   :root {
+    --color-bg: #f6f6f6;
+    --color-border: #d8d8d8;
+    --color-body-primary: #666;
+    --color-body-secondary: #666;
+    --color-body-tertiary: #999;
+    --color-heading: #333;
+    --color-highlight: #00659b;
     --space-0: 4px;
     --space-1: 8px;
     --space-2: 16px;
     --space-3: 24px;
-    --color-bg: #f6f6f6;
-    --color-heading: #333;
-    --color-body-primary: #111;
-    --color-body-secondary: #666;
-    --color-body-tertiary: #999;
-    --color-highlight: #00659b;
-    --color-border: #d8d8d8;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
       --color-bg: #1e2227;
-      --color-heading: #e7e7e7;
+      --color-border: #2c3238;
       --color-body-primary: #dcdcdc;
       --color-body-secondary: #a9b0b7;
       --color-body-tertiary: #7f8891;
+      --color-heading: #e7e7e7;
       --color-highlight: #39a5e6;
-      --color-border: #2c3238;
     }
   }
 
   html {
     display: flex;
     flex-direction: column;
-    height: 100vh;
     height: -webkit-fill-available;
+    height: 100vh;
   }
 
   header {
@@ -76,17 +76,17 @@ import Button from "../components/button.astro";
   }
 
   body {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 4em 8em 0;
-    font-size: 1.23em;
-    max-width: 77ch;
-    line-height: 28px;
-    font-family: sans-serif;
     background-color: var(--color-bg);
     color: var(--color-body-primary);
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
+    font-family: sans-serif;
+    font-size: 1.23em;
+    line-height: 28px;
+    margin: 0;
+    max-width: 77ch;
+    padding: 4em 8em 0;
   }
 
   main {
@@ -94,21 +94,23 @@ import Button from "../components/button.astro";
   }
 
   h1 {
-    margin: 0;
+    color: var(--color-heading);
+    font-family: var(--font-dm-serif-display-italic), serif;
     font-size: 2.5em;
     font-weight: 200;
     line-height: 1.12em;
-    font-family: var(--font-dm-serif-display-italic), serif;
+    margin: 0;
   }
 
   h2 {
-    margin-top: 2em;
-    font-weight: 200;
-    font-size: 1.2em;
     color: var(--color-heading);
+    font-size: 1.2em;
+    font-weight: 200;
+    margin-top: 2em;
   }
 
   h3 {
+    color: var(--color-heading);
     margin-bottom: 0;
   }
 
@@ -121,15 +123,15 @@ import Button from "../components/button.astro";
   }
 
   figcaption {
-    font-size: 14px;
     color: var(--color-body-secondary);
+    font-size: 14px;
     padding: 4px 0px;
   }
 
   figure > img {
-    width: 100%;
     border: 1px solid var(--color-border);
     border-radius: 12px;
+    width: 100%;
   }
 
   time {
@@ -141,11 +143,11 @@ import Button from "../components/button.astro";
   }
 
   ul {
-    list-style-type: none;
     display: flex;
     flex-direction: column;
-    padding-inline-start: 0;
     gap: 8px;
+    list-style-type: none;
+    padding-inline-start: 0;
   }
 
   ul.styled {
@@ -154,30 +156,30 @@ import Button from "../components/button.astro";
   }
 
   a {
-    display: inline;
-    text-decoration: none;
-    padding-bottom: 1px;
     box-sizing: border-box;
     color: var(--color-body-primary);
+    display: inline;
+    padding-bottom: 1px;
     position: relative;
+    text-decoration: none;
+    text-decoration-color: var(--color-border);
     text-decoration-line: underline;
+    text-decoration-skip-ink: auto;
     text-decoration-style: solid;
     text-underline-offset: 5px;
-    text-decoration-color: var(--color-border);
-    text-decoration-skip-ink: auto;
     transition: text-decoration-color 0.5s ease-out;
   }
 
   a:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -1px;
-    width: 100%;
     border-bottom: 2px solid var(--color-highlight);
+    bottom: -1px;
+    content: "";
+    left: 0;
+    position: absolute;
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.2s ease-out;
+    width: 100%;
   }
 
   a:hover::after,
@@ -191,9 +193,9 @@ import Button from "../components/button.astro";
   }
 
   .heading {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    align-items: center;
   }
 
   @media only screen and (max-width: 1024px) {

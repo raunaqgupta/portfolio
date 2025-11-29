@@ -1,14 +1,18 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
 import RangeItem from "../components/rangeItem.astro";
-import UlMdx from "../components/ul.mdx.astro";
+import Thumbnail from "../components/thumbnail..astro";
 
 import { getCollection } from "astro:content";
+import { getEntries } from "astro:content";
 const rawJobs = await getCollection("jobs");
 const jobs = await Promise.all(
   rawJobs.map(async (job) => {
     const rendered = await job.render();
-    return { ...job, Content: rendered.Content };
+    const caseStudies = job.data.caseStudies
+      ? await getEntries(job.data.caseStudies)
+      : [];
+    return { ...job, Content: rendered.Content, caseStudies };
   })
 );
 const sortedJobs = [...jobs].sort(
@@ -26,6 +30,12 @@ const breadcrumbs = [
 ];
 
 const actions = [
+  {
+    label: "LinkedIn",
+    url: "https://www.linkedin.com/in/raunaqgupta/",
+    isLink: true,
+    icon: "linkedin",
+  },
   {
     label: "Download",
     url: "/resume.raunaqgupta.pdf",
@@ -47,7 +57,21 @@ const actions = [
           from={job.data.from}
           to={job.data.to}
         >
-          <job.Content components={{ ul: UlMdx }} />
+          <job.Content />
+          {job.caseStudies.length > 0 && (
+            <div class="projects">
+              {job.caseStudies.map((caseStudy) => (
+                <a href={`/case-studies/${caseStudy.slug}`}>
+                  <Thumbnail
+                    image={caseStudy.data.thumbnail}
+                    title={caseStudy.data.title}
+                    url={`/case-studies/${caseStudy.slug}`}
+                    size="small"
+                  />
+                </a>
+              ))}
+            </div>
+          )}
         </RangeItem>
       ))
     }
@@ -61,10 +85,16 @@ const actions = [
           org={item.data.organization}
           from={item.data.from}
           to={item.data.to}
-        >
-          {/* <item.Content /> */}
-        </RangeItem>
+        />
       ))
     }
   </section>
 </BaseLayout>
+
+<style>
+  .projects {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-1);
+  }
+</style>

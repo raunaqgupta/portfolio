@@ -1,6 +1,6 @@
-import { z, defineCollection } from 'astro:content';
+import { z, defineCollection, reference } from 'astro:content';
 
-const casestudyCollection = defineCollection({
+const casestudies = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
@@ -11,7 +11,7 @@ const casestudyCollection = defineCollection({
   }),
 });
 
-const blogCollection = defineCollection({
+const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.date(),
@@ -19,16 +19,17 @@ const blogCollection = defineCollection({
   })
 })
 
-const jobCollection = defineCollection({
+const jobs = defineCollection({
   schema: z.object({
     role: z.string(),
     organization: z.string(),
     from: z.date(),
-    to: z.date().optional()
+    to: z.date().optional(),
+    caseStudies: z.array(reference('casestudies')).optional()
   })
 })
 
-const educationCollection = defineCollection({
+const education = defineCollection({
   schema: z.object({
     role: z.string(),
     organization: z.string(),
@@ -38,8 +39,8 @@ const educationCollection = defineCollection({
 })
 
 export const collections = {
-  'casestudies': casestudyCollection,
-  'blog': blogCollection,
-  'jobs': jobCollection,
-  'education': educationCollection
+  casestudies,
+  blog,
+  jobs,
+  education
 };

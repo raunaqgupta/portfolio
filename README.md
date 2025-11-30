@@ -1,9 +1,4 @@
-# Setup
-
-Cloudflare (Deployment + DNS)
-GoDaddy (Domain registration)
-
-# Development steps
+# Dev Setup
 
 1. Install nvm
 2. Install npm (`nvm install node`)

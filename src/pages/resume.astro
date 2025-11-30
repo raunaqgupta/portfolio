@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
 import RangeItem from "../components/rangeItem.astro";
-import Thumbnail from "../components/thumbnail..astro";
+import Thumbnail from "../components/thumbnail.astro";
 import DownloadIcon from "../assets/icons/download.svg";
 import LinkedInIcon from "../assets/icons/linkedin.svg";
 
@@ -36,14 +36,15 @@ const actions = [
     label: "LinkedIn",
     url: "https://www.linkedin.com/in/raunaqgupta/",
     isLink: true,
-    Icon: LinkedInIcon,
+    isExternalLink: true,
+    preIcon: LinkedInIcon,
   },
   {
     label: "Download",
     url: "/resume.raunaqgupta.pdf",
     isLink: true,
     isDownload: true,
-    Icon: DownloadIcon,
+    postIcon: DownloadIcon,
   },
 ];
 ---
@@ -63,14 +64,13 @@ const actions = [
           {job.caseStudies.length > 0 && (
             <div class="projects">
               {job.caseStudies.map((caseStudy) => (
-                <a href={`/case-studies/${caseStudy.slug}`}>
-                  <Thumbnail
-                    image={caseStudy.data.thumbnail}
-                    title={caseStudy.data.title}
-                    url={`/case-studies/${caseStudy.slug}`}
-                    size="small"
-                  />
-                </a>
+                <Thumbnail
+                  image={caseStudy.data.thumbnail}
+                  title={caseStudy.data.title}
+                  url={`/case-studies/${caseStudy.slug}`}
+                  size="small"
+                  theme="flat"
+                />
               ))}
             </div>
           )}
@@ -97,6 +97,6 @@ const actions = [
   .projects {
     display: flex;
     flex-direction: row;
-    gap: var(--space-1);
+    gap: var(--space-2);
   }
 </style>

@@ -1,10 +1,17 @@
 ---
-const { image, title, description, url, size = "large" } = Astro.props;
+const {
+  image,
+  title,
+  description,
+  url,
+  size = "large",
+  theme = "glass",
+} = Astro.props;
 import Card from "./card.astro";
 ---
 
 <a href={url} class={size === "small" ? "small" : ""}>
-  <Card size={size}>
+  <Card size={size} theme={theme}>
     <img src={image} alt={title} />
     <div class="content">
       <p class="title">{title}</p>
@@ -16,22 +23,32 @@ import Card from "./card.astro";
 <style>
   a {
     text-decoration: none;
+    transition: transform 160ms ease;
   }
 
   a:after {
     content: none;
   }
 
+  a:hover {
+    transform: translateY(-4px);
+  }
+
   img {
-    flex-grow: 1;
+    width: 100%;
     max-width: 400px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-border);
     border-radius: 6px;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   a.small img {
-    max-width: 150px;
+    max-width: 100px;
+    filter: brightness(80%);
+  }
+
+  a.small:hover img {
+    filter: brightness(100%);
   }
 
   .content {

@@ -6,8 +6,11 @@ const {
   isLink,
   isExternalLink,
   isDownload,
-  Icon,
+  preIcon: PreIcon,
+  postIcon: PostIcon,
 } = Astro.props;
+
+import ExternalLinkIcon from "../assets/icons/external-link.svg";
 ---
 
 {
@@ -20,13 +23,16 @@ const {
         : {})}
       {...(isDownload ? { download: true } : {})}
     >
+      {PreIcon && <PreIcon />}
       {iconOnly ? "" : label}
-      {Icon && <Icon />}
+      {PostIcon && <PostIcon />}
+      {isExternalLink && <ExternalLinkIcon />}
     </a>
   ) : (
     <button onclick={url}>
+      {PreIcon && <PreIcon />}
       {iconOnly ? "" : label}
-      {Icon && <Icon />}
+      {PostIcon && <PostIcon />}
     </button>
   )
 }

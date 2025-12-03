@@ -1,7 +1,7 @@
 ---
 title: Database monitoring for Splunk Observability Cloud
 description: Enabling comprehensive database monitoring capabilities within Splunk Observability Cloud.
-organization: Cisco (Splunk)
+organization: Cisco
 date: 2025-11-25
 thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/thumbnail.png?f=avif
 caseStudy: true
@@ -9,16 +9,42 @@ caseStudy: true
 
 ![Database monitoring](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/thumbnail.png?f=avif)
 
-Database monitoring is a critical aspect of maintaining the health and performance of databases. This case study explores how we implemented database monitoring for Splunk Observability Cloud, a leading platform for observability and monitoring.
+## Context
 
-## Opportunity
+### Observability and Database Monitoring
 
-A database has multiple moving parts. It has the host on which a database server runs. This database server manages multiple databases, each having its own set of tables, indexes, and other objects. Queries are executed against these databases to retrieve or manipulate data. Each of these components can impact the overall performance and reliability of the database system.
+Observability is a crucial aspect for ensuring reliability, performance, and user satisfaction of modern applications. Databases are the backbone of all business applications. To have a comprehensive view of a system, it is essential to monitor the databases that power these applications.
 
-Splunk Observability Cloud was already capable of monitoring such hosts but lacked the ability to monitor the database server and its components in detail. This presented an opportunity to enhance the monitoring capabilities of Splunk Observability Cloud by adding database monitoring features.
+Splunk Observability Cloud is a Gartner leader in observability solutions, and this case study focuses on enhancing its database monitoring capabilities.
 
-## Process
+### Who benefits from Database monitoring?
 
-TODO
+Database monitoring fits into existing workflows for DevOps, SRE, and Database Administrators (DBAs). These professionals are responsible for ensuring the performance, reliability, and availability of applications and their underlying databases.
+
+### Why build this?
+
+Splunk Observability Cloud provided surface-level visibility into the performance of database queries impacting monitored applications. However, to truly understand database bottlenecks, it becamse apparent that deeper insights into the database server and its components were necessary.
+
+Every competitor and other observability platforms had database monitoring capabilities. Customers were asking for it, and it was a glaring omission in Splunk Observability Cloud's feature set.
+
+We also knew from Appdynamics's success that customers were willing to pay ~$50 million in ARR to . Therefore, we set out to build a robust database monitoring solution within Splunk Observability Cloud.
+
+## Process & Exploration
+
+The design process began with understanding three new aspects: how Splunk Observability Cloud was structured, how Splunk UI components and patterns worked, and the roadmap for database monitoring.
+
+## Key decision points
+
+Database monitoring was being launched as an independent product vertical with its own license. At the same time it needed to be designed to be deeply integrated within the APM, and Infrastructure products.
 
 ## Solution
+
+TODO: Add screenshots and more details about the solution.
+
+## Impact
+
+On the Alpha launch of the vertical where we had 11 customer signups, we were able to convert 7 of them to paying customers within the first 3 months of launch. This was a significant achievement and demonstrated the value of the product.
+
+## Learnings
+
+Building a new product vertical within an existing platform is a complex task that requires careful planning and execution. It is essential to understand the existing platform, its users, and their needs. It is also crucial to have a clear roadmap and vision for the new product vertical.

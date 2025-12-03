@@ -4,6 +4,7 @@ organization: Cisco (Splunk, AppDynamics)
 from: 2021-09-28
 caseStudies:
   - dbmon-for-splunk-o11y-cloud
+  - appopt-for-splunk-o11y-cloud
   - appsec-for-appdynamics
 ---
 

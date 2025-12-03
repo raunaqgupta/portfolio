@@ -5,7 +5,7 @@ from: 2021-09-28
 caseStudies:
   - dbmon-for-splunk-o11y-cloud
   - appopt-for-splunk-o11y-cloud
-  - appsec-for-appdynamics
+  - appsec-for-appd
 ---
 
 1. Designed new verticals for Database monitoring, Application security, and Application optimization acros [Splunk Observability Cloud](https://www.splunk.com/en_us/products/observability-cloud.html), [Splunk IT Service Intelligence](https://www.splunk.com/en_us/products/it-service-intelligence.html), and [Cisco Observability Platform](https://docs.appdynamics.com/observability/cisco-observability-platform/en).

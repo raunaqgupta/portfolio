@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../../layouts/baseLayout.astro";
 import Imgmdx from "../../components/img.mdx.astro";
+import Ulmdx from "../../components/ul.mdx.astro";
+import Listmdx from "../../components/list.mdx.astro";
 
 import { getCollection } from "astro:content";
 export async function getStaticPaths() {
@@ -20,5 +22,7 @@ const links = [
 ---
 
 <BaseLayout title={entry.data.title} breadcrumbs={links}>
-  <Content components={{ ...components, img: Imgmdx }} />
+  <Content
+    components={{ ...components, img: Imgmdx, ul: Ulmdx, List: Listmdx }}
+  />
 </BaseLayout>

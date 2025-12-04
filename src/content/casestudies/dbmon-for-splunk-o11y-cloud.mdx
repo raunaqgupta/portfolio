@@ -5,35 +5,66 @@ organization: Cisco
 date: 2025-11-25
 thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/thumbnail.png?f=avif
 caseStudy: true
+gallery:
+  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/component_qep.png?f=avif
 ---
+import Gallery from '../../components/gallery.astro';
+
 
 ![Database monitoring](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/thumbnail.png?f=avif)
 
-## Context
+## Table of contents
 
-### Observability and Database Monitoring
+<List>
+  <li><a href="#the-need-for-database-monitoring">The need for Database Monitoring</a></li>
+  <li><a href="#designing-for-execution">Designing for execution</a></li>
+  <li><a href="#solution">Solution</a></li>
+  <li><a href="#impact">Impact</a></li>
+  <li><a href="#learnings">Learnings</a></li>
+  <li><a href="#gallery">Gallery</a></li>
+</List>
 
-Observability is a crucial aspect for ensuring reliability, performance, and user satisfaction of modern applications. Databases are the backbone of all business applications. To have a comprehensive view of a system, it is essential to monitor the databases that power these applications.
+## The need for Database Monitoring
 
-Splunk Observability Cloud is a Gartner leader in observability solutions, and this case study focuses on enhancing its database monitoring capabilities.
+Splunk Observability Cloud is a Gartner leader in observability solutions with a comprehensive set of features for monitoring applications, infrastructure, and end-user monitoring. However, it lacked robust database monitoring capabilities. This gap between application performance and database performance made it challenging for users to identify and troubleshoot database-related issues affecting their applications.
 
-### Who benefits from Database monitoring?
+Every competitive observability platform had database monitoring capabilities that extended beyond currently on offer. Customers had been asking for it on Splunk Ideas forum for years, and it was a glaring omission in Splunk Observability Cloud's feature set.
 
-Database monitoring fits into existing workflows for DevOps, and Software Reliability Engineers (SREs). In addition, Database monitoring would open up new use cases to target Database Administrators (DBAs).
+We also knew from Appdynamics's success that customers were willing to pay ~$50 million in ARR. Therefore, we set out to build a robust database monitoring solution within Splunk Observability Cloud.
 
-### Why build this?
+### Expanding addressable user base
 
-Splunk Observability Cloud provided surface-level visibility into the performance of database queries impacting monitored applications. However, to truly understand database bottlenecks, it becamse apparent that deeper insights into the database server and its components were necessary.
+It was evident that Database monitoring would complement existing workflows for DevOps, and Software Reliability Engineers (SREs). But in addition to that, Database monitoring would also open up new use cases that target new personas; specifically Database Administrators (DBAs) which would effectively increase the potential market cap for Splunk Observability Cloud.
 
-Every competitor and other observability platforms had database monitoring capabilities. Customers were asking for it, and it was a glaring omission in Splunk Observability Cloud's feature set.
+### Filling the gap
 
-We also knew from Appdynamics's success that customers were willing to pay ~$50 million in ARR to . Therefore, we set out to build a robust database monitoring solution within Splunk Observability Cloud.
+![Filling the gap](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
 
-## Process & Exploration
+At the time, users had access to query performance metrics through APM traces. However, these metrics were limited in scope and did not provide a comprehensive view of database performance. Users needed a comprehensive view into the performance of each query that was being executed especially if it was a slow or a long-running query.
 
-The design process began with understanding three new aspects: how Splunk Observability Cloud was structured, how Splunk UI components and patterns worked, and the roadmap for database monitoring.
+### Constraint: An independently licensed vertical
+
+Splunk Observability Cloud sold its features as independent verticals. Customers could choose to buy only the features they needed. This meant that Database monitoring had to be designed as an independent vertical with its own license, pricing, and onboarding flows. At the same time, it had to be deeply integrated with existing verticals such as Application Performance Monitoring (APM), and Infrastructure monitoring to provide a seamless user experience.
+
+## Designing for speed (of execution)
+
+The design process began with understanding three new aspects: how Splunk Observability Cloud was structured, how Splunk UI components and patterns worked, and the roadmap of various database monitoring features ahead of us.
+
+### Visualizing the query explain plan
+
+The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Each node in the tree represented a specific operation, such as a table scan, index scan, join, or sort. The nodes were color-coded based on their execution time, allowing users to quickly identify the most time-consuming operations.
+
+Multiple micro-interactions were finessed with the frontend team to ensure that the tree structure was intuitive and easy to navigate.
+
+![Component: Query explain plan](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/component_qep.png?f=avif)
 
 ## Key decision points
+
+<List>
+  <li>Integrating Database monitoring with existing verticals such as APM and Infrastructure monitoring.</li>
+  <li>Diffrentiating between Database monitoring and Infrastructure while ensuring a seamless user experience.</li>
+</List>
 
 Database monitoring was being launched as an independent product vertical with its own license. At the same time it needed to be designed to be deeply integrated within the APM, and Infrastructure products.
 
@@ -49,4 +80,10 @@ On the Alpha launch of the vertical where we had 11 customer signups, we were ab
 
 ## Learnings
 
-Building a new product vertical within an existing platform is a complex task that requires careful planning and execution. It is essential to understand the existing platform, its users, and their needs. It is also crucial to have a clear roadmap and vision for the new product vertical.
+{/* What you’d repeat, what you’d do differently, and what surprised you. */}
+
+Building a new product vertical within an existing platform has many layers to unravel. For instance, the existence of a design system does not necessarily mean the design patterns are well-documented or even understood consistently across teams. Without a well-defined design strategy, it can be challenging to ensure consistency when launching new features.
+
+## Gallery
+
+<Gallery collection={frontmatter.gallery}/>

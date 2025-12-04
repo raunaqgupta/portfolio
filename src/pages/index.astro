@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
+import List from "../components/list.mdx.astro";
 const breadcrumbs = [];
 ---
 
@@ -14,9 +15,9 @@ const breadcrumbs = [];
     </p>
   </section>
   <section>
-    <ul>
+    <List>
       <li><a href="/portfolio">Portfolio</a></li>
       <li><a href="/blog">Blog</a></li>
-    </ul>
+    </List>
   </section>
 </BaseLayout>

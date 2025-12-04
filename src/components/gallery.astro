@@ -3,7 +3,7 @@ const { collection } = Astro.props;
 ---
 
 <section class="gallery" aria-label="Image gallery">
-  {collection.map((item) => <img src={item} alt="Gallery image" />)}
+  {collection.map((item) => <img src={item} />)}
 </section>
 
 <script>
@@ -12,8 +12,9 @@ const { collection } = Astro.props;
   const galleryImages = document.querySelectorAll(".gallery img");
 
   galleryImages.forEach((img) => {
+    console.log(img);
     img.addEventListener("click", () => {
-      modalContent.innerHTML = `<img src="${img.src}" alt="${img.alt}" />`;
+      modalContent.innerHTML = img.outerHTML;
       modal.showModal();
     });
   });

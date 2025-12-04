@@ -6,10 +6,9 @@ date: 2025-11-25
 thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/thumbnail.png?f=avif
 caseStudy: true
 gallery:
-  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif
-  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/component_qep.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbmon-view.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbInstance.view.queries.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif
 ---
 import Gallery from '../../components/gallery.astro';
 
@@ -57,13 +56,17 @@ The design process began with understanding three new aspects: how Splunk Observ
 
 ![Information architecture](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
 
-### Visualizing the query explain plan
+### Creating new visualizations
 
 The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Each node in the tree represented a specific operation, such as a table scan, index scan, join, or sort. The nodes were color-coded based on their execution time, allowing users to quickly identify the most time-consuming operations.
 
 Multiple micro-interactions were finessed with the frontend team to ensure that the tree structure was intuitive and easy to navigate.
 
 ![Component: Query explain plan](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/component_qep.png?f=avif)
+
+### Setting the stage for AI-assisted insights
+
+![AI-assisted query summarization and recommendations](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif)
 
 ## Key decision points
 

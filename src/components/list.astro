@@ -1,9 +1,13 @@
 ---
-const { collection, isStyled } = Astro.props;
-const sortedCollection = [...collection].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+import ListMdx from "./list.mdx.astro";
+
+const { collection } = Astro.props;
+const sortedCollection = [...collection].sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
 ---
 
-<ul class={isStyled ? "styled" : ""}>
+<ListMdx>
   {
     sortedCollection.map((item) => (
       <li>
@@ -11,4 +15,4 @@ const sortedCollection = [...collection].sort((a, b) => b.data.date.getTime() - 
       </li>
     ))
   }
-</ul>
+</ListMdx>

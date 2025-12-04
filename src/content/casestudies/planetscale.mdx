@@ -1,10 +1,52 @@
 ---
-title: PlanetScale's web application surface
+title: "PlanetScale: Designing for a 0→1 startup"
 description: The serverless database platform built on Vitess, designed for developers to scale effortlessly.
 organization: PlanetScale
 date: 2021-09-28
 thumbnail: https://r2-image.raunaqgupta.workers.dev/planetscale/thumbnail.png?f=avif
 caseStudy: true
+v0:
+  - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.login.view.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.eula.view.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.company.create.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.user.add.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.cluster.view.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.keyspace.view.png?f=avif
+v1:
+  - https://r2-image.raunaqgupta.workers.dev/planetscale/v1/v1.database.view.overview.png?f=avif
+loginConcept:
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/login.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/create-account.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/verify-email.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/create-project.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/create-database.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/add-card.png?f=avif
 ---
+import Gallery from '../../components/gallery.astro';
 
 ![PlanetScale](https://r2-image.raunaqgupta.workers.dev/planetscale/thumbnail.png?f=avif)
+
+## Table of contents
+
+<List>
+  <li><a href="#creating-a-cloud-database-service-from-scratch">Creating a database service from scratch</a></li>
+  <li><a href="#visuals">Visuals</a></li>
+</List>
+
+## Creating a cloud database service from scratch
+
+PlanetScale spun up from Vitess, an open-source database clustering system. The question was how do we deliver sharding as a plug-and-play solution for developers?
+
+## Visuals
+
+### Login concept
+
+<Gallery collection={frontmatter.loginConcept}/>
+
+### Version 1
+
+<Gallery collection={frontmatter.v1}/>
+
+### Version 0
+
+<Gallery collection={frontmatter.v0}/>

@@ -4,6 +4,7 @@ import Breadcrumbs from "../components/breadcrumbs.astro";
 import Head from "../components/head.astro";
 import Footer from "../components/footer.astro";
 import Button from "../components/button.astro";
+import Modal from "../components/modal.astro";
 ---
 
 <html lang="en">
@@ -25,6 +26,7 @@ import Button from "../components/button.astro";
       </div>
     </header>
     <main>
+      <Modal />
       <slot />
     </main>
     <Footer />
@@ -36,11 +38,14 @@ import Button from "../components/button.astro";
     --color-bg: #f6f6f6;
     --color-bg-1: #eaeaea;
     --color-border: #d8d8d8;
+    --color-border-1: #d0d0d0;
     --color-body-primary: #333;
     --color-body-secondary: #666;
     --color-body-tertiary: #999;
     --color-heading: #333;
     --color-highlight: #00659b;
+    --typography-body: 1em;
+    --typography-h1: 2.5em;
     --space-0: 4px;
     --space-1: 8px;
     --space-2: 16px;
@@ -52,6 +57,7 @@ import Button from "../components/button.astro";
       --color-bg: #1e2227;
       --color-bg-1: #2c3238;
       --color-border: #2c3238;
+      --color-border-1: #3a4046;
       --color-body-primary: #dcdcdc;
       --color-body-secondary: #a9b0b7;
       --color-body-tertiary: #7f8891;
@@ -98,7 +104,7 @@ import Button from "../components/button.astro";
   h1 {
     color: var(--color-heading);
     font-family: var(--font-dm-serif-display-italic), serif;
-    font-size: 2.5em;
+    font-size: var(--typography-h1);
     font-weight: 200;
     line-height: 1.12em;
     margin: 0;
@@ -107,13 +113,14 @@ import Button from "../components/button.astro";
   h2 {
     color: var(--color-heading);
     font-size: 1.2em;
-    font-weight: 200;
     margin-top: 2em;
   }
 
   h3 {
     color: var(--color-heading);
-    margin-bottom: 0;
+    font-size: 1em;
+    font-weight: 200;
+    margin-top: 2em;
   }
 
   figure {
@@ -131,30 +138,14 @@ import Button from "../components/button.astro";
   }
 
   figure > img {
-    border: 1px solid var(--color-border);
+    background-color: var(--color-bg-1);
+    border: 1px solid var(--color-border-1);
     border-radius: 12px;
     width: 100%;
   }
 
   time {
     color: var(--color-body-secondary);
-  }
-
-  ol {
-    padding-inline-start: 1.5em;
-  }
-
-  ul {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    list-style-type: none;
-    padding-inline-start: 0;
-  }
-
-  ul.styled {
-    list-style-type: disc;
-    padding-inline-start: 1em;
   }
 
   a {

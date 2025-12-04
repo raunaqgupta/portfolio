@@ -1,13 +1,15 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
-import List from "../components/list.astro";
 import { getCollection } from "astro:content";
 const blog = await getCollection("blog");
-const newBlog = blog.map(({ slug, ...rest }) => ({
-  slug: `/blog/` + slug,
-  ...rest,
-}));
+const newBlog = blog
+  .map(({ slug, ...rest }) => ({
+    slug: `/blog/` + slug,
+    ...rest,
+  }))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 const links = [{ text: "Raunaq Gupta", url: "/" }];
+const format = { year: "numeric", month: "long", day: "numeric" };
 ---
 
 <BaseLayout title="Blog" breadcrumbs={links}>
@@ -19,7 +21,18 @@ const links = [{ text: "Raunaq Gupta", url: "/" }];
     autocomplete="off"
   />
   <div id="blog-list">
-    <List collection={newBlog} />
+    <ul>
+      {
+        newBlog.map((item) => (
+          <li>
+            <a href={item.slug}>{item.data.title}</a>{" "}
+            <div class="date">
+              {item.data.date.toLocaleDateString("en-US", format)}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 
   <script type="module">
@@ -53,6 +66,11 @@ const links = [{ text: "Raunaq Gupta", url: "/" }];
     input:focus {
       border-color: var(--color-highlight);
       outline: none;
+    }
+
+    li .date {
+      font-size: 0.5em;
+      color: var(--color-body-tertiary);
     }
   </style>
 </BaseLayout>

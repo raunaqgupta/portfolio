@@ -53,6 +53,10 @@ Splunk Observability Cloud sold its features as independent verticals. Customers
 
 The design process began with understanding three new aspects: how Splunk Observability Cloud was structured, how Splunk UI components and patterns worked, and the roadmap of various database monitoring features ahead of us.
 
+### Defining a scalable information architecture
+
+![Information architecture](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
+
 ### Visualizing the query explain plan
 
 The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Each node in the tree represented a specific operation, such as a table scan, index scan, join, or sort. The nodes were color-coded based on their execution time, allowing users to quickly identify the most time-consuming operations.
@@ -69,8 +73,6 @@ Multiple micro-interactions were finessed with the frontend team to ensure that 
 </List>
 
 Database monitoring was being launched as an independent product vertical with its own license. At the same time it needed to be designed to be deeply integrated within the APM, and Infrastructure products.
-
-![Information architecture](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
 
 ## Solution
 

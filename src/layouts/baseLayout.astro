@@ -86,12 +86,14 @@ import Modal from "../components/modal.astro";
   body {
     background: linear-gradient(
       180deg,
-      color-mix(in srgb, var(--color-highlight) 12%, var(--color-bg)) 0%,
-      var(--color-bg) 35%,
-      var(--color-bg)
+      rgba(59, 103, 219, 0.25) 0%,
+      rgba(128, 255, 219, 0.2) 20%,
+      var(--color-bg) 35%
     );
+    background-size: 100% 200%;
     background-repeat: no-repeat;
     background-color: var(--color-bg);
+    animation: body-gradient 16s ease-in-out infinite alternate;
     color: var(--color-body-primary);
     display: flex;
     flex-direction: column;
@@ -102,6 +104,15 @@ import Modal from "../components/modal.astro";
     margin: 0;
     max-width: 77ch;
     padding: 4em 8em 0;
+  }
+
+  @keyframes body-gradient {
+    from {
+      background-position: 0% 0%;
+    }
+    to {
+      background-position: 0% 60%;
+    }
   }
 
   main {

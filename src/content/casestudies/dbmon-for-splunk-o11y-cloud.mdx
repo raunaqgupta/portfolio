@@ -6,10 +6,9 @@ date: 2025-11-25
 thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/thumbnail.png?f=avif
 caseStudy: true
 gallery:
-  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif
-  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/component_qep.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbmon-view.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbInstance.view.queries.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif
 ---
 import Gallery from '../../components/gallery.astro';
 
@@ -20,44 +19,43 @@ import Gallery from '../../components/gallery.astro';
 
 <List>
   <li><a href="#the-need-for-database-monitoring">The need for Database Monitoring</a></li>
-  <li><a href="#designing-for-execution">Designing for execution</a></li>
-  <li><a href="#solution">Solution</a></li>
+  <li><a href="#design-for-consistency-scalability-and-speed">Design for consistency, scalability, and speed</a></li>
   <li><a href="#impact">Impact</a></li>
   <li><a href="#learnings">Learnings</a></li>
-  <li><a href="#visuals">Visuals</a></li>
+  <li><a href="#solution">Solution</a></li>
 </List>
 
 ## The need for Database Monitoring
 
-Splunk Observability Cloud is a Gartner leader in observability solutions with a comprehensive set of features for monitoring applications, infrastructure, and end-user monitoring. However, it lacked robust database monitoring capabilities. This gap between application performance and database performance made it challenging for users to identify and troubleshoot database-related issues affecting their applications.
+Splunk Observability Cloud was already being utilized to monitor applications, and infrastructure but lacked comprehensive database monitoring capabilities. This gap between application performance and database performance made it challenging for users to identify and troubleshoot database-related issues affecting their applications.
 
-Every competitive observability platform had database monitoring capabilities that extended beyond currently on offer. Customers had been asking for it on Splunk Ideas forum for years, and it was a glaring omission in Splunk Observability Cloud's feature set.
-
-We also knew from Appdynamics's success that customers were willing to pay ~$50 million in ARR. Therefore, we set out to build a robust database monitoring solution within Splunk Observability Cloud.
-
-### Expanding addressable user base
-
-It was evident that Database monitoring would complement existing workflows for DevOps, and Software Reliability Engineers (SREs). But in addition to that, Database monitoring would also open up new use cases that target new personas; specifically Database Administrators (DBAs) which would effectively increase the potential market cap for Splunk Observability Cloud.
-
-### Filling the gap
+Customers had been asking for it Splunk's public forums, and we knew from AppDynamics's success that customers were willing to pay ~$50 million in ARR.
 
 ![Databases sit at the intersection of applications and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
 
-At the time, users had access to query performance metrics through APM traces. However, these metrics were limited in scope and did not provide a comprehensive view of database performance. Users needed a comprehensive view into the performance of each query that was being executed especially if it was a slow or a long-running query.
+### Expanding the addressable user base
+
+Database monitoring would also open up new use cases that target new personas; specifically Database Administrators (DBAs) which would effectively increase the potential market cap for Splunk Observability Cloud.
 
 ### An independently licensed vertical
 
 Splunk Observability Cloud sold its features as independent verticals. Customers could choose to buy only the features they needed. This meant that Database monitoring had to be designed as an independent vertical with its own license, pricing, and onboarding flows. At the same time, it had to be deeply integrated with existing verticals such as Application Performance Monitoring (APM), and Infrastructure monitoring to provide a seamless user experience.
 
-## Designing for speed (of execution)
+## Design for consistency, scalability, and speed
 
-The design process began with understanding three new aspects: how Splunk Observability Cloud was structured, how Splunk UI components and patterns worked, and the roadmap of various database monitoring features ahead of us.
+There were three primary design tasks at hand:
 
-### Defining a scalable information architecture
+1. Understand the existing information architecture of Splunk Observability Cloud.
+2. Come to grips and become proficient with Splunk's design system and UI patterns.
+3. Understanding the roadmap and laying the groundwork for a scaalable information architecture.
 
-![Information architecture](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
+### Information architecture and action-oriented UI states
 
-### Visualizing the query explain plan
+The project kicked off with defining the object architecture, and creating a new taxonomy for defining UI components for those objects. Objects such as Database instances, normalized queries, etc would have corresponding states defined by the actions users could take on them. "View", "Preview", "Create" etc would then be linked to define the various workflows users could take within the system.
+
+![Information architecture utilizing the action-oriented UI states](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
+
+### Creating new visualizations
 
 The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Each node in the tree represented a specific operation, such as a table scan, index scan, join, or sort. The nodes were color-coded based on their execution time, allowing users to quickly identify the most time-consuming operations.
 
@@ -65,22 +63,13 @@ Multiple micro-interactions were finessed with the frontend team to ensure that 
 
 ![Component: Query explain plan](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/component_qep.png?f=avif)
 
-## Key decision points
+### Setting the stage for AI-assisted insights
 
-<List>
-  <li>Integrating Database monitoring with existing verticals such as APM and Infrastructure monitoring.</li>
-  <li>Diffrentiating between Database monitoring and Infrastructure while ensuring a seamless user experience.</li>
-</List>
-
-Database monitoring was being launched as an independent product vertical with its own license. At the same time it needed to be designed to be deeply integrated within the APM, and Infrastructure products.
-
-## Solution
-
-TODO: Add screenshots and link to prototype.
+![AI-assisted query summarization and recommendations](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif)
 
 ## Impact
 
-On the Alpha launch of the vertical where we had 11 customer signups, we were able to convert 7 of them to paying customers within the first 3 months of launch. This was a significant achievement and demonstrated the value of the product.
+Alpha launch of Database monitoring had 11 customer signups with a conversion rate of 64% within 3 months of launch. This number is currently estimated to grow to 25 by the end of Q1 2026.
 
 ## Learnings
 
@@ -88,6 +77,6 @@ On the Alpha launch of the vertical where we had 11 customer signups, we were ab
 
 Building a new product vertical within an existing platform has many layers to unravel. For instance, the existence of a design system does not necessarily mean the design patterns are well-documented or even understood consistently across teams. Without a well-defined design strategy, it can be challenging to ensure consistency when launching new features.
 
-## Visuals
+## Solution
 
 <Gallery collection={frontmatter.gallery}/>

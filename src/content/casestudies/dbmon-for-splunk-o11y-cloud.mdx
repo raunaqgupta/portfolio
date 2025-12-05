@@ -9,12 +9,13 @@ gallery:
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbmon-view.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbInstance.view.queries.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/trace.view.span.preview.query.preview.png?f=avif
 ---
 import Gallery from '../../components/gallery.astro';
 
 ![Database monitoring](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbInstance.view.queries.png?f=avif)
 
-**Addressing the gap and expanding the user base** Splunk Observability Cloud was already being utilized to monitor applications, and infrastructure but lacked comprehensive database monitoring capabilities to provide end-to-end troubleshooting. This gap between application performance and database performance resulted in users switching tools to remediate issues. Customers had also been asking for it on public forums, and we knew from AppDynamics's success that it was worth ~$50 million in ARR.
+**Addressing the gap and expanding the addressable user base** Splunk Observability Cloud was already being utilized to monitor applications, and infrastructure but lacked comprehensive database monitoring capabilities to provide end-to-end troubleshooting. This gap between application performance and database performance resulted in users switching tools to remediate issues. Customers had also been asking for it on public forums, and we knew from AppDynamics's success that it was worth ~$50 million in ARR.
 
 ![Databases sit at the intersection of applications and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
 
@@ -22,31 +23,23 @@ Database monitoring would also open up new use cases that target new personas; s
 
 ## Designing for scalability
 
-There were three primary design tasks at hand:
+At the onset, there were three primary design tasks at hand:
 
 1. Understand the product roadmap, and research the necessary user needs for database monitoring. 
 2. Laying the groundwork for a scalable information architecture.
 3. Becoming proficient with Splunk's design system and UI patterns.
 
-### Information architecture and action-oriented UI states
-
-The project kicked off with defining the object architecture, and creating a new taxonomy for defining UI components for those objects. Objects such as Database instances, normalized queries, etc would have corresponding states defined by the actions users could take on them. "View", "Preview", "Create" etc would then be linked to define the various workflows users could take within the system.
+**Information architecture and action-oriented UI states** The project kicked off with defining the object architecture, and creating a new taxonomy for defining UI components. Objects such as Database instances, normalized queries, etc would have corresponding states defined by the actions users could take on them. "View", "Preview", "Create" etc would then be linked to define the various workflows users could take within the system. I call these the action-oriented UI states.
 
 ![Information architecture utilizing the action-oriented UI states](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
 
-### An independently licensed vertical
+**An independently licensed vertical** Splunk Observability Cloud sold observability domains as independent licenses and database monitoring had to be designed as its own "product" with its own license, pricing, and onboarding flows. At the same time, it had to be holistically integrated with existing verticals such as Application Performance Monitoring (APM), and Infrastructure monitoring to provide a consistent end-to-end troubleshooting workflow across domains.
 
-Splunk Observability Cloud sold observability domains as independent licenses and database monitoring had to be designed as its own "product" with its own license, pricing, and onboarding flows. At the same time, it had to be holistically integrated with existing verticals such as Application Performance Monitoring (APM), and Infrastructure monitoring to provide a consistent end-to-end troubleshooting workflow across domains.
-
-### Crafting new visualizations
-
-The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Each node in the tree represented a specific operation, such as a table scan, index scan, join, or sort. The nodes were color-coded based on their execution time, allowing users to quickly identify the most time-consuming operations.
-
-Multiple micro-interactions were finessed with the frontend team to ensure that the tree structure was intuitive and easy to navigate.
+**Crafting new visualizations** The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Micro-interactions were obsessed over to ensure that the tree structure was intuitive and easy to navigate.
 
 ![The query explain plan component](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/component_qep.png?f=avif)
 
-### Setting the stage for AI-assisted insights
+**Setting the stage for AI-assisted insights** I experimented with and proposed AI-assisted workflows such as query summarization, and AI-based recommendations to help users optimize their database queries. Both these features are currently in customer preview and are getting positive feedback.
 
 ![AI-assisted query summarization and recommendations](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif)
 

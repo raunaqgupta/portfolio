@@ -70,7 +70,7 @@ import Modal from "../components/modal.astro";
     display: flex;
     flex-direction: column;
     height: -webkit-fill-available;
-    height: 100vh;
+    min-height: 100vh;
   }
 
   header {
@@ -84,6 +84,13 @@ import Modal from "../components/modal.astro";
   }
 
   body {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-highlight) 12%, var(--color-bg)) 0%,
+      var(--color-bg) 35%,
+      var(--color-bg)
+    );
+    background-repeat: no-repeat;
     background-color: var(--color-bg);
     color: var(--color-body-primary);
     display: flex;

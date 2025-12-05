@@ -28,21 +28,15 @@ import Gallery from '../../components/gallery.astro';
 
 ## The need for Database Monitoring
 
-Splunk Observability Cloud is a Gartner leader in observability solutions with a comprehensive set of features for monitoring applications, infrastructure, and end-user monitoring. However, it lacked robust database monitoring capabilities. This gap between application performance and database performance made it challenging for users to identify and troubleshoot database-related issues affecting their applications.
+Splunk Observability Cloud was already being utilized to monitor applications, and infrastructure but lacked comprehensive database monitoring capabilities. This gap between application performance and database performance made it challenging for users to identify and troubleshoot database-related issues affecting their applications.
 
-Every competitive observability platform had database monitoring capabilities that extended beyond currently on offer. Customers had been asking for it on Splunk Ideas forum for years, and it was a glaring omission in Splunk Observability Cloud's feature set.
-
-We also knew from Appdynamics's success that customers were willing to pay ~$50 million in ARR. Therefore, we set out to build a robust database monitoring solution within Splunk Observability Cloud.
-
-### Expanding the addressable user base
-
-It was evident that Database monitoring would complement existing workflows for DevOps, and Software Reliability Engineers (SREs). But in addition to that, Database monitoring would also open up new use cases that target new personas; specifically Database Administrators (DBAs) which would effectively increase the potential market cap for Splunk Observability Cloud.
-
-### Filling the gap
+Customers had been asking for it Splunk's public forums, and we knew from AppDynamics's success that customers were willing to pay ~$50 million in ARR.
 
 ![Databases sit at the intersection of applications and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
 
-At the time, users had access to query performance metrics through APM traces. However, these metrics were limited in scope and did not provide a comprehensive view of database performance. Users needed a comprehensive view into the performance of each query that was being executed especially if it was a slow or a long-running query.
+### Expanding the addressable user base
+
+Database monitoring would also open up new use cases that target new personas; specifically Database Administrators (DBAs) which would effectively increase the potential market cap for Splunk Observability Cloud.
 
 ### An independently licensed vertical
 

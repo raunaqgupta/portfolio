@@ -13,40 +13,34 @@ gallery:
 ---
 import Gallery from '../../components/gallery.astro';
 
-![Database monitoring](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbInstance.view.queries.png?f=avif)
+![Databases sit at the intersection of applications and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
 
 **Addressing the gap and expanding the addressable user base** Splunk Observability Cloud was already being utilized to monitor applications, and infrastructure but lacked comprehensive database monitoring capabilities to provide end-to-end troubleshooting. This gap between application performance and database performance resulted in users switching tools to remediate issues. Customers had also been asking for it on public forums, and we knew from AppDynamics's success that it was worth ~$50 million in ARR.
 
-![Databases sit at the intersection of applications and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
-
 Database monitoring would also open up new use cases that target new personas; specifically Database Administrators (DBAs) which would effectively increase the potential market cap for Splunk Observability Cloud.
 
-## Designing for scalability
+**Designing for scalability** I started by understanding the product roadmap, and researching the necessary user needs for database monitoring. It was followed up by laying the groundwork for a scalable information architecture and becoming proficient with Splunk's design system and UI patterns.
 
-At the onset, there were three primary design tasks at hand:
+**Impact** Alpha launch of Database monitoring had 11 customer signups with a conversion rate of 64% within 3 months of launch. This number is currently estimated to grow to 25 by the end of Q1 2026.
 
-1. Understand the product roadmap, and research the necessary user needs for database monitoring. 
-2. Laying the groundwork for a scalable information architecture.
-3. Becoming proficient with Splunk's design system and UI patterns.
+## Solution
 
-**Information architecture and action-oriented UI states** The project kicked off with defining the object architecture, and creating a new taxonomy for defining UI components. Objects such as Database instances, normalized queries, etc would have corresponding states defined by the actions users could take on them. "View", "Preview", "Create" etc would then be linked to define the various workflows users could take within the system. I call these the action-oriented UI states.
+### Information architecture
 
 ![Information architecture utilizing the action-oriented UI states](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
 
-**An independently licensed vertical** Splunk Observability Cloud sold observability domains as independent licenses and database monitoring had to be designed as its own "product" with its own license, pricing, and onboarding flows. At the same time, it had to be holistically integrated with existing verticals such as Application Performance Monitoring (APM), and Infrastructure monitoring to provide a consistent end-to-end troubleshooting workflow across domains.
+### Visualizations and micro-interactions
 
-**Crafting new visualizations** The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Micro-interactions were obsessed over to ensure that the tree structure was intuitive and easy to navigate.
+The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Micro-interactions were obsessed over to ensure that the tree structure was intuitive and easy to navigate.
 
 ![The query explain plan component](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/component_qep.png?f=avif)
 
-**Setting the stage for AI-assisted insights** I experimented with and proposed AI-assisted workflows such as query summarization, and AI-based recommendations to help users optimize their database queries. Both these features are currently in customer preview and are getting positive feedback.
+### Defining AI-assisted workflows
+
+I defined and designed AI-assisted workflows such as query summarization, and AI-based recommendations to help users optimize their database queries. Both these features are currently in customer preview and are getting positive feedback.
 
 ![AI-assisted query summarization and recommendations](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif)
 
-## Impact
-
-Alpha launch of Database monitoring had 11 customer signups with a conversion rate of 64% within 3 months of launch. This number is currently estimated to grow to 25 by the end of Q1 2026.
-
-## Solution
+### Artifacts
 
 <Gallery collection={frontmatter.gallery}/>

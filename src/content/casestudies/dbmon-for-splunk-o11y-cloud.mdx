@@ -3,7 +3,7 @@ title: Database monitoring for Splunk Observability Cloud
 description: Enabling comprehensive database monitoring capabilities within Splunk Observability Cloud.
 organization: Cisco
 date: 2025-11-25
-thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/thumbnail.png?f=avif
+thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbInstance.view.queries.png?f=avif
 caseStudy: true
 gallery:
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbmon-view.png?f=avif
@@ -12,42 +12,21 @@ gallery:
 ---
 import Gallery from '../../components/gallery.astro';
 
+![Database monitoring](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbInstance.view.queries.png?f=avif)
 
-![Database monitoring](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/thumbnail.png?f=avif)
-
-## Table of contents
-
-<List>
-  <li><a href="#the-need-for-database-monitoring">The need for Database Monitoring</a></li>
-  <li><a href="#design-for-consistency-scalability-and-speed">Design for consistency, scalability, and speed</a></li>
-  <li><a href="#impact">Impact</a></li>
-  <li><a href="#learnings">Learnings</a></li>
-  <li><a href="#solution">Solution</a></li>
-</List>
-
-## The need for Database Monitoring
-
-Splunk Observability Cloud was already being utilized to monitor applications, and infrastructure but lacked comprehensive database monitoring capabilities. This gap between application performance and database performance made it challenging for users to identify and troubleshoot database-related issues affecting their applications.
-
-Customers had been asking for it Splunk's public forums, and we knew from AppDynamics's success that customers were willing to pay ~$50 million in ARR.
+**Addressing the gap and expanding the user base** Splunk Observability Cloud was already being utilized to monitor applications, and infrastructure but lacked comprehensive database monitoring capabilities to provide end-to-end troubleshooting. This gap between application performance and database performance resulted in users switching tools to remediate issues. Customers had also been asking for it on public forums, and we knew from AppDynamics's success that it was worth ~$50 million in ARR.
 
 ![Databases sit at the intersection of applications and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
 
-### Expanding the addressable user base
-
 Database monitoring would also open up new use cases that target new personas; specifically Database Administrators (DBAs) which would effectively increase the potential market cap for Splunk Observability Cloud.
 
-### An independently licensed vertical
-
-Splunk Observability Cloud sold its features as independent verticals. Customers could choose to buy only the features they needed. This meant that Database monitoring had to be designed as an independent vertical with its own license, pricing, and onboarding flows. At the same time, it had to be deeply integrated with existing verticals such as Application Performance Monitoring (APM), and Infrastructure monitoring to provide a seamless user experience.
-
-## Design for consistency, scalability, and speed
+## Designing for scalability
 
 There were three primary design tasks at hand:
 
-1. Understand the existing information architecture of Splunk Observability Cloud.
-2. Come to grips and become proficient with Splunk's design system and UI patterns.
-3. Understanding the roadmap and laying the groundwork for a scaalable information architecture.
+1. Understand the product roadmap, and research the necessary user needs for database monitoring. 
+2. Laying the groundwork for a scalable information architecture.
+3. Becoming proficient with Splunk's design system and UI patterns.
 
 ### Information architecture and action-oriented UI states
 
@@ -55,7 +34,11 @@ The project kicked off with defining the object architecture, and creating a new
 
 ![Information architecture utilizing the action-oriented UI states](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
 
-### Creating new visualizations
+### An independently licensed vertical
+
+Splunk Observability Cloud sold observability domains as independent licenses and database monitoring had to be designed as its own "product" with its own license, pricing, and onboarding flows. At the same time, it had to be holistically integrated with existing verticals such as Application Performance Monitoring (APM), and Infrastructure monitoring to provide a consistent end-to-end troubleshooting workflow across domains.
+
+### Crafting new visualizations
 
 The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Each node in the tree represented a specific operation, such as a table scan, index scan, join, or sort. The nodes were color-coded based on their execution time, allowing users to quickly identify the most time-consuming operations.
 

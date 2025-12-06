@@ -1,5 +1,5 @@
 ---
-import Thumbnail from "./thumbnail.astro";
+import CaseStudyBig from "./caseStudy.big.astro";
 
 const { collection } = Astro.props;
 const sortedCollection = [...collection].sort(
@@ -10,7 +10,7 @@ const sortedCollection = [...collection].sort(
 <section>
   {
     sortedCollection.map((item) => (
-      <Thumbnail
+      <CaseStudyBig
         image={item.data.thumbnail}
         title={item.data.title}
         description={item.data.description}
@@ -22,10 +22,15 @@ const sortedCollection = [...collection].sort(
 
 <style>
   section {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-auto-flow: row;
-    gap: var(--space-2);
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+
+  @media only screen and (max-width: 700px) {
+    section {
+      flex-direction: column;
+    }
   }
 </style>

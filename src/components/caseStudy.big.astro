@@ -1,0 +1,86 @@
+---
+const { image, title, description, url } = Astro.props;
+import Card from "./card.astro";
+---
+
+<a href={url}>
+  <article>
+    <div class="text">
+      <p class="title">{title}</p>
+      <p class="description">{description}</p>
+    </div>
+    <div class="image">
+      <img src={image} alt={title} />
+    </div>
+  </article>
+</a>
+
+<style>
+  a {
+    text-decoration: none;
+    transition: transform 160ms ease;
+  }
+
+  a:after {
+    content: none;
+  }
+
+  a:hover {
+    transform: translateY(-4px);
+  }
+
+  a:hover .image {
+    transform: translateY(-16px);
+  }
+
+  article {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    justify-content: space-between;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 100%;
+    background: var(--color-bg-glass);
+    border: 1px solid var(--color-border);
+  }
+
+  .text {
+    padding: var(--space-2);
+    min-width: 400px;
+  }
+
+  .image {
+    padding-inline: var(--space-2);
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(255, 255, 255, 1) 90%
+    );
+    mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(255, 255, 255, 0) 90%
+    );
+    transition: transform 160ms ease;
+  }
+
+  .image img {
+    width: 100%;
+    object-fit: fill;
+    display: block;
+  }
+
+  p.title {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--color-heading);
+  }
+
+  p.description {
+    margin: 0;
+    font-size: 0.9em;
+    color: var(--color-body-secondary);
+  }
+</style>

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
 import RangeItem from "../components/rangeItem.astro";
-import Thumbnail from "../components/thumbnail.astro";
+import CaseStudySmall from "../components/caseStudy.small.astro";
 import DownloadIcon from "../assets/icons/download.svg";
 import LinkedInIcon from "../assets/icons/linkedin.svg";
 
@@ -64,7 +64,7 @@ const actions = [
           {job.caseStudies.length > 0 && (
             <div class="projects">
               {job.caseStudies.map((caseStudy) => (
-                <Thumbnail
+                <CaseStudySmall
                   image={caseStudy.data.thumbnail}
                   title={caseStudy.data.title}
                   url={`/case-studies/${caseStudy.slug}`}

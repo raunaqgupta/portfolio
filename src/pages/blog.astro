@@ -1,5 +1,8 @@
 ---
+import List from "../components/list.mdx.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
+import ListMdx from "../components/list.mdx.astro";
+
 import { getCollection } from "astro:content";
 const blog = await getCollection("blog");
 const newBlog = blog
@@ -21,7 +24,7 @@ const format = { year: "numeric", month: "long", day: "numeric" };
     autocomplete="off"
   />
   <div id="blog-list">
-    <ul>
+    <ListMdx>
       {
         newBlog.map((item) => (
           <li>
@@ -32,7 +35,7 @@ const format = { year: "numeric", month: "long", day: "numeric" };
           </li>
         ))
       }
-    </ul>
+    </ListMdx>
   </div>
 
   <script type="module">

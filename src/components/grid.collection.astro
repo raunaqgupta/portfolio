@@ -22,15 +22,13 @@ const sortedCollection = [...collection].sort(
 
 <style>
   section {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: var(--space-3);
+    width: 100%;
   }
 
-  @media only screen and (max-width: 700px) {
-    section {
-      flex-direction: column;
-    }
+  section > * {
+    display: flex;
   }
 </style>

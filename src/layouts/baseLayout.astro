@@ -106,15 +106,6 @@ import Modal from "../components/modal.astro";
     padding: 4em 8em 0;
   }
 
-  @keyframes body-gradient {
-    from {
-      background-position: 0% 0%;
-    }
-    to {
-      background-position: 0% 60%;
-    }
-  }
-
   main {
     flex-grow: 1;
   }
@@ -243,6 +234,19 @@ import Modal from "../components/modal.astro";
   @media (prefers-reduced-motion: reduce) {
     a::after {
       transition: none;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: linear-gradient(
+          180deg,
+          rgba(9, 122, 77, 0.35) 0%,
+          rgba(16, 40, 66, 0.55) 25%,
+          var(--color-bg) 65%
+        )
+        fixed;
+      background-color: var(--color-bg);
     }
   }
 </style>

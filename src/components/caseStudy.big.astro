@@ -17,8 +17,14 @@ import Card from "./card.astro";
 
 <style>
   a {
+    display: block;
+    border-radius: 6px;
     text-decoration: none;
     transition: transform 160ms ease;
+    background: rgba(250, 250, 250, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px) saturate(130%);
   }
 
   a:after {
@@ -38,13 +44,18 @@ import Card from "./card.astro";
     flex-direction: column;
     gap: var(--space-1);
     justify-content: space-between;
-    border-radius: 6px;
     overflow: hidden;
     height: 100%;
-    background: rgba(250, 250, 250, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(255, 255, 255, 1) 95%
+    );
+    mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(255, 255, 255, 0) 95%
+    );
   }
 
   .text {
@@ -53,16 +64,7 @@ import Card from "./card.astro";
 
   .image {
     padding-inline: var(--space-2);
-    -webkit-mask-image: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(255, 255, 255, 1) 90%
-    );
-    mask-image: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(255, 255, 255, 0) 90%
-    );
+
     transition: transform 160ms ease;
   }
 
@@ -84,5 +86,17 @@ import Card from "./card.astro";
     font-size: 0.9em;
     line-height: 1.3em;
     color: var(--color-body-secondary);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    a {
+      background: rgba(10, 10, 10, 0.2);
+      border: 1px solid rgba(16, 110, 169, 0.2);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.55);
+    }
+
+    .text {
+      color: var(--color-body-primary);
+    }
   }
 </style>

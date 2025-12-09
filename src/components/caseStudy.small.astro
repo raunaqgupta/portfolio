@@ -6,7 +6,10 @@ import Card from "./card.astro";
 <a href={url}>
   <Card size="small">
     <img src={image} alt={title} />
-    <p class="title">{title}</p>
+    <div class="text">
+      <div class="label">Case study</div>
+      <div class="title">{title}</div>
+    </div>
   </Card>
 </a>
 
@@ -26,8 +29,6 @@ import Card from "./card.astro";
 
   img {
     width: 100%;
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
     object-fit: contain;
     max-width: 100px;
     filter: brightness(80%);
@@ -37,19 +38,19 @@ import Card from "./card.astro";
     filter: brightness(100%);
   }
 
-  p.title {
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
 
-  p.title {
-    margin: 0;
-    font-size: 14px;
-    line-height: 16px;
-    color: var(--color-heading);
-  }
-
-  p.description {
-    margin: 0.5em 0 0 0;
-    font-size: 0.9em;
+  .label {
+    font-size: 0.6em;
+    line-height: 0.6em;
     color: var(--color-body-secondary);
+  }
+
+  .title {
+    font-size: 0.8em;
   }
 </style>

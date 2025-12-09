@@ -12,7 +12,6 @@ const { collection } = Astro.props;
   const galleryImages = document.querySelectorAll(".gallery img");
 
   galleryImages.forEach((img) => {
-    console.log(img);
     img.addEventListener("click", () => {
       modalContent.innerHTML = img.outerHTML;
       modal.showModal();
@@ -29,6 +28,7 @@ const { collection } = Astro.props;
   }
 
   img {
+    aspect-ratio: 1.5;
     border: 1px solid var(--color-border-1);
     border-radius: 12px;
     width: 100%;

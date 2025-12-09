@@ -25,6 +25,7 @@ import Card from "./card.astro";
 
   a:hover {
     transform: translateY(-4px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
 
   img {
@@ -52,5 +53,11 @@ import Card from "./card.astro";
 
   .title {
     font-size: 0.8em;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    a:hover {
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.55);
+    }
   }
 </style>

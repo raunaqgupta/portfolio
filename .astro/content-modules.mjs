@@ -1,8 +1,8 @@
 
 export default new Map([
 ["src/content/casestudies/dbmon-for-splunk-o11y-cloud.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fdbmon-for-splunk-o11y-cloud.mdx&astroContentModuleFlag=true")],
-["src/content/casestudies/objects.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fobjects.mdx&astroContentModuleFlag=true")],
 ["src/content/casestudies/planetscale-docs-refresh.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fplanetscale-docs-refresh.mdx&astroContentModuleFlag=true")],
+["src/content/casestudies/objects.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fobjects.mdx&astroContentModuleFlag=true")],
 ["src/content/casestudies/planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fplanetscale.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/asparagus-cottage-cheese-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fasparagus-cottage-cheese-sandwich.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/california-breakfast-bowl.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fcalifornia-breakfast-bowl.mdx&astroContentModuleFlag=true")],

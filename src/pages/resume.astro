@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
+import Button from "../components/button.astro";
 import RangeItem from "../components/rangeItem.astro";
 import CaseStudySmall from "../components/caseStudy.small.astro";
 import DownloadIcon from "../assets/icons/download.svg";
@@ -35,6 +36,7 @@ const actions = [
   {
     label: "LinkedIn",
     url: "https://www.linkedin.com/in/raunaqgupta/",
+    isResponsive: true,
     isLink: true,
     isExternalLink: true,
     preIcon: LinkedInIcon,
@@ -42,6 +44,7 @@ const actions = [
   {
     label: "Download",
     url: "/resume.raunaqgupta.pdf",
+    isResponsive: true,
     isLink: true,
     isDownload: true,
     preIcon: DownloadIcon,
@@ -130,6 +133,19 @@ const actions = [
     h2 {
       grid-column: 1;
       margin-top: 2em;
+    }
+
+    button,
+    a.button {
+      padding: var(--space-1);
+    }
+
+    .post-icon {
+      display: none;
+    }
+
+    .label {
+      display: none;
     }
   }
 </style>

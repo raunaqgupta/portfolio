@@ -8,6 +8,9 @@ export default defineConfig({
   image: {
     layout: "constrained"
   },
+  redirects: [
+    { from: "/", to: "/portfolio"}
+  ],
   experimental: {
     fonts: [{
       provider: 'local',

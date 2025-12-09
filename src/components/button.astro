@@ -3,6 +3,7 @@ const {
   label,
   url,
   iconOnly = false,
+  isResponsive = false,
   isLink,
   isExternalLink,
   isDownload,
@@ -16,17 +17,21 @@ import ExternalLinkIcon from "../assets/icons/external-link.svg";
 {
   isLink ? (
     <a
-      class="button"
+      class:list={["button", { responsive: isResponsive }]}
       href={url}
       {...(isExternalLink
         ? { target: "_blank", rel: "noopener noreferrer" }
         : {})}
       {...(isDownload ? { download: true } : {})}
     >
-      {PreIcon && <PreIcon />}
-      {iconOnly ? "" : label}
-      {PostIcon && <PostIcon />}
-      {isExternalLink && <ExternalLinkIcon />}
+      {PreIcon && <PreIcon class="pre-icon" />}
+      {iconOnly ? "" : <div class="label">{label}</div>}
+
+      {isExternalLink ? (
+        <ExternalLinkIcon class="post-icon" />
+      ) : (
+        PostIcon && <PostIcon class="post-icon" />
+      )}
     </a>
   ) : (
     <button onclick={url}>
@@ -61,5 +66,20 @@ import ExternalLinkIcon from "../assets/icons/external-link.svg";
 
   a.button:after {
     content: none;
+  }
+
+  @media only screen and (max-width: 700px) {
+    a.button.responsive,
+    button.responsive {
+      padding: var(--space-1);
+    }
+
+    .responsive .post-icon {
+      display: none;
+    }
+
+    .responsive .label {
+      display: none;
+    }
   }
 </style>

@@ -3,7 +3,13 @@ const { collection } = Astro.props;
 ---
 
 <section class="gallery" aria-label="Image gallery">
-  {collection.map((item) => <img src={item} />)}
+  {
+    collection.map((item) => (
+      <div class="gallery-item">
+        <img src={item} />
+      </div>
+    ))
+  }
 </section>
 
 <script>
@@ -27,7 +33,7 @@ const { collection } = Astro.props;
     width: 100%;
   }
 
-  img {
+  .gallery-item img {
     aspect-ratio: 1.5;
     border: 1px solid var(--color-border-1);
     border-radius: 12px;
@@ -36,7 +42,7 @@ const { collection } = Astro.props;
     object-fit: cover;
   }
 
-  img:hover {
+  .gallery-item:hover {
     cursor: pointer;
     filter: brightness(0.95);
   }

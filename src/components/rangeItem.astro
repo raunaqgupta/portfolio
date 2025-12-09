@@ -3,27 +3,89 @@ const { title, org, from, to } = Astro.props;
 ---
 
 <section>
-  <h3>{org}</h3>
-  <div>{title}</div>
-  <time datetime={from}>{from.getFullYear()}</time> - {
-    to ? <time datetime={to}>{to.getFullYear()}</time> : <span>Current</span>
-  }
-  <slot />
+  <div class="time-range">
+    <time datetime={from}>{from.getFullYear()}</time> - {
+      to ? <time datetime={to}>{to.getFullYear()}</time> : <span>Current</span>
+    }
+  </div>
+
+  <div class="heading">
+    <h3>{org}</h3>
+    <div class="separator">○</div>
+    <div>{title}</div>
+  </div>
+  <div class="content">
+    <slot />
+  </div>
 </section>
 
 <style>
   section {
-    margin-bottom: 2em;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 120px 1fr;
+    column-gap: var(--space-2);
+  }
+
+  section:not(:first-of-type) {
+    margin-top: var(--space-3);
+  }
+
+  .time-range {
+    text-align: left;
+    font-size: 0.9em;
+    font-style: italic;
+    font-weight: 200;
+    color: var(--color-body-secondary);
+  }
+
+  .heading {
+    align-self: start;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--space-1);
   }
 
   h3 {
-    margin-top: 1em;
+    margin: 0;
+    font-size: 1em;
     font-weight: 600;
-    margin-bottom: 0;
   }
 
-  time,
-  span {
-    color: var(--color-body-secondary);
+  .separator {
+    color: var(--color-body-tertiary);
+    font-size: 0.8em;
+  }
+
+  .content {
+    grid-column: 2 / 3;
+  }
+
+  @media only screen and (max-width: 700px) {
+    section {
+      gap: 0;
+    }
+
+    .time-range {
+      grid-column: 1 / 3;
+      text-align: left;
+    }
+
+    .heading {
+      grid-column: 1 / 3;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
+
+    .separator {
+      display: none;
+    }
+
+    .content {
+      grid-column: 1 / 3;
+    }
   }
 </style>

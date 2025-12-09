@@ -47,14 +47,16 @@ import ExternalLinkIcon from "../assets/icons/external-link.svg";
     gap: var(--space-1);
     align-items: center;
     cursor: pointer;
-    border: 1px solid var(--color-body-primary);
-    padding: var(--space-1) var(--space-2);
-    border-radius: 4px;
+    color: var(--color-bg);
+    background: var(--color-bg-invert);
+    padding: var(--space-0) var(--space-2);
+    border-radius: 99px;
+    transition: background-color 160ms ease;
   }
 
   button:hover,
   a.button:hover {
-    border-color: var(--color-highlight);
+    background-color: var(--color-highlight);
   }
 
   a.button:after {

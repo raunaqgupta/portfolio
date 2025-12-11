@@ -12,19 +12,6 @@ const { collection } = Astro.props;
   }
 </section>
 
-<script>
-  const modal = document.getElementById("modal");
-  const modalContent = modal?.querySelector(".content");
-  const galleryImages = document.querySelectorAll(".gallery img");
-
-  galleryImages.forEach((img) => {
-    img.addEventListener("click", () => {
-      modalContent.innerHTML = img.outerHTML;
-      modal.showModal();
-    });
-  });
-</script>
-
 <style>
   .gallery {
     display: grid;

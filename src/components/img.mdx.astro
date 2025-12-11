@@ -7,19 +7,6 @@ const { src, alt } = Astro.props;
   <figcaption>{alt}</figcaption>
 </figure>
 
-<script>
-  const modal = document.getElementById("modal");
-  const modalContent = modal?.querySelector(".content");
-  const galleryImages = document.querySelectorAll("img");
-
-  galleryImages.forEach((img) => {
-    img.addEventListener("click", () => {
-      modalContent.innerHTML = img.outerHTML;
-      modal.showModal();
-    });
-  });
-</script>
-
 <style>
   figure:hover {
     cursor: pointer;

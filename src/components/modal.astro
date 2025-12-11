@@ -4,39 +4,99 @@
 
 <dialog id="modal" closedby="any">
   <div class="heading">
-    <button>Close</button>
+    <button class="nav prev" aria-label="Previous image">‹</button>
+    <button class="nav next" aria-label="Next image">›</button>
+    <button class="close" aria-label="Close modal">×</button>
   </div>
-  <div class="content"></div>
+  <div class="content">
+    <img src="" alt="" />
+  </div>
 </dialog>
 
 <script>
-  const closeButton = document.querySelector("#modal .heading button");
-  const dialog = document.querySelector("#modal");
+  const modal = document.getElementById("modal");
+  const prevBtn = modal?.querySelector(".nav.prev");
+  const nextBtn = modal?.querySelector(".nav.next");
+  const closeBtn = modal?.querySelector(".close");
 
-  closeButton.addEventListener("click", () => {
-    dialog.close();
+  let images = [];
+  let currentIndex = 0;
+
+  function openModal(index) {
+    currentIndex = index;
+    updateImage();
+    modal?.showModal();
+  }
+
+  function updateImage() {
+    const modalImg = modal?.querySelector(".content img");
+    console.log(images[currentIndex].src);
+    if (modalImg && images[currentIndex]) {
+      modalImg.src = images[currentIndex].src;
+      modalImg.alt = images[currentIndex].alt || "";
+    }
+  }
+
+  function navigate(delta) {
+    currentIndex = (currentIndex + delta + images.length) % images.length;
+    updateImage();
+  }
+
+  // Collect all images from the page content
+  document.addEventListener("DOMContentLoaded", () => {
+    images = Array.from(document.querySelectorAll("main img, .gallery img"));
+    images.forEach((img, i) => {
+      img.style.cursor = "pointer";
+      img.addEventListener("click", () => openModal(i));
+    });
   });
+
+  prevBtn?.addEventListener("click", (e) => {
+    navigate(-1);
+  });
+  nextBtn?.addEventListener("click", (e) => {
+    navigate(1);
+  });
+  closeBtn?.addEventListener("click", () => modal?.close());
+  // modal?.addEventListener("click", (e) => {
+  //   if (e.target === modal) modal.close();
+  // });
+
+  // document.addEventListener("keydown", (e) => {
+  //   if (!modal?.open) return;
+  //   if (e.key === "ArrowLeft") navigate(-1);
+  //   if (e.key === "ArrowRight") navigate(1);
+  //   if (e.key === "Escape") modal.close();
+  // });
 </script>
 
 <style>
   #modal {
     border: 1px solid var(--color-border);
-    width: 100%;
     padding: 0 var(--space-2);
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    max-width: 90%;
-    max-height: 90%;
+    width: 90vw;
+    height: 90vh;
+    max-width: 90vw;
+    max-height: 90vh;
     overflow: hidden;
+  }
+
+  #modal[open] {
+    display: flex;
+    flex-direction: column;
   }
 
   .heading {
     display: flex;
     width: 100%;
     justify-content: flex-end;
+    gap: var(--space-1);
     padding: var(--space-2) 0;
     margin-bottom: var(--space-2);
     border-bottom: 1px solid var(--color-border-1);
+    flex-shrink: 0;
   }
 
   button {
@@ -57,5 +117,22 @@
 
   button:hover {
     background-color: var(--color-highlight);
+  }
+
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border: 1px solid var(--color-border-1);
+    border-radius: 12px;
   }
 </style>

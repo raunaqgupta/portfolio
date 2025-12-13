@@ -1,14 +1,32 @@
 ---
-
+import ArrowLeft from "../assets/icons/arrow-left.svg";
+import ArrowRight from "../assets/icons/arrow-right.svg";
+import Cross from "../assets/icons/cross.svg";
+import Button from "./button.astro";
 ---
 
 <dialog id="modal" closedby="any">
   <div class="heading">
     <div class="left">
-      <button class="nav prev" aria-label="Previous image">‹</button>
-      <button class="nav next" aria-label="Next image">›</button>
+      <Button
+        class="nav prev"
+        aria-label="Previous image"
+        iconOnly={true}
+        preIcon={ArrowLeft}
+      />
+      <Button
+        class="nav next"
+        aria-label="Next image"
+        iconOnly={true}
+        preIcon={ArrowRight}
+      />
     </div>
-    <button class="close" aria-label="Close modal">×</button>
+    <Button
+      class="close"
+      aria-label="Close modal"
+      iconOnly={true}
+      preIcon={Cross}
+    />
   </div>
   <div class="content">
     <img src="" alt="" />
@@ -100,26 +118,6 @@
     margin-bottom: var(--space-2);
     border-bottom: 1px solid var(--color-border-1);
     flex-shrink: 0;
-  }
-
-  button {
-    text-decoration: none;
-    font-size: 0.8em;
-    display: inline-flex;
-    flex-direction: row;
-    gap: var(--space-1);
-    align-items: center;
-    cursor: pointer;
-    color: var(--color-bg);
-    background: var(--color-bg-invert);
-    padding: var(--space-0) var(--space-2);
-    border-radius: 99px;
-    transition: background-color 160ms ease;
-    border: 0;
-  }
-
-  button:hover {
-    background-color: var(--color-highlight);
   }
 
   .content {

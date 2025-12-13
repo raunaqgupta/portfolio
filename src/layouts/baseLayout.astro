@@ -44,14 +44,16 @@ import Modal from "../components/modal.astro";
     --color-body-primary: #333;
     --color-body-secondary: #666;
     --color-body-tertiary: #999;
-    --color-heading: #333;
+    --color-heading: #111;
     --color-highlight: #00659b;
     --typography-body: 1em;
+    --typography-body-small: 0.875em;
     --typography-h1: 2.5em;
     --space-0: 4px;
     --space-1: 8px;
     --space-2: 16px;
     --space-3: 24px;
+    --space-4: 32px;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -79,7 +81,7 @@ import Modal from "../components/modal.astro";
   }
 
   header {
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
   }
 
   header .actions {
@@ -98,7 +100,8 @@ import Modal from "../components/modal.astro";
     font-size: 1.12em;
     line-height: 28px;
     margin: 0;
-    max-width: 77ch;
+    width: 100%;
+    max-width: 100ch;
     padding: 4em 8em 0;
   }
 
@@ -107,10 +110,10 @@ import Modal from "../components/modal.astro";
   }
 
   h1 {
-    color: var();
+    color: var(--color-heading);
     font-family: var(--font-dm-serif-display-italic), serif;
     font-size: var(--typography-h1);
-    font-weight: 200;
+    font-weight: 400;
     line-height: 1.12em;
     margin: 0;
   }
@@ -193,10 +196,6 @@ import Modal from "../components/modal.astro";
   ul,
   ol {
     padding-inline-start: 1.5em;
-  }
-
-  ol > li {
-    margin-bottom: var(--space-1);
   }
 
   .heading {

@@ -4,8 +4,10 @@
 
 <dialog id="modal" closedby="any">
   <div class="heading">
-    <button class="nav prev" aria-label="Previous image">‹</button>
-    <button class="nav next" aria-label="Next image">›</button>
+    <div class="left">
+      <button class="nav prev" aria-label="Previous image">‹</button>
+      <button class="nav next" aria-label="Next image">›</button>
+    </div>
     <button class="close" aria-label="Close modal">×</button>
   </div>
   <div class="content">
@@ -58,16 +60,16 @@
     navigate(1);
   });
   closeBtn?.addEventListener("click", () => modal?.close());
-  // modal?.addEventListener("click", (e) => {
-  //   if (e.target === modal) modal.close();
-  // });
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) modal.close();
+  });
 
-  // document.addEventListener("keydown", (e) => {
-  //   if (!modal?.open) return;
-  //   if (e.key === "ArrowLeft") navigate(-1);
-  //   if (e.key === "ArrowRight") navigate(1);
-  //   if (e.key === "Escape") modal.close();
-  // });
+  document.addEventListener("keydown", (e) => {
+    if (!modal?.open) return;
+    if (e.key === "ArrowLeft") navigate(-1);
+    if (e.key === "ArrowRight") navigate(1);
+    if (e.key === "Escape") modal.close();
+  });
 </script>
 
 <style>
@@ -91,7 +93,8 @@
   .heading {
     display: flex;
     width: 100%;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
     gap: var(--space-1);
     padding: var(--space-2) 0;
     margin-bottom: var(--space-2);

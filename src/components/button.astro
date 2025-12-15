@@ -45,6 +45,9 @@ import ExternalLinkIcon from "../assets/icons/external-link.svg";
 <style>
   button,
   a.button {
+    appearance: none;
+    background: none;
+    border: none;
     text-decoration: none;
     font-size: 0.8em;
     display: inline-flex;
@@ -55,6 +58,7 @@ import ExternalLinkIcon from "../assets/icons/external-link.svg";
     color: var(--color-bg);
     background: var(--color-bg-invert);
     padding: var(--space-0) var(--space-2);
+    min-height: 32px;
     border-radius: 99px;
     transition: background-color 160ms ease;
   }

@@ -1,12 +1,32 @@
 ---
-
+import ArrowLeft from "../assets/icons/arrow-left.svg";
+import ArrowRight from "../assets/icons/arrow-right.svg";
+import Cross from "../assets/icons/cross.svg";
+import Button from "./button.astro";
 ---
 
 <dialog id="modal" closedby="any">
   <div class="heading">
-    <button class="nav prev" aria-label="Previous image">‹</button>
-    <button class="nav next" aria-label="Next image">›</button>
-    <button class="close" aria-label="Close modal">×</button>
+    <div class="left">
+      <Button
+        class="nav prev"
+        aria-label="Previous image"
+        iconOnly={true}
+        preIcon={ArrowLeft}
+      />
+      <Button
+        class="nav next"
+        aria-label="Next image"
+        iconOnly={true}
+        preIcon={ArrowRight}
+      />
+    </div>
+    <Button
+      class="close"
+      aria-label="Close modal"
+      iconOnly={true}
+      preIcon={Cross}
+    />
   </div>
   <div class="content">
     <img src="" alt="" />
@@ -58,16 +78,16 @@
     navigate(1);
   });
   closeBtn?.addEventListener("click", () => modal?.close());
-  // modal?.addEventListener("click", (e) => {
-  //   if (e.target === modal) modal.close();
-  // });
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) modal.close();
+  });
 
-  // document.addEventListener("keydown", (e) => {
-  //   if (!modal?.open) return;
-  //   if (e.key === "ArrowLeft") navigate(-1);
-  //   if (e.key === "ArrowRight") navigate(1);
-  //   if (e.key === "Escape") modal.close();
-  // });
+  document.addEventListener("keydown", (e) => {
+    if (!modal?.open) return;
+    if (e.key === "ArrowLeft") navigate(-1);
+    if (e.key === "ArrowRight") navigate(1);
+    if (e.key === "Escape") modal.close();
+  });
 </script>
 
 <style>
@@ -91,32 +111,13 @@
   .heading {
     display: flex;
     width: 100%;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
     gap: var(--space-1);
     padding: var(--space-2) 0;
     margin-bottom: var(--space-2);
     border-bottom: 1px solid var(--color-border-1);
     flex-shrink: 0;
-  }
-
-  button {
-    text-decoration: none;
-    font-size: 0.8em;
-    display: inline-flex;
-    flex-direction: row;
-    gap: var(--space-1);
-    align-items: center;
-    cursor: pointer;
-    color: var(--color-bg);
-    background: var(--color-bg-invert);
-    padding: var(--space-0) var(--space-2);
-    border-radius: 99px;
-    transition: background-color 160ms ease;
-    border: 0;
-  }
-
-  button:hover {
-    background-color: var(--color-highlight);
   }
 
   .content {

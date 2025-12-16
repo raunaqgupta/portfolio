@@ -35,18 +35,18 @@ import Modal from "../components/modal.astro";
 
 <style is:global>
   :root {
-    --color-bg: #f6f6f6;
+    --color-bg: #fcfcfc;
     --color-bg-invert: #1e2227;
     --color-bg-1: #eaeaea;
     --color-bg-glass: rgba(24, 24, 24, 0.1);
     --color-border: #d8d8d8;
     --color-border-1: #d0d0d0;
-    --color-body-primary: #333;
+    --color-body-primary: #5f5f5f;
     --color-body-secondary: #666;
     --color-body-tertiary: #999;
     --color-heading: #111;
     --color-highlight: #00659b;
-    --typography-body: 1em;
+    --typography-body: 0.9em;
     --typography-body-small: 0.875em;
     --typography-h1: 2.5em;
     --space-0: 4px;
@@ -129,6 +129,10 @@ import Modal from "../components/modal.astro";
     font-size: 1.2rem;
     font-weight: 200;
     margin-top: 2em;
+  }
+
+  p {
+    font-size: var(--typography-body);
   }
 
   figure {

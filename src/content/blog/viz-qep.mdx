@@ -1,0 +1,21 @@
+---
+title: Exploring Visualizations for Query Execution Plans using AI tools
+date: 2025-12-15
+category: post
+---
+
+Within the realm of databases, every query has one or more execution plans that details how the database executed the query. These plans can be complex, and understanding them is crucial for optimizing query performance.
+
+The default visualization for a query execution plan looks something like this:
+
+![Source: [https://dba.stackexchange.com/a/252094](https://dba.stackexchange.com/a/252094)](https://r2-image.raunaqgupta.workers.dev/blog/qep.png?f=avif)
+
+Various vendors have their variations of this visualization, but they all share a common structure: a tree-like diagram where each node represents an operation (like a table scan, join, or filter), and the edges represent the flow of data between these operations.
+
+The purpose of the visualization is to help understand which operations are potential bottlenecks and to understand their place in the overall execution of the query. Considering this I hypoethesized that the sunburst chart could be a feasible alternative to the tree diagram for quick identification of bottlenecks. It might also turn out to be more intuitive and aesthetically pleasing.
+
+## Further reading
+
+- [The Art of the Execution Plan](https://www.brentozar.com/archive/2012/01/art-of-execution-plan/)
+- [ELI5: Query Optimization with BigQuery Execution Plan](https://medium.com/refined-and-refactored/eli5-query-optimization-with-bigquery-execution-plan-9b8211700a7d)
+

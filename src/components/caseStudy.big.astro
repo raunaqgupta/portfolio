@@ -8,22 +8,17 @@ const { image, title, description, url } = Astro.props;
       <p class="title">{title}</p>
       <p class="description">{description}</p>
     </div>
-    <div class="image">
-      <img src={image} alt={title} />
-    </div>
+    <div class="image" style={`--img: url("${image}")`}></div>
   </article>
 </a>
 
 <style>
   a {
-    display: block;
     border-radius: 6px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    display: block;
     text-decoration: none;
     transition: transform 160ms ease;
-    background: rgba(250, 250, 250, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px) saturate(130%);
   }
 
   a:after {
@@ -39,12 +34,22 @@ const { image, title, description, url } = Astro.props;
   }
 
   article {
+    border: 1px solid var(--color-border-bg);
+    border-radius: 6px;
+    backdrop-filter: blur(10px) saturate(130%);
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
     justify-content: space-between;
-    overflow: hidden;
     height: 100%;
+    background-image: linear-gradient(
+        var(--color-border-bg) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, var(--color-border-bg) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: -4px -4px;
+
     -webkit-mask-image: linear-gradient(
       180deg,
       rgba(0, 0, 0, 1) 50%,
@@ -62,8 +67,12 @@ const { image, title, description, url } = Astro.props;
   }
 
   .image {
+    background-image: var(--img);
     padding-inline: var(--space-2);
-
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 300px;
     transition: transform 160ms ease;
   }
 
@@ -89,9 +98,7 @@ const { image, title, description, url } = Astro.props;
 
   @media (prefers-color-scheme: dark) {
     a {
-      background: rgba(10, 10, 10, 0.2);
-      border: 1px solid rgba(16, 110, 169, 0.2);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.55);
+      box-shadow: rgba(0, 0, 0, 0.1) 4px 4px 29px;
     }
 
     .text {

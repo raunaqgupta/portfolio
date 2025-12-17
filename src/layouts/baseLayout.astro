@@ -81,7 +81,7 @@ import Modal from "../components/modal.astro";
   }
 
   header {
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-2);
   }
 
   header .actions {
@@ -100,7 +100,7 @@ import Modal from "../components/modal.astro";
     font-size: 1.12em;
     line-height: 28px;
     margin: 0;
-    /* width: 100%; */
+    min-width: 100ch;
     max-width: 100ch;
     padding: 8em 8em 0;
   }
@@ -220,15 +220,17 @@ import Modal from "../components/modal.astro";
   }
 
   @media only screen and (max-width: 700px) {
-    header {
+    /* header {
       margin-bottom: unset;
-    }
+    } */
 
     h1 {
       font-size: 2em;
+      margin: 0.1em 0 0;
     }
 
     body {
+      min-width: unset;
       padding: 2em 1.5em 0;
     }
   }

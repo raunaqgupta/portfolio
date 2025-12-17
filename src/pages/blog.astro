@@ -1,5 +1,5 @@
 ---
-import List from "../components/list.mdx.astro";
+import Toolbar from "../components/toolbar.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
 import ListMdx from "../components/list.mdx.astro";
 
@@ -16,13 +16,15 @@ const format = { year: "numeric", month: "long", day: "numeric" };
 ---
 
 <BaseLayout title="Blog" breadcrumbs={links}>
-  <input
-    id="blog-search-input"
-    type="search"
-    name="search"
-    placeholder="Search titles"
-    autocomplete="off"
-  />
+  <Toolbar>
+    <input
+      id="blog-search-input"
+      type="search"
+      name="search"
+      placeholder="Search titles"
+      autocomplete="off"
+    />
+  </Toolbar>
   <div id="blog-list">
     <ListMdx>
       {

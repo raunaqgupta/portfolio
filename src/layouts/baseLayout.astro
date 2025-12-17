@@ -150,8 +150,13 @@ import Modal from "../components/modal.astro";
   }
 
   figure > img {
-    background-color: var(--color-bg-1);
-    border: 1px solid var(--color-border-1);
+    background-image: linear-gradient(
+        rgba(200, 200, 200, 0.15) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(200, 200, 200, 0.15) 1px, transparent 1px);
+    background-size: 8px 8px;
+    border: 1px solid rgba(200, 200, 200, 0.4);
     border-radius: 12px;
     width: 100%;
   }

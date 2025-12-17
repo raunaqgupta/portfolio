@@ -22,7 +22,7 @@ import Button from "./button.astro";
       />
     </div>
     <Button
-      class="close"
+      class="nav close"
       aria-label="Close modal"
       iconOnly={true}
       preIcon={Cross}
@@ -37,7 +37,8 @@ import Button from "./button.astro";
   const modal = document.getElementById("modal");
   const prevBtn = modal?.querySelector(".nav.prev");
   const nextBtn = modal?.querySelector(".nav.next");
-  const closeBtn = modal?.querySelector(".close");
+  const closeBtn = modal?.querySelector(".nav.close");
+  console.log(prevBtn, nextBtn, closeBtn);
 
   let images = [];
   let currentIndex = 0;
@@ -50,7 +51,6 @@ import Button from "./button.astro";
 
   function updateImage() {
     const modalImg = modal?.querySelector(".content img");
-    console.log(images[currentIndex].src);
     if (modalImg && images[currentIndex]) {
       modalImg.src = images[currentIndex].src;
       modalImg.alt = images[currentIndex].alt || "";
@@ -75,9 +75,12 @@ import Button from "./button.astro";
     navigate(-1);
   });
   nextBtn?.addEventListener("click", (e) => {
+    console.log("Next button clicked");
     navigate(1);
   });
-  closeBtn?.addEventListener("click", () => modal?.close());
+
+  closeBtn?.addEventListener("click", (e) => modal.close());
+
   modal?.addEventListener("click", (e) => {
     if (e.target === modal) modal.close();
   });

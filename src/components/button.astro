@@ -1,5 +1,6 @@
 ---
 const {
+  class: className,
   label,
   url,
   iconOnly = false,
@@ -34,7 +35,7 @@ import ExternalLinkIcon from "../assets/icons/external-link.svg";
       )}
     </a>
   ) : (
-    <button onclick={url}>
+    <button class={className} onclick={url}>
       {PreIcon && <PreIcon />}
       {iconOnly ? "" : label}
       {PostIcon && <PostIcon />}

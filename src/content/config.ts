@@ -7,6 +7,7 @@ const casestudies = defineCollection({
     organization: z.string(),
     date: z.date(),
     thumbnail: z.string().url(),
+    hero: z.string().url().optional(),
     caseStudy: z.boolean().optional()
   }),
 });

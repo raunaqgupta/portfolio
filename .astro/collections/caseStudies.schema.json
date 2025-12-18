@@ -33,6 +33,10 @@
           "type": "string",
           "format": "uri"
         },
+        "hero": {
+          "type": "string",
+          "format": "uri"
+        },
         "caseStudy": {
           "type": "boolean"
         },

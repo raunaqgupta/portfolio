@@ -22,7 +22,29 @@ const links = [
 ---
 
 <BaseLayout title={entry.data.title} breadcrumbs={links}>
+  <div class="image">
+    <div style={`--img: url("${entry.data.hero}")`}></div>
+  </div>
   <Content
     components={{ ...components, img: Imgmdx, ul: Ulmdx, List: Listmdx }}
   />
 </BaseLayout>
+
+<style>
+  .image {
+    width: 100%;
+    aspect-ratio: 3;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--color-border-bg);
+  }
+
+  .image > div {
+    width: 100%;
+    height: 100%;
+    background-image: var(--img);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+</style>

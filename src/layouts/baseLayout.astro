@@ -1,17 +1,25 @@
 ---
-const { title, breadcrumbs, actions } = Astro.props;
+const { actions } = Astro.props;
+
+const title = Astro.props.title || Astro.props.frontmatter?.title || "Untitled";
+const breadcrumbs =
+  Astro.props.breadcrumbs || Astro.props.frontmatter?.breadcrumbs || [];
 import Breadcrumbs from "../components/breadcrumbs.astro";
 import Head from "../components/head.astro";
 import Footer from "../components/footer.astro";
 import Button from "../components/button.astro";
 import Modal from "../components/modal.astro";
+import Logo from "../assets/logo.svg";
 ---
 
 <html lang="en">
   <Head title={title} />
   <body>
     <header>
-      <Breadcrumbs breadcrumbs={breadcrumbs} />
+      <div class="logo-container">
+        <a class="logo-link" href="/"><Logo class="logo" /></a>
+      </div>
+      <!-- {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />} -->
       <div class="heading">
         <h1>{title}</h1>
         {
@@ -85,6 +93,23 @@ import Modal from "../components/modal.astro";
 
   header {
     margin-bottom: var(--space-2);
+  }
+
+  .logo-container {
+    margin-bottom: var(--space-2);
+  }
+
+  .logo-container .logo-link {
+    text-decoration: none;
+  }
+
+  .logo-container .logo-link:after {
+    content: none;
+  }
+
+  .logo-container .logo {
+    height: 40px;
+    width: auto;
   }
 
   header .actions {

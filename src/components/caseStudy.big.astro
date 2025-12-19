@@ -1,10 +1,28 @@
 ---
-const { image, title, description, url } = Astro.props;
+const {
+  image,
+  name,
+  title,
+  description,
+  url,
+  caseStudyCount = 0,
+} = Astro.props;
 ---
 
 <a href={url}>
   <article>
     <div class="text">
+      {
+        name && (
+          <div class="name">
+            <span>{name}</span>
+            <span aria-hidden="true">·</span>
+            <span>
+              {caseStudyCount} case stud{caseStudyCount !== 1 ? "ies" : "y"}
+            </span>
+          </div>
+        )
+      }
       <p class="title">{title}</p>
       <p class="description">{description}</p>
     </div>
@@ -64,6 +82,20 @@ const { image, title, description, url } = Astro.props;
 
   .text {
     padding: var(--space-2);
+  }
+
+  .name {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.6em;
+    font-weight: 500;
+    color: var(--color-body-tertiary);
+    text-transform: uppercase;
+    line-height: 1;
+    border: 1px solid #eee;
+    padding: var(--space-0) var(--space-1);
+    border-radius: 6px;
   }
 
   .image {

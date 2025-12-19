@@ -1,0 +1,52 @@
+---
+name: Splunk Observability Cloud
+title: Extending an established platform
+description: Designing new verticals on Splunk Observability Cloud
+organization: Cisco
+date: 2024-10-01
+thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/thumbnail.png?f=avif
+hero: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/hero.png?f=avif
+caseStudies:
+  - launching-dbmon
+  - launching-apopt
+---
+import Gallery from '../../components/gallery.astro';
+import Grid from '../../components/grid.collection.astro';
+import { getCollection, reference } from 'astro:content';
+
+export const allCaseStudies = await getCollection('casestudies');
+export const referencedSlugs = frontmatter.caseStudies || [];
+export const referencedCaseStudies = allCaseStudies.filter((entry) =>
+  referencedSlugs.includes(entry.slug)
+).map(({ slug, ...rest }) => ({ slug: `/case-studies/${slug}`, ...rest }));
+
+## Overview
+
+Splunk's acquisition replaced Cisco's existing efforts in Observability. Splunk Observability Cloud provides application performance monitoring, and infrastructure monitoring for cloud-native environments.
+
+## Addressing the gap and expanding capabilities
+
+![Extending capabilities at the intersection of applications and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
+
+As part of my work on Splunk Observability Cloud, I led the design efforts for two new verticals: Database Monitoring and Application Optimization. These additions aimed to enhance the platform's capabilities and provide users with a more comprehensive observability solution.
+
+I also contributed new design patterns, components, and visualizations to Splunk's design system.
+
+## Designing for scalability
+
+I supported two product and engineering teams each working independently within their respective domains by delivering designs that could scale across these new verticals while supporting future extensions. This included:
+
+1. A new information architecture proposal,
+2. Defining a taxonomy to establish new UI patterns,
+3. Defining product strategy for releasing new beta features within the product,
+4. In-product marketing to enable product-led adoption, and
+5. Paving the way for future AI-assisted workflows.
+
+## Impact
+
+Alpha launch of Database monitoring had 11 multinational enterprise customers with a conversion rate of 64% within 3 months of launch. This number is currently estimated to grow to 25 by the end of Q1 2026.
+
+## Case studies
+
+<Grid collection={referencedCaseStudies} />
+

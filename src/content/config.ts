@@ -5,10 +5,11 @@ const casestudies = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     organization: z.string(),
+    product: z.string().optional(),
     date: z.date(),
     thumbnail: z.string().url(),
     hero: z.string().url().optional(),
-    caseStudy: z.boolean().optional()
+    published: z.boolean().optional()
   }),
 });
 
@@ -30,6 +31,19 @@ const jobs = defineCollection({
   })
 })
 
+const product = defineCollection({
+  schema: z.object({
+    name: z.string(),
+    title: z.string(),
+    date: z.date(),
+    description: z.string().optional(),
+    thumbnail: z.string().url().optional(),
+    hero: z.string().url().optional(),
+    organization: z.string(),
+    caseStudies: z.array(reference('casestudies')).optional()
+  })
+})
+
 const education = defineCollection({
   schema: z.object({
     role: z.string(),
@@ -43,5 +57,6 @@ export const collections = {
   casestudies,
   blog,
   jobs,
-  education
+  education,
+  product,
 };

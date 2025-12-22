@@ -1,0 +1,32 @@
+---
+import Logo from "../assets/logo.svg";
+---
+
+<div class="logo-container">
+  <a class="logo-link" href="/"><Logo class="logo" /></a>
+</div>
+
+<style>
+  .logo-container {
+    margin-bottom: var(--space-2);
+  }
+
+  .logo-container .logo-link {
+    text-decoration: none;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .logo-container .logo-link:after {
+    content: none;
+  }
+
+  .logo-container .logo {
+    height: 42px;
+    width: auto;
+    --logo-c1: #4aa1e8;
+    --logo-c2: #c84242;
+  }
+</style>

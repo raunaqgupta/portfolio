@@ -9,16 +9,14 @@ import Head from "../components/head.astro";
 import Footer from "../components/footer.astro";
 import Button from "../components/button.astro";
 import Modal from "../components/modal.astro";
-import Logo from "../assets/logo.svg";
+import Logo from "../components/logo.astro";
 ---
 
 <html lang="en">
   <Head title={title} />
   <body>
     <header>
-      <div class="logo-container">
-        <a class="logo-link" href="/"><Logo class="logo" /></a>
-      </div>
+      <Logo />
       <!-- {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />} -->
       <div class="heading">
         <h1>{title}</h1>
@@ -82,6 +80,17 @@ import Logo from "../assets/logo.svg";
     }
   }
 
+  @property --logo-c1 {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #4aa1e8;
+  }
+  @property --logo-c2 {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #c84242;
+  }
+
   html {
     display: flex;
     flex-direction: column;
@@ -93,23 +102,6 @@ import Logo from "../assets/logo.svg";
 
   header {
     margin-bottom: var(--space-2);
-  }
-
-  .logo-container {
-    margin-bottom: var(--space-2);
-  }
-
-  .logo-container .logo-link {
-    text-decoration: none;
-  }
-
-  .logo-container .logo-link:after {
-    content: none;
-  }
-
-  .logo-container .logo {
-    height: 40px;
-    width: auto;
   }
 
   header .actions {

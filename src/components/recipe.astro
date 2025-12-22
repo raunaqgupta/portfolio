@@ -1,23 +1,30 @@
 ---
-import { Recipe } from 'cooklang'
-const { recipe } = Astro.props
-const newRecipe = new Recipe(recipe)
+import { Recipe } from "cooklang";
+const { recipe } = Astro.props;
+const newRecipe = new Recipe(recipe);
 ---
 
-<ul class='meta'>
+<div class="meta">
   {
     newRecipe.metadata.map((metadatum) => (
-      <li class="property">{metadatum.key}: {metadatum.value}</li>
+      <div class="property">
+        <div class="key">{metadatum.key}</div>{" "}
+        <div class="value">{metadatum.value}</div>
+      </div>
     ))
   }
-</ul>
+</div>
 
 <h2>Ingredients</h2>
 
-<ul class='ingredients'>
+<ul class="ingredients">
   {
     newRecipe.ingredients.map((ingredient) => (
-      <li>{ingredient.amount} {ingredient.units} {ingredient.name}</li>
+      <li class="ingredient">
+        <span class="amount">{ingredient.amount}</span>
+        <span class="units">{ingredient.units}</span>
+        <span class="name">{ingredient.name}</span>
+      </li>
     ))
   }
 </ul>
@@ -28,24 +35,48 @@ const newRecipe = new Recipe(recipe)
   {
     newRecipe.steps.map((step) => (
       <li>
-        {
-          step.line.map((token) => (
-            typeof token === 'string'
-            ? <span>{token}</span> : <span>{token.name}</span>
-          ))
-        }
+        {step.line.map((token) =>
+          typeof token === "string" ? (
+            <span>{token}</span>
+          ) : (
+            <span>{token.name}</span>
+          )
+        )}
       </li>
     ))
   }
 </ul>
 
 <style>
-  .meta, .ingredients {
-    gap: 1px;
+  .meta {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding: 0;
+    gap: var(--space-4);
+  }
+
+  .meta .property {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .meta .property .key {
+    font-size: var(--typography-body-small);
+    color: var(--color-body-tertiary);
   }
 
   .property {
     text-transform: capitalize;
+  }
+
+  .ingredients {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .ingredients .ingredient {
+    padding-bottom: var(--space-1);
   }
 
   .instructions {

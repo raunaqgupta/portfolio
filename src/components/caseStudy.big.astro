@@ -16,14 +16,16 @@ const {
         name && (
           <div class="name">
             <span>{name}</span>
-            <span aria-hidden="true">·</span>
-            <span>
+            <span class="separator" aria-hidden="true">
+              ·
+            </span>
+            <span class="case-study-count">
               {caseStudyCount} case stud{caseStudyCount !== 1 ? "ies" : "y"}
             </span>
           </div>
         )
       }
-      <p class="title">{title}</p>
+      <div class="title">{title}</div>
       <p class="description">{description}</p>
     </div>
     <div class="image" style={`--img: url("${image}")`}></div>
@@ -113,7 +115,7 @@ const {
     display: block;
   }
 
-  p.title {
+  .title {
     margin: 0;
     font-size: 1em;
     font-weight: 600;
@@ -128,6 +130,16 @@ const {
   }
 
   @media only screen and (max-width: 700px) {
+    .name .separator,
+    .name .case-study-count {
+      display: none;
+    }
+
+    .title {
+      line-height: 1.2em;
+      margin: var(--space-1) 0;
+    }
+
     .image {
       background-size: contain;
       background-position: top;

@@ -1,11 +1,31 @@
 ---
-const { image, title, description, url } = Astro.props;
+const {
+  image,
+  name,
+  title,
+  description,
+  url,
+  caseStudyCount = 0,
+} = Astro.props;
 ---
 
 <a href={url}>
   <article>
     <div class="text">
-      <p class="title">{title}</p>
+      {
+        name && (
+          <div class="name">
+            <span>{name}</span>
+            <span class="separator" aria-hidden="true">
+              ·
+            </span>
+            <span class="case-study-count">
+              {caseStudyCount} case stud{caseStudyCount !== 1 ? "ies" : "y"}
+            </span>
+          </div>
+        )
+      }
+      <div class="title">{title}</div>
       <p class="description">{description}</p>
     </div>
     <div class="image" style={`--img: url("${image}")`}></div>
@@ -18,7 +38,7 @@ const { image, title, description, url } = Astro.props;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     display: block;
     text-decoration: none;
-    transition: transform 160ms ease;
+    transition: transform 300ms ease-out;
   }
 
   a:after {
@@ -66,13 +86,27 @@ const { image, title, description, url } = Astro.props;
     padding: var(--space-2);
   }
 
+  .name {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.6em;
+    font-weight: 500;
+    color: var(--color-body-tertiary);
+    text-transform: uppercase;
+    line-height: 1;
+    border: 1px solid #eee;
+    padding: var(--space-0) var(--space-1);
+    border-radius: 6px;
+  }
+
   .image {
     background-image: var(--img);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     height: 300px;
-    transition: transform 160ms ease;
+    transition: transform 300ms ease-out;
   }
 
   .image img {
@@ -81,7 +115,7 @@ const { image, title, description, url } = Astro.props;
     display: block;
   }
 
-  p.title {
+  .title {
     margin: 0;
     font-size: 1em;
     font-weight: 600;
@@ -96,6 +130,16 @@ const { image, title, description, url } = Astro.props;
   }
 
   @media only screen and (max-width: 700px) {
+    .name .separator,
+    .name .case-study-count {
+      display: none;
+    }
+
+    .title {
+      line-height: 1.2em;
+      margin: var(--space-1) 0;
+    }
+
     .image {
       background-size: contain;
       background-position: top;

@@ -1,4 +1,4 @@
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig } from "astro/config";
 
 import mdx from "@astrojs/mdx";
 
@@ -9,10 +9,6 @@ export default defineConfig({
   image: {
     layout: "constrained"
   },
-  redirects: {
-    '/': '/portfolio'
-  } 
-  ,
   experimental: {
     fonts: [{
       provider: 'local',

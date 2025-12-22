@@ -1,17 +1,23 @@
 ---
-const { title, breadcrumbs, actions } = Astro.props;
+const { actions } = Astro.props;
+
+const title = Astro.props.title || Astro.props.frontmatter?.title || "Untitled";
+const breadcrumbs =
+  Astro.props.breadcrumbs || Astro.props.frontmatter?.breadcrumbs || [];
 import Breadcrumbs from "../components/breadcrumbs.astro";
 import Head from "../components/head.astro";
 import Footer from "../components/footer.astro";
 import Button from "../components/button.astro";
 import Modal from "../components/modal.astro";
+import Logo from "../components/logo.astro";
 ---
 
 <html lang="en">
   <Head title={title} />
   <body>
     <header>
-      <Breadcrumbs breadcrumbs={breadcrumbs} />
+      <Logo />
+      <!-- {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />} -->
       <div class="heading">
         <h1>{title}</h1>
         {
@@ -72,6 +78,17 @@ import Modal from "../components/modal.astro";
       --color-heading: #e7e7e7;
       --color-highlight: #39a5e6;
     }
+  }
+
+  @property --logo-c1 {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #4aa1e8;
+  }
+  @property --logo-c2 {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #c84242;
   }
 
   html {

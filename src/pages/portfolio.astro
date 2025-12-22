@@ -5,11 +5,9 @@ import BaseLayout from "../layouts/baseLayout.astro";
 import Button from "../components/button.astro";
 import ArrowRightIcon from "../assets/icons/arrow-right.svg";
 const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
-const caseStudies = await getCollection("casestudies", ({ data }) => {
-  return data.caseStudy === true;
-});
-const newCaseStudies = caseStudies.map(({ slug, ...rest }) => ({
-  slug: `/case-studies/` + slug,
+const products = await getCollection("product");
+const newProducts = products.map(({ slug, ...rest }) => ({
+  slug: `/product/` + slug,
   ...rest,
 }));
 ---
@@ -44,7 +42,8 @@ const newCaseStudies = caseStudies.map(({ slug, ...rest }) => ({
     />
   </section>
   <section id="case-studies">
-    <h2>Case studies</h2>
-    <Grid collection={newCaseStudies} />
+    <h2>Case study collections</h2>
+    <p>Read various case studies grouped by product engagements.</p>
+    <Grid collection={newProducts} />
   </section>
 </BaseLayout>

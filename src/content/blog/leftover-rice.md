@@ -1,7 +1,7 @@
 ---
 title: Leftover rice
 date: 2024-08-18
-category: poems
+category: poem
 ---
 
 I take out the half cup of leftover rice from 2 days ago  

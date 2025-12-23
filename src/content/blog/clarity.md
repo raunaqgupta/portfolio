@@ -1,7 +1,7 @@
 ---
 title: Clarity
 date: 2023-04-28
-category: poems
+category: poem
 ---
 
 What is it like to experience  

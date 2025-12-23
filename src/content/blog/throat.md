@@ -1,7 +1,7 @@
 ---
 title: Throat
 date: 2023-01-15
-category: poems
+category: poem
 ---
 
 This ancestral filter  

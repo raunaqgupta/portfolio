@@ -27,7 +27,7 @@
           "type": "string",
           "enum": [
             "recipe",
-            "poems",
+            "poem",
             "post"
           ]
         },

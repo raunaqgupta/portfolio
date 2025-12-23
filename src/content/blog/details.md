@@ -1,7 +1,7 @@
 ---
 title: Details
 date: 2023-04-28
-category: poems
+category: poem
 ---
 
 As I trace the shape of your eyebrows with my fingertips  

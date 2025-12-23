@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://raunaqgupta.com/sitemap-index.xml

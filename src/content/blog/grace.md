@@ -1,7 +1,7 @@
 ---
 title: Grace
 date: 2023-07-07
-category: poems
+category: poem
 ---
 
 Are hurricanes ever remembered fondly?  

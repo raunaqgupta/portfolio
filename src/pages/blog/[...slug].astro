@@ -24,5 +24,9 @@ const format = { year: "numeric", month: "long", day: "numeric" };
 
 <BaseLayout title={entry.data.title} breadcrumbs={links}>
   <Content components={{ ...components, img: Imgmdx }} />
-  <Toolbar>{entry.data.date.toLocaleDateString("en-US", format)}</Toolbar>
+  <Toolbar
+    >{entry.data.date.toLocaleDateString("en-US", format)} ○ {
+      entry.data.category
+    }</Toolbar
+  >
 </BaseLayout>

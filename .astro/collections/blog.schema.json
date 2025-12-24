@@ -28,7 +28,8 @@
           "enum": [
             "recipe",
             "poem",
-            "post"
+            "post",
+            "audio"
           ]
         },
         "$schema": {

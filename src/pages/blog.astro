@@ -2,8 +2,8 @@
 import Toolbar from "../components/toolbar.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
 import ListMdx from "../components/list.mdx.astro";
-
 import { getCollection } from "astro:content";
+
 const blog = await getCollection("blog");
 const newBlog = blog
   .map(({ slug, ...rest }) => ({
@@ -11,11 +11,15 @@ const newBlog = blog
     ...rest,
   }))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const links = [{ text: "Raunaq Gupta", url: "/" }];
+
+const categories = [
+  ...new Set(newBlog.map((item) => item.data.category).filter(Boolean)),
+].sort();
+
 const format = { year: "numeric", month: "long", day: "numeric" };
 ---
 
-<BaseLayout title="Blog" breadcrumbs={links}>
+<BaseLayout title="Blog">
   <Toolbar>
     <input
       id="blog-search-input"
@@ -24,15 +28,27 @@ const format = { year: "numeric", month: "long", day: "numeric" };
       placeholder="Search titles"
       autocomplete="off"
     />
+    <select id="category-filter">
+      <option value="">All categories</option>
+      {
+        categories.map((category) => (
+          <option value={category}>{category}</option>
+        ))
+      }
+    </select>
   </Toolbar>
   <div id="blog-list">
     <ListMdx>
       {
         newBlog.map((item) => (
-          <li>
+          <li data-category={item.data.category || ""}>
             <a href={item.slug}>{item.data.title}</a>{" "}
-            <div class="date">
-              {item.data.date.toLocaleDateString("en-US", format)}
+            <div class="meta">
+              <div class="date">
+                {item.data.date.toLocaleDateString("en-US", format)}
+              </div>
+              <div class="separator">○</div>
+              <div class="category"> {item.data.category} </div>
             </div>
           </li>
         ))
@@ -42,40 +58,71 @@ const format = { year: "numeric", month: "long", day: "numeric" };
 
   <script type="module">
     const input = document.getElementById("blog-search-input");
+    const categoryFilter = document.getElementById("category-filter");
     const list = document.querySelector("#blog-list ul");
-    if (input && list) {
+
+    if (input && categoryFilter && list) {
       const items = Array.from(list.querySelectorAll("li"));
-      input.addEventListener("input", () => {
-        const value = input.value.trim().toLowerCase();
+
+      const filterItems = () => {
+        const searchValue = input.value.trim().toLowerCase();
+        const categoryValue = categoryFilter.value.toLowerCase();
+
         items.forEach((item) => {
           const text = item.textContent?.toLowerCase() ?? "";
-          item.hidden = value && !text.includes(value);
+          const itemCategory =
+            item.getAttribute("data-category")?.toLowerCase() ?? "";
+
+          const matchesSearch = !searchValue || text.includes(searchValue);
+          const matchesCategory =
+            !categoryValue || itemCategory === categoryValue;
+
+          item.hidden = !(matchesSearch && matchesCategory);
         });
-      });
+      };
+
+      input.addEventListener("input", filterItems);
+      categoryFilter.addEventListener("change", filterItems);
     }
   </script>
 
   <style>
-    input {
+    input,
+    select {
+      appearance: none;
       border: 1px solid var(--color-border);
       border-radius: 6px;
       font-size: 1em;
       padding: var(--space-1);
       transition: border-color 150ms ease;
+      text-transform: capitalize;
     }
 
-    input:hover {
+    input:hover,
+    select:hover {
       border-color: var(--color-highlight);
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       border-color: var(--color-highlight);
       outline: none;
     }
 
-    li .date {
+    select {
+      background-color: var(--color-background);
+      cursor: pointer;
+    }
+
+    li .meta {
+      display: flex;
+      gap: var(--space-0);
       font-size: 0.5em;
       color: var(--color-body-tertiary);
+    }
+
+    li .meta .category {
+      text-transform: capitalize;
     }
   </style>
 </BaseLayout>

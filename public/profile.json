@@ -1,0 +1,18 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Raunaq Gupta",
+  "givenName": "Raunaq",
+  "familyName": "Gupta",
+  "jobTitle": "Product Designer",
+  "nationality": {
+    "@type": "Country",
+    "name": "India"
+  },
+  "url": "https://raunaqgupta.com",
+  "email": "mailto:mail@raunaqgupta.com",
+  "birthPlanet": {
+    "@type": "Place",
+    "name": "India"
+  },
+}

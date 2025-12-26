@@ -236,7 +236,27 @@ import Logo from "../components/logo.astro";
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    padding: var(--space-2);
+    border-radius: var(--space-0);
+  }
+
+  code {
+    counter-reset: line-number;
+  }
+
+  code .line {
+    counter-increment: line-number;
+  }
+
+  pre code .line::before {
+    content: counter(line-number);
+    display: inline-block;
+    width: 2em;
+    padding: 0 var(--space-1);
+    background-color: var(--color-bg-1);
+    border-right: 1px solid var(--color-border);
+    margin-right: var(--space-2);
+    text-align: right;
+    color: var(--color-body-tertiary);
   }
 
   @media only screen and (max-width: 1024px) {

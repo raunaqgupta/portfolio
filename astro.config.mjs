@@ -12,6 +12,14 @@ export default defineConfig({
   image: {
     layout: "constrained"
   },
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: "github-light",
+        dark: "github-dark"
+      }
+    }
+  },
   experimental: {
     fonts: [{
       provider: 'local',

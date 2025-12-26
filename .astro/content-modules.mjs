@@ -20,5 +20,6 @@ export default new Map([
 ["src/content/blog/palak-paneer.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fpalak-paneer.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/schema-hot-wheels.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fschema-hot-wheels.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fyogurt-dip.mdx&astroContentModuleFlag=true")],
-["src/content/blog/schema-json-ld.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fschema-json-ld.mdx&astroContentModuleFlag=true")]]);
+["src/content/blog/schema-json-ld.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fschema-json-ld.mdx&astroContentModuleFlag=true")],
+["src/content/blog/2025-12-26-json-ld-examples.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2F2025-12-26-json-ld-examples.mdx&astroContentModuleFlag=true")]]);
 		

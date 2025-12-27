@@ -1,0 +1,59 @@
+---
+title: JSON-LD examples
+date: 2025-12-24
+category: post
+---
+
+## Personal profile
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Raunaq Gupta",
+  "givenName": "Raunaq",
+  "familyName": "Gupta",
+  "jobTitle": "Product Designer",
+  "nationality": {
+    "@type": "Country",
+    "name": "India"
+  },
+  "url": "https://raunaqgupta.com",
+  "email": "mailto:mail@raunaqgupta.com",
+  "birthPlanet": {
+    "@type": "Place",
+    "name": "India"
+  },
+}
+```
+
+## A singular release of a Hot Wheels model
+
+A Hot wheels car represents a particualar model as well as a particular release of said model i.e. a model can have multiple releases over the years with different colors, designs etc. For reference, this will be referencing the [Oscar Mayer Wienermobile](https://hotwheels.fandom.com/wiki/Oscar_Mayer_Wienermobile) model.
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Thing",
+  "name": "Oscar Mayer Wienermobile",
+  "description": "Did you know that there is a real Wienermobile that travels the country and weighs exactly the same as 1 million hot dogs?",
+  "url": "https://hotwheels.fandom.com/wiki/Oscar_Mayer_Wienermobile",
+  "releaseDate": "1996",
+  "manufacturer": {
+    "@type": "Organization",
+    "name": "Mattel",
+    "url": "https://www.mattel.com/"
+  },
+  "material": [
+    {
+      "@type": "Text",
+      "@value": "Zamac (zinc alloy)"
+    },
+    {
+      "@type": "Text", 
+      "@value": "ABS plastic"
+    }
+  ]
+}
+```
+

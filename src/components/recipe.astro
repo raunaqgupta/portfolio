@@ -71,12 +71,17 @@ const newRecipe = new Recipe(recipe);
   }
 
   .ingredients {
+    font-size: var(--typography-body-small);
     list-style-type: none;
     padding: 0;
   }
 
   .instructions {
-    list-style: decimal;
-    padding-inline-start: 24px;
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .instructions li {
+    margin-bottom: var(--space-1);
   }
 </style>

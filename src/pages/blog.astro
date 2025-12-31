@@ -1,7 +1,9 @@
 ---
-import Toolbar from "../components/toolbar.astro";
+import Toolbar from "@components/toolbar.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
-import ListMdx from "../components/list.mdx.astro";
+import ListMdx from "@components/list.mdx.astro";
+import Input from "@components/input.astro";
+import Select from "@components/select.astro";
 import { getCollection } from "astro:content";
 
 const blog = await getCollection("blog");
@@ -21,21 +23,8 @@ const format = { year: "numeric", month: "long", day: "numeric" };
 
 <BaseLayout title="Blog">
   <Toolbar>
-    <input
-      id="blog-search-input"
-      type="search"
-      name="search"
-      placeholder="Search titles"
-      autocomplete="off"
-    />
-    <select id="category-filter">
-      <option value="">All categories</option>
-      {
-        categories.map((category) => (
-          <option value={category}>{category}</option>
-        ))
-      }
-    </select>
+    <Input id="blog-search-input" name="search" placeholder="Search titles" />
+    <Select id="category-filter" categories={categories} />
   </Toolbar>
   <div id="blog-list">
     <ListMdx>
@@ -55,74 +44,47 @@ const format = { year: "numeric", month: "long", day: "numeric" };
       }
     </ListMdx>
   </div>
-
-  <script type="module">
-    const input = document.getElementById("blog-search-input");
-    const categoryFilter = document.getElementById("category-filter");
-    const list = document.querySelector("#blog-list ul");
-
-    if (input && categoryFilter && list) {
-      const items = Array.from(list.querySelectorAll("li"));
-
-      const filterItems = () => {
-        const searchValue = input.value.trim().toLowerCase();
-        const categoryValue = categoryFilter.value.toLowerCase();
-
-        items.forEach((item) => {
-          const text = item.textContent?.toLowerCase() ?? "";
-          const itemCategory =
-            item.getAttribute("data-category")?.toLowerCase() ?? "";
-
-          const matchesSearch = !searchValue || text.includes(searchValue);
-          const matchesCategory =
-            !categoryValue || itemCategory === categoryValue;
-
-          item.hidden = !(matchesSearch && matchesCategory);
-        });
-      };
-
-      input.addEventListener("input", filterItems);
-      categoryFilter.addEventListener("change", filterItems);
-    }
-  </script>
-
-  <style>
-    input,
-    select {
-      appearance: none;
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      font-size: 1em;
-      padding: var(--space-1);
-      transition: border-color 150ms ease;
-      text-transform: capitalize;
-    }
-
-    input:hover,
-    select:hover {
-      border-color: var(--color-highlight);
-    }
-
-    input:focus,
-    select:focus {
-      border-color: var(--color-highlight);
-      outline: none;
-    }
-
-    select {
-      background-color: var(--color-background);
-      cursor: pointer;
-    }
-
-    li .meta {
-      display: flex;
-      gap: var(--space-0);
-      font-size: 0.5em;
-      color: var(--color-body-tertiary);
-    }
-
-    li .meta .category {
-      text-transform: capitalize;
-    }
-  </style>
 </BaseLayout>
+
+<script type="module">
+  const input = document.getElementById("blog-search-input");
+  const categoryFilter = document.getElementById("category-filter");
+  const list = document.querySelector("#blog-list ul");
+
+  if (input && categoryFilter && list) {
+    const items = Array.from(list.querySelectorAll("li"));
+
+    const filterItems = () => {
+      const searchValue = input.value.trim().toLowerCase();
+      const categoryValue = categoryFilter.value.toLowerCase();
+
+      items.forEach((item) => {
+        const text = item.textContent?.toLowerCase() ?? "";
+        const itemCategory =
+          item.getAttribute("data-category")?.toLowerCase() ?? "";
+
+        const matchesSearch = !searchValue || text.includes(searchValue);
+        const matchesCategory =
+          !categoryValue || itemCategory === categoryValue;
+
+        item.hidden = !(matchesSearch && matchesCategory);
+      });
+    };
+
+    input.addEventListener("input", filterItems);
+    categoryFilter.addEventListener("change", filterItems);
+  }
+</script>
+
+<style>
+  li .meta {
+    display: flex;
+    gap: var(--space-0);
+    font-size: 0.5em;
+    color: var(--color-body-tertiary);
+  }
+
+  li .meta .category {
+    text-transform: capitalize;
+  }
+</style>

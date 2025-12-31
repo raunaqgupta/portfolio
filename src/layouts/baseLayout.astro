@@ -121,7 +121,7 @@ import Logo from "../components/logo.astro";
     line-height: 28px;
     margin: 0;
     min-width: 100ch;
-    max-width: 100ch;
+    max-width: 100vw;
     padding: 8em 8em 0;
   }
 
@@ -247,7 +247,7 @@ import Logo from "../components/logo.astro";
     counter-increment: line-number;
   }
 
-  pre code .line::before {
+  /* pre code .line::before {
     content: counter(line-number);
     display: inline-block;
     width: 2em;
@@ -257,7 +257,7 @@ import Logo from "../components/logo.astro";
     margin-right: var(--space-2);
     text-align: right;
     color: var(--color-body-tertiary);
-  }
+  } */
 
   @media only screen and (max-width: 1024px) {
     body {

@@ -10,8 +10,8 @@ caseStudies:
   - launching-dbmon
   - launching-apopt
 ---
-import Gallery from '../../components/gallery.astro';
-import Grid from '../../components/grid.collection.astro';
+import Gallery from '@components/gallery.astro';
+import Grid from '@components/grid.collection.astro';
 import { getCollection, reference } from 'astro:content';
 
 export const allCaseStudies = await getCollection('casestudies');

@@ -8,8 +8,19 @@
 
 <style>
   .toolbar {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
     display: flex;
     align-items: center;
     gap: 0.25rem;
+  }
+
+  @media only screen and (max-width: 700px) {
+    .toolbar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem;
+    }
   }
 </style>

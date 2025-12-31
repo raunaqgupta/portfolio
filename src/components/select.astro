@@ -1,0 +1,31 @@
+---
+const { id, categories } = Astro.props;
+---
+
+<select id={id}>
+  <option value="">All categories</option>
+  {categories.map((category) => <option value={category}>{category}</option>)}
+</select>
+
+<style>
+  select {
+    appearance: none;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 1em;
+    padding: var(--space-1);
+    transition: border-color 150ms ease;
+    text-transform: capitalize;
+    background-color: var(--color-bg);
+    cursor: pointer;
+  }
+
+  select:hover {
+    border-color: var(--color-highlight);
+  }
+
+  select:focus {
+    border-color: var(--color-highlight);
+    outline: none;
+  }
+</style>

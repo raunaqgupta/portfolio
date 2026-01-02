@@ -2,9 +2,6 @@
 const { actions } = Astro.props;
 
 const title = Astro.props.title || Astro.props.frontmatter?.title || "Untitled";
-const breadcrumbs =
-  Astro.props.breadcrumbs || Astro.props.frontmatter?.breadcrumbs || [];
-import Breadcrumbs from "../components/breadcrumbs.astro";
 import Head from "../components/head.astro";
 import Footer from "../components/footer.astro";
 import Button from "../components/button.astro";

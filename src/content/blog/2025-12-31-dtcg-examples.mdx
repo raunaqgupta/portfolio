@@ -1,0 +1,57 @@
+---
+title: DTCG JSON examples
+date: 2025-12-31
+category: post
+---
+
+## Color tokens
+
+This example define three color tokens of the [base category](https://www.designtokens.org/tr/2025.10/color/#base). DTCG tokens are infinitely nestable to create appropriate hierarchies. Here, we have a `color` token that contains a `palette` token that contains a `gray` token that contains three color definitions.
+
+```json
+{
+  "color": {
+    "palette": {
+      "gray": {
+        "1000": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [1, 0, 0],
+            "alpha": 1,
+            "hex": "#ffffff"
+          }
+        },
+        "900": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9911, 0, 0],
+            "alpha": 1,
+            "hex": "#fcfcfc"
+          }
+        },
+        "0": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0, 0, 0],
+            "alpha": 1,
+            "hex": "#000000"
+          }
+        }
+      } 
+    }
+  }
+}
+```
+
+Their equivalent CSS variables would end up as:
+
+```css
+:root {
+  --color-palette-gray-1000: oklch(1 0 0);
+  --color-palette-gray-900: oklch(0.9911 0 0);
+  --color-palette-gray-0: oklch(0 0 0);
+}
+```

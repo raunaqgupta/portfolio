@@ -4,9 +4,11 @@ date: 2025-12-31
 category: post
 ---
 
+DTCG (Design Tokens Community Group) defines a standard for design tokens using the JSON format. The [specification](https://www.designtokens.org/tr/2025.10/) is divided into three modules: [Format](https://www.designtokens.org/tr/2025.10/format), [Color](https://www.designtokens.org/tr/2025.10/color/), and [Resolver](https://www.designtokens.org/tr/2025.10/resolver/).
+
 ## Color tokens
 
-This example define three color tokens of the [base category](https://www.designtokens.org/tr/2025.10/color/#base). DTCG tokens are infinitely nestable to create appropriate hierarchies. Here, we have a `color` token that contains a `palette` token that contains a `gray` token that contains three color definitions.
+Color tokens has its own module within the specification as described [here](https://www.designtokens.org/tr/2025.10/color/). This example define three color tokens of the [base category](https://www.designtokens.org/tr/2025.10/color/#base). DTCG tokens are infinitely nestable to create appropriate hierarchies. Here, we have a `color` token that contains a `palette` token that contains a `gray` token that contains three color definitions.
 
 ```json
 {

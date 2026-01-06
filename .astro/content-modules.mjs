@@ -6,9 +6,8 @@ export default new Map([
 ["src/content/casestudies/objects.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fobjects.mdx&astroContentModuleFlag=true")],
 ["src/content/casestudies/planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fplanetscale.mdx&astroContentModuleFlag=true")],
 ["src/content/casestudies/planetscale-docs-refresh.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fcasestudies%2Fplanetscale-docs-refresh.mdx&astroContentModuleFlag=true")],
-["src/content/blog/2020-12-31.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2F2020-12-31.mdx&astroContentModuleFlag=true")],
-["src/content/blog/2022-05-06.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2F2022-05-06.mdx&astroContentModuleFlag=true")],
 ["src/content/product/planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fproduct%2Fplanetscale.mdx&astroContentModuleFlag=true")],
+["src/content/blog/2020-12-31.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2F2020-12-31.mdx&astroContentModuleFlag=true")],
 ["src/content/product/splunk-o11y-cloud.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fproduct%2Fsplunk-o11y-cloud.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/2025-12-31-dtcg-examples.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2F2025-12-31-dtcg-examples.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/2025-12-26-json-ld-examples.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2F2025-12-26-json-ld-examples.mdx&astroContentModuleFlag=true")],
@@ -20,5 +19,6 @@ export default new Map([
 ["src/content/blog/palak-paneer.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fpalak-paneer.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/mango-lassi.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fmango-lassi.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/potato-chip-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fpotato-chip-sandwich.mdx&astroContentModuleFlag=true")],
+["src/content/blog/palak-paneer.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fpalak-paneer.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fyogurt-dip.mdx&astroContentModuleFlag=true")]]);
 		

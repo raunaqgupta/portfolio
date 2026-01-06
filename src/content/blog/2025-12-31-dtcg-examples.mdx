@@ -1,14 +1,19 @@
 ---
-title: DTCG JSON examples
+title: DTCG design tokens
 date: 2025-12-31
 category: post
 ---
 
 DTCG (Design Tokens Community Group) has defined a design token specification in JSON syntax. The [specification](https://www.designtokens.org/tr/2025.10/) is divided into three modules: [Format](https://www.designtokens.org/tr/2025.10/format), [Color](https://www.designtokens.org/tr/2025.10/color/), and [Resolver](https://www.designtokens.org/tr/2025.10/resolver/). `Format` provides the general details, `Color` provides the syntax specifically for color tokens, and `Resolver` provides how to define multiple contexts under which the tokens can be "resolved".
 
-## Base colors
+Some highlights from the `Format` specification:
 
-This example define three [base color tokens](https://www.designtokens.org/tr/2025.10/color/#base). DTCG tokens are infinitely nestable to create appropriate hierarchies. Here, we have a `color` token that contains a `palette` token that contains a `gray` token that contains three color definitions.
+- There are essentially two types of entities: groups and tokens. Groups do not have a `$value` property, while tokens do.
+- A token requires an unambiguous `$type` but can inherit it from its parent group.
+
+## Example: Base colors
+
+This example define three [color tokens](https://www.designtokens.org/tr/2025.10/color/#base).
 
 ```json
 {
@@ -35,6 +40,46 @@ This example define three [base color tokens](https://www.designtokens.org/tr/20
         },
         "0": {
           "$type": "color",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0, 0, 0],
+            "alpha": 1,
+            "hex": "#000000"
+          }
+        }
+      } 
+    }
+  }
+}
+```
+
+Here, `color`, `palette`, and `gray` are all groups, while `1000`, `900`, and `0` are the actual color tokens. The numbering utilized is defined as an [ordered scale](https://www.designtokens.org/tr/2025.10/color/#ordered-scales). Each color token has a `$type` of `color` and a `$value` that defines the color in the OKLCH color space along with its hex representation.
+
+As can be seen, `$type` is being repeated for each token even though we know that they will be colors because of their parent groups. To avoid this redundancy, DTCG allows us to define the `$type` at the group level, which will then be inherited by all child tokens. Here's how that would look:
+
+```json
+{
+  "color": {
+    "$type": "color",
+    "palette": {
+      "gray": {
+        "1000": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [1, 0, 0],
+            "alpha": 1,
+            "hex": "#ffffff"
+          }
+        },
+        "900": {
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [0.9911, 0, 0],
+            "alpha": 1,
+            "hex": "#fcfcfc"
+          }
+        },
+        "0": {
           "$value": {
             "colorSpace": "oklch",
             "components": [0, 0, 0],

@@ -220,9 +220,8 @@ import Logo from "../components/logo.astro";
   code {
     background-color: var(--color-bg-1);
     border-radius: var(--space-0);
-    font-family: monospace;
-    font-size: var(--typography-body-small);
     padding: 0.2em 0.4em;
+    font-size: var(--typography-body-small);
   }
 
   pre {
@@ -234,6 +233,10 @@ import Logo from "../components/logo.astro";
   }
 
   pre > code {
+    background-color: unset;
+    padding: 0;
+    border-radius: unset;
+    font-size: unset;
     counter-reset: line-number;
   }
 

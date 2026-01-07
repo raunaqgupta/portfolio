@@ -1,0 +1,61 @@
+---
+title: Code block line numbering using CSS counters
+date: 2026-01-06
+category: post
+---
+
+AstroJS comes pre-bundled with [Shiki](https://shiki.style/) for syntax highlighting code. However, it does not come with built-in support for line numbering in code blocks. I wondered if the [counter()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/counter) could be used to show line numbers in code blocks since Shiki parses the code into individual lines while rendering. Here's how it can look like:
+
+```js
+function helloWorld() {
+  console.log("Hello, world!");
+}
+```
+
+And this is all of the CSS code that makes it possible:
+
+```css
+pre {
+  border: 1px solid var(--color-border);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  border-radius: var(--space-0);
+}
+
+pre > code {
+  background-color: unset;
+  padding: 0;
+  border-radius: unset;
+  font-size: unset;
+  counter-reset: line-number; /* [!code highlight] */
+}
+
+pre > code .line {
+  counter-increment: line-number; /* [!code highlight] */
+}
+
+pre > code .line::before {
+  content: counter(line-number); /* [!code highlight] */
+  display: inline-block;
+  width: 2em;
+  padding: 0 var(--space-1);
+  background-color: var(--color-bg-1);
+  border-right: 1px solid var(--color-border);
+  margin-right: var(--space-2);
+  text-align: right;
+  color: var(--color-body-tertiary);
+}
+```
+
+Looks great! Until there's line wrapping involved:
+
+```js
+function helloWorld() {
+  console.log("This is a very long line that will likely wrap around to the next line depending on the width of the container.");
+}
+```
+
+Line wrapping is a function of the viewport width, and so you are probably seeing it even in earlier examples especially on smaller screens like a mobile phone. The problem with the above approach is that the line number is attached to the entire line element, and when the line wraps, the wrapped part is still part of the same line element, and hence does not get its own line number.
+
+To fix this, we can use a different approach where we use a pseudo-element on each individual line of code, and use CSS counters to number them. This way, even if a line wraps, the wrapped part is still part of the same line element, and hence does not get its own line number.

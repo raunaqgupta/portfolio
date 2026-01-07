@@ -238,18 +238,31 @@ import Logo from "../components/logo.astro";
     border-radius: unset;
     font-size: unset;
     counter-reset: line-number;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
 
   pre > code .line {
     counter-increment: line-number;
+    display: grid;
+    grid-template-columns: auto 1fr;
+  }
+
+  pre > code .line.highlighted {
+    background-color: var(--color-bg-1);
+  }
+
+  pre > code .line > span {
+    display: contents;
   }
 
   pre > code .line::before {
-    content: counter(line-number);
+    grid-column: 1;
     display: inline-block;
+    content: counter(line-number);
     width: 2em;
     padding: 0 var(--space-1);
-    background-color: var(--color-bg-1);
     border-right: 1px solid var(--color-border);
     margin-right: var(--space-2);
     text-align: right;

@@ -1,8 +1,7 @@
 import { defineConfig } from "astro/config";
-
 import mdx from "@astrojs/mdx";
-
 import sitemap from "@astrojs/sitemap";
+import { transformerNotationHighlight } from "@shikijs/transformers";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,11 +12,15 @@ export default defineConfig({
     layout: "constrained"
   },
   markdown: {
+    syntaxHighlight: "shiki",
     shikiConfig: {
       themes: {
         light: "github-light",
         dark: "github-dark"
-      }
+      },
+      transformers: [
+        transformerNotationHighlight()
+      ]
     }
   },
   experimental: {

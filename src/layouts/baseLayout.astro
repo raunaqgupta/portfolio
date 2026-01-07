@@ -208,12 +208,20 @@ import Logo from "../components/logo.astro";
   ul,
   ol {
     padding-inline-start: 1.5em;
+    font-size: var(--typography-body);
   }
 
   .heading {
     align-items: center;
     display: flex;
     justify-content: space-between;
+  }
+
+  code {
+    background-color: var(--color-bg-1);
+    border-radius: var(--space-0);
+    padding: 0.2em 0.4em;
+    font-size: var(--typography-body-small);
   }
 
   pre {
@@ -224,15 +232,19 @@ import Logo from "../components/logo.astro";
     border-radius: var(--space-0);
   }
 
-  code {
+  pre > code {
+    background-color: unset;
+    padding: 0;
+    border-radius: unset;
+    font-size: unset;
     counter-reset: line-number;
   }
 
-  code .line {
+  pre > code .line {
     counter-increment: line-number;
   }
 
-  pre code .line::before {
+  pre > code .line::before {
     content: counter(line-number);
     display: inline-block;
     width: 2em;

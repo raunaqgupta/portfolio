@@ -1,22 +1,30 @@
 ---
-title: DTCG JSON examples
+title: DTCG design tokens
 date: 2025-12-31
 category: post
 ---
 
-DTCG (Design Tokens Community Group) has defined a design token specification in JSON syntax. The [specification](https://www.designtokens.org/tr/2025.10/) is divided into three modules: [Format](https://www.designtokens.org/tr/2025.10/format), [Color](https://www.designtokens.org/tr/2025.10/color/), and [Resolver](https://www.designtokens.org/tr/2025.10/resolver/). `Format` provides the general details, `Color` provides the syntax specifically for color tokens, and `Resolver` provides how to define multiple contexts under which the tokens can be "resolved".
+DTCG (Design Tokens Community Group) is a design token [specification](https://www.designtokens.org/tr/2025.10/) divided into three modules: [Format](https://www.designtokens.org/tr/2025.10/format), [Color](https://www.designtokens.org/tr/2025.10/color/), and [Resolver](https://www.designtokens.org/tr/2025.10/resolver/). `Format` provides the general syntax, `Color` provides additional details around the definition of color tokens, and `Resolver` talks about ways to define multiple contexts under which the tokens can be "resolved".
 
-## Base colors
+Overview of the specification:
 
-This example define three [base color tokens](https://www.designtokens.org/tr/2025.10/color/#base). DTCG tokens are infinitely nestable to create appropriate hierarchies. Here, we have a `color` token that contains a `palette` token that contains a `gray` token that contains three color definitions.
+- There are essentially two types of entities: groups and tokens. Groups do not have a `$value` property, while tokens do.
+- A token requires an unambiguous `$type` but can inherit it from its parent group.
+- There are currently 7 core types: `Color`, `Cubic Bezier`, `Dimension`, `Duration`, `FontFamily`, `FontWeight`, and `Number`. All core types can only have a singular `$value`.
+- Composite types are distinguished by having objects or arrays as their `$value`. Currently supported composite types are `Border`, `Gradient`, `Shadow`, `Stroke style`, `Transition`, and `Typography`.
+
+
+## Example: Base colors
+
+This example define three [color tokens](https://www.designtokens.org/tr/2025.10/color/#base). Here, `color`, `palette`, and `gray` are all groups, while `1000`, `900`, and `0` are the actual color tokens. The numbering utilized is defined as an [ordered scale](https://www.designtokens.org/tr/2025.10/color/#ordered-scales). Each color token's `$value` is defined in the OKLCH color space along with an optional alpha value and hex representation. As can be seen, DTCG allows us to define the `$type` at the group level, which is then inherited by all child tokens.
 
 ```json
 {
   "color": {
+    "$type": "color",
     "palette": {
       "gray": {
         "1000": {
-          "$type": "color",
           "$value": {
             "colorSpace": "oklch",
             "components": [1, 0, 0],
@@ -25,7 +33,6 @@ This example define three [base color tokens](https://www.designtokens.org/tr/20
           }
         },
         "900": {
-          "$type": "color",
           "$value": {
             "colorSpace": "oklch",
             "components": [0.9911, 0, 0],
@@ -34,7 +41,6 @@ This example define three [base color tokens](https://www.designtokens.org/tr/20
           }
         },
         "0": {
-          "$type": "color",
           "$value": {
             "colorSpace": "oklch",
             "components": [0, 0, 0],

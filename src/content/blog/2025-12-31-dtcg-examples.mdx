@@ -10,6 +10,9 @@ Some highlights from the `Format` specification:
 
 - There are essentially two types of entities: groups and tokens. Groups do not have a `$value` property, while tokens do.
 - A token requires an unambiguous `$type` but can inherit it from its parent group.
+- There are currently 7 core types: `Color`, `Cubic Bezier`, `Dimension`, `Duration`, `FontFamily`, `FontWeight`, and `Number`. All core types can only have a singular `$value`.
+- Composite types are distinguished by having objects or arrays as their `$value`. Currently supported composite types are `Border`, `Gradient`, `Shadow`, `Stroke style`, `Transition`, and `Typography`.
+
 
 ## Example: Base colors
 

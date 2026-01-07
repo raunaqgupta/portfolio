@@ -57,5 +57,3 @@ function helloWorld() {
 ```
 
 Line wrapping is a function of the viewport width, and so you are probably seeing it even in earlier examples especially on smaller screens like a mobile phone. The problem with the above approach is that the line number is attached to the entire line element, and when the line wraps, the wrapped part is still part of the same line element, and hence does not get its own line number.
-
-To fix this, we can use a different approach where we use a pseudo-element on each individual line of code, and use CSS counters to number them. This way, even if a line wraps, the wrapped part is still part of the same line element, and hence does not get its own line number.

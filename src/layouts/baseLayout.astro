@@ -44,7 +44,7 @@ import Logo from "../components/logo.astro";
     --color-border: #d8d8d8;
     --color-border-1: #d0d0d0;
     --color-border-bg: rgba(200, 200, 200, 0.15);
-    --color-body-primary: #5f5f5f;
+    --color-body-primary: #3f3f3f;
     --color-body-secondary: #666;
     --color-body-tertiary: #999;
     --color-heading: #111;
@@ -73,6 +73,16 @@ import Logo from "../components/logo.astro";
       --color-body-tertiary: #7f8891;
       --color-heading: #e7e7e7;
       --color-highlight: #39a5e6;
+    }
+
+    .astro-code,
+    .astro-code span {
+      color: var(--shiki-dark) !important;
+      background-color: var(--shiki-dark-bg) !important;
+      /* Optional, if you also want font styles */
+      font-style: var(--shiki-dark-font-style) !important;
+      font-weight: var(--shiki-dark-font-weight) !important;
+      text-decoration: var(--shiki-dark-text-decoration) !important;
     }
   }
 
@@ -250,7 +260,7 @@ import Logo from "../components/logo.astro";
   }
 
   pre > code .line.highlighted {
-    background-color: var(--color-bg-1);
+    background-color: var(--color-bg-1) !important;
   }
 
   pre > code .line > span {

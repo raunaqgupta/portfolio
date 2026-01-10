@@ -1,0 +1,27 @@
+---
+import Logo from "./logo.astro";
+---
+
+<header>
+  <Logo />
+  <nav>
+    <a href="/">Portfolio</a>
+    <a href="/resume">Resume</a>
+    <a href="/blog">Blog</a>
+  </nav>
+</header>
+
+<style>
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 var(--space-4);
+  }
+
+  nav a {
+    margin-left: var(--space-1);
+    text-decoration: none;
+    color: var(--color-body-primary);
+  }
+</style>

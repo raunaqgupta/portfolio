@@ -1,0 +1,25 @@
+---
+const { title, actions } = Astro.props;
+import Button from "@components/button.astro";
+---
+
+<div class="heading">
+  <h1>{title}</h1>
+  {
+    actions && (
+      <div class="actions">
+        {actions.map((action) => (
+          <Button {...action} />
+        ))}
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .heading .actions {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-1);
+  }
+</style>

@@ -34,7 +34,17 @@ I went through the following steps:
 - Created a Cloudflare worker to return current GMT date and time in JSON format. It can take an optional query parameter `timezone` to return the date and time in that timezone.
 - Setup route on Kong Konnect's API gateway to redirect to `/utilities/datetime`.
 
-<iframe src="https://app.warp.dev/block/embed/j6hmda9yhFke37wK4yrSEA" title="Get PST date and time" style="width: 100%; height: 283px; border:0; overflow:hidden;" allow="clipboard-read; clipboard-write"></iframe>
+```sh
+curl -X GET "https://api.raunaqgupta.com/utilities/datetime?timezone=PST"
+```
+
+```sh
+{
+  "timezone": "PST",
+  "timestamp": "Monday, January 12, 2026 at 5:10:09 PM PST",
+  "iso": "2026-01-13T01:10:09.391Z"
+}%                                                                                                                                                                      
+```
 
 ## 4. Enable `/aqi/feed/:city`
 
@@ -42,7 +52,13 @@ I went through the following steps:
 - Use Kong Konnect's API gateway to route requests to `https://api.waqi.info/feed/:city/?token=YOUR_API_TOKEN`.
 - Utilize the `Request Transformer Advanced` plugin to store the personal API token in the gateway instead of exposing it on the client side.
 
-<iframe src="https://app.warp.dev/block/embed/2wyo2tbjTgxbRjz2pOVMIM" title="Fetch Oakland's air quality index data" style="width: 100%; height: 800px; border:0; overflow:hidden;" allow="clipboard-read; clipboard-write"></iframe>
+```sh
+curl -X GET "https://api.raunaqgupta.com/aqi/feed/oakland"
+```
+
+```sh
+{"status":"ok","data":{"aqi":25,"idx":5363,"attributions":[{"url":"http://www.arb.ca.gov/","name":"CARB - California Air Resources Board","logo":"USA-CAARB.png"},{"url":"http://www.airnow.gov/","name":"Air Now - US EPA"},{"url":"https://waqi.info/","name":"World Air Quality Index Project"}],"city":{"geo":[37.793635,-122.263356],"name":"Oakland-Laney College, Alameda, California","url":"https://aqicn.org/city/california/alameda/oakland-laney-college","location":""},"dominentpol":"pm25","iaqi":{"co":{"v":1.2},"h":{"v":48},"no2":{"v":5},"p":{"v":1024},"pm25":{"v":25},"t":{"v":16.1},"w":{"v":3},"wg":{"v":4}},"time":{"s":"2026-01-12 17:00:00","tz":"-08:00","v":1768237200,"iso":"2026-01-12T17:00:00-08:00"},"forecast":{"daily":{"pm10":[{"avg":22,"day":"2026-01-10","max":23,"min":19},{"avg":29,"day":"2026-01-11","max":33,"min":20},{"avg":41,"day":"2026-01-12","max":51,"min":28},{"avg":53,"day":"2026-01-13","max":56,"min":44},{"avg":55,"day":"2026-01-14","max":58,"min":49},{"avg":57,"day":"2026-01-15","max":64,"min":46},{"avg":50,"day":"2026-01-16","max":56,"min":39},{"avg":61,"day":"2026-01-17","max":64,"min":55}],"pm25":[{"avg":52,"day":"2026-01-10","max":53,"min":49},{"avg":60,"day":"2026-01-11","max":70,"min":44},{"avg":83,"day":"2026-01-12","max":100,"min":60},{"avg":118,"day":"2026-01-13","max":129,"min":102},{"avg":129,"day":"2026-01-14","max":147,"min":116},{"avg":143,"day":"2026-01-15","max":158,"min":115},{"avg":115,"day":"2026-01-16","max":133,"min":91},{"avg":152,"day":"2026-01-17","max":157,"min":136}],"uvi":[{"avg":1,"day":"2026-01-12","max":2,"min":0},{"avg":1,"day":"2026-01-13","max":3,"min":0},{"avg":1,"day":"2026-01-14","max":3,"min":0},{"avg":1,"day":"2026-01-15","max":3,"min":0},{"avg":1,"day":"2026-01-16","max":3,"min":0},{"avg":0,"day":"2026-01-17","max":0,"min":0}]}},"debug":{"sync":"2026-01-13T10:16:46+09:00"}}}%                                                                                                                                                             
+```
 
 ### Notes
 
@@ -50,14 +66,51 @@ I went through the following steps:
 
 ## 5. Enable an AI gateway at `/ai/respond`
 
+- Used Google Gemini's API key to connect.
+- Added a prompt decorator (categorized as a plugin) to only output a singular sentence.
+
 ### Onboarding example
 
-<iframe src="https://app.warp.dev/block/embed/Nwiu4FNyhldtaNQZtMgWTf" title="Response from AI gateway" style="width: 100%; height: 580px; border:0; overflow:hidden;" allow="clipboard-read; clipboard-write"></iframe>
+```sh
+curl -X POST https://api.raunaqgupta.com/ai/basic \
+-H 'Content-Type: application/json' \
+-d '{
+  "messages": [
+    {
+      "role": "user",
+      "content": "How does Kong AI Gateway work?"
+    }
+  ]
+}'
+```
 
+```json
+{
+  "model": "gemini-3-flash-preview",
+  "usage": {
+    "completion_tokens": 39,
+    "total_tokens": 237,
+    "prompt_tokens": 16
+  },
+  "choices": [
+    {
+      "index": 0,
+      "finish_reason": "stop",
+      "message": {
+        "content": "Kong AI Gateway functions as a centralized management layer that sits between applications and multiple large language model providers, providing a unified API to streamline security, governance, and performance optimization for AI-driven traffic.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 0,
+  "id": "3ZpladjeD4y2jMcP0q638Qs",
+  "object": "chat.completion"
+}
+```
 
 ### Notes
 
 - If you follow the onboarding project, it automatically creates a service, and a `/test` route under the existing API gateway by default.
-- Does not provide connections to HuggingFace, or OpenRouter. I decided to utilize Google Gemini.
-- In the onboarding setup, it uses the term `Plugin` to refer to features such as prompt decorators, and guardrails although they are not referenced elsewhere as plugins.
-- The onboarding curl example doesn't use the custom domain setup for the API gateway.
+- Has fewer providers to select from compared to Cloudflare's AI gateway.
+- It uses the term `Plugin` in the onboarding setup to refer to features such as prompt decorators, and guardrails although they are not referenced elsewhere as such.
+- The onboarding curl example doesn't use the custom domain that has been set up for the API gateway.

@@ -21,5 +21,7 @@ export default new Map([
 ["src/content/blog/mango-lassi.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fmango-lassi.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/palak-paneer.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fpalak-paneer.mdx&astroContentModuleFlag=true")],
 ["src/content/blog/potato-chip-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fpotato-chip-sandwich.mdx&astroContentModuleFlag=true")],
-["src/content/blog/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fyogurt-dip.mdx&astroContentModuleFlag=true")]]);
+["src/content/blog/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2Fyogurt-dip.mdx&astroContentModuleFlag=true")],
+["src/content/blog/2026-01-11-kong-konnect.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2F2026-01-11-kong-konnect.mdx&astroContentModuleFlag=true")],
+["src/content/blog/2026-01-12-deploying-api-raunaqgupta-com-on-kong-konnect.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fblog%2F2026-01-12-deploying-api-raunaqgupta-com-on-kong-konnect.mdx&astroContentModuleFlag=true")]]);
 		

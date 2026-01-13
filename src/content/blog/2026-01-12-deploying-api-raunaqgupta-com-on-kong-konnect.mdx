@@ -1,18 +1,19 @@
 ---
-title: Deploying api.raunaqgupta.com on Kong Konnect
+title: Setting up the api sub-domain on raunaqgupta.com
 date: 2026-01-11
 category: post
 ---
 
 Following are some notes from my experience setting up `api.raunaqgupta.com` on Kong Konnect. I've never used an API gateway before. Using Github co-pilot and clicking around, I realized that I can spin up api.raunaqgupta.com and expose cloudflare workers and other APIs through it.
 
-The following goals were achieved:
+I went through the following steps:
 
-1. Create an account on Kong Konnect.
-2. Enable https://api.raunaqgupta.com/utilities/datetime
-3. Enable https://api.raunaqgupta.com/aqi/feed/:city
-4. Enable an AI gateway at https://api.raunaqgupta.com/ai/respond
-
+- Creating an account on Kong Konnect.
+- Configuring the api sub-domain.
+- Enabling `/utilities/datetime`.
+- Enabling `/aqi/feed/:city`
+- Enabling an AI gateway at `/ai/respond`
+   
 ## 1. Create an account on Kong Konnect
 
 ### Notes
@@ -21,14 +22,21 @@ The following goals were achieved:
 - Creating an account using email and password was straightforward. Would have been great if it used a one-time passcode to verify email instead of the now somewhat older method of clicking a link to verify. This creates an extra tab to discard.
    - Note: Insomnia by Kong uses the passcode mechanism.
 
-## 2. Enable https://api.raunaqgupta.com/utilities/datetime
+## 2. Configure the `api` sub-domain
+
+- Kong Konnect's provides a CNAME record to add to Cloudflare DNS settings.
+
+### Notes
+- TODO: Need to check the effect of turning on proxy for the CNAME record on Kong's setup.
+
+## 3. Enable `/utilities/datetime`
 
 - Created a Cloudflare worker to return current GMT date and time in JSON format. It can take an optional query parameter `timezone` to return the date and time in that timezone.
 - Setup route on Kong Konnect's API gateway to redirect to `/utilities/datetime`.
 
 <iframe src="https://app.warp.dev/block/embed/j6hmda9yhFke37wK4yrSEA" title="Get PST date and time" style="width: 100%; height: 283px; border:0; overflow:hidden;" allow="clipboard-read; clipboard-write"></iframe>
 
-## 3. Enable https://api.raunaqgupta.com/aqi/feed/:city
+## 4. Enable `/aqi/feed/:city`
 
 - Exposed aqicn.org's `feed` endpoint at `api.raunaqgupta.com/aqi/feed/:city` without requiring to expose the API token. This endpoint takes a city name as a parameter and returns the air quality index data for that city in JSON format.
 - Use Kong Konnect's API gateway to route requests to `https://api.waqi.info/feed/:city/?token=YOUR_API_TOKEN`.
@@ -40,7 +48,7 @@ The following goals were achieved:
 
 - Learned through multiple rounds of debugging and AI assistance that Konnect vault cannot be used to store an API token that can be used in the `Request Transformer Advanced` plugin. Even though it lets me use it as part of the querystring, it will not work. This is in the documentation under FAQ: https://developer.konghq.com/how-to/configure-the-konnect-config-store/#can-i-reference-konnect-config-store-vault-secrets-in-kong-conf
 
-## 4. Enable an AI gateway at https://api.raunaqgupta.com/ai/respond
+## 5. Enable an AI gateway at `/ai/respond`
 
 ### Onboarding example
 

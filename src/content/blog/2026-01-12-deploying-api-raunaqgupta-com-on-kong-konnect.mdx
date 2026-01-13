@@ -1,0 +1,55 @@
+---
+title: Deploying api.raunaqgupta.com on Kong Konnect
+date: 2026-01-11
+category: post
+---
+
+Following are some notes from my experience setting up `api.raunaqgupta.com` on Kong Konnect. I've never used an API gateway before. Using Github co-pilot and clicking around, I realized that I can spin up api.raunaqgupta.com and expose cloudflare workers and other APIs through it.
+
+The following goals were achieved:
+
+1. Create an account on Kong Konnect.
+2. Enable https://api.raunaqgupta.com/utilities/datetime
+3. Enable https://api.raunaqgupta.com/aqi/feed/:city
+4. Enable an AI gateway at https://api.raunaqgupta.com/ai/respond
+
+## 1. Create an account on Kong Konnect
+
+### Notes
+
+- Free tier was sufficient to spin up the API gateway.
+- Creating an account using email and password was straightforward. Would have been great if it used a one-time passcode to verify email instead of the now somewhat older method of clicking a link to verify. This creates an extra tab to discard.
+   - Note: Insomnia by Kong uses the passcode mechanism.
+
+## 2. Enable https://api.raunaqgupta.com/utilities/datetime
+
+- Created a Cloudflare worker to return current GMT date and time in JSON format. It can take an optional query parameter `timezone` to return the date and time in that timezone.
+- Setup route on Kong Konnect's API gateway to redirect to `/utilities/datetime`.
+
+<iframe src="https://app.warp.dev/block/embed/j6hmda9yhFke37wK4yrSEA" title="Get PST date and time" style="width: 100%; height: 283px; border:0; overflow:hidden;" allow="clipboard-read; clipboard-write"></iframe>
+
+## 3. Enable https://api.raunaqgupta.com/aqi/feed/:city
+
+- Exposed aqicn.org's `feed` endpoint at `api.raunaqgupta.com/aqi/feed/:city` without requiring to expose the API token. This endpoint takes a city name as a parameter and returns the air quality index data for that city in JSON format.
+- Use Kong Konnect's API gateway to route requests to `https://api.waqi.info/feed/:city/?token=YOUR_API_TOKEN`.
+- Utilize the `Request Transformer Advanced` plugin to store the personal API token in the gateway instead of exposing it on the client side.
+
+<iframe src="https://app.warp.dev/block/embed/2wyo2tbjTgxbRjz2pOVMIM" title="Fetch Oakland's air quality index data" style="width: 100%; height: 800px; border:0; overflow:hidden;" allow="clipboard-read; clipboard-write"></iframe>
+
+### Notes
+
+- Learned through multiple rounds of debugging and AI assistance that Konnect vault cannot be used to store an API token that can be used in the `Request Transformer Advanced` plugin. Even though it lets me use it as part of the querystring, it will not work. This is in the documentation under FAQ: https://developer.konghq.com/how-to/configure-the-konnect-config-store/#can-i-reference-konnect-config-store-vault-secrets-in-kong-conf
+
+## 4. Enable an AI gateway at https://api.raunaqgupta.com/ai/respond
+
+### Onboarding example
+
+<iframe src="https://app.warp.dev/block/embed/Nwiu4FNyhldtaNQZtMgWTf" title="Response from AI gateway" style="width: 100%; height: 580px; border:0; overflow:hidden;" allow="clipboard-read; clipboard-write"></iframe>
+
+
+### Notes
+
+- If you follow the onboarding project, it automatically creates a service, and a `/test` route under the existing API gateway by default.
+- Does not provide connections to HuggingFace, or OpenRouter. I decided to utilize Google Gemini.
+- In the onboarding setup, it uses the term `Plugin` to refer to features such as prompt decorators, and guardrails although they are not referenced elsewhere as plugins.
+- The onboarding curl example doesn't use the custom domain setup for the API gateway.

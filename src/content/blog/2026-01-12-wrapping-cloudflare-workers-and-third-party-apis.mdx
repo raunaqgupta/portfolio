@@ -1,0 +1,137 @@
+---
+title: Wrapping Cloudflare workers and third-party AI and non-AI APIs endpoints with key authentication
+date: 2026-01-11
+category: post
+---
+
+This demo will try to:
+
+- Enable `api.raunaqgupta.com`
+- Expose various single-function cloudflare workers under the `/utilities` path.
+- Expose my aqicn.org API token protected endpoint under the `/aqi` path without exposing the token.
+- Enable key authentication on all endpoints.
+- Expose a basic single-response AI endpoint under the `/ai` path.
+
+## Enable the `api` sub-domain
+
+- Kong Konnect's free tier provides one free API gateway.
+- Provisioned API gateway can be configured for a non-apex domain.
+
+## Expose a datetime utility under `/utilities`
+
+- Created a Cloudflare worker to return the current date and time in JSON format with an optional `timezone` query parameter.
+- Setup route on Kong Konnect's API gateway to redirect to `/utilities/datetime`.
+
+```sh
+curl -X GET "https://api.raunaqgupta.com/utilities/datetime?timezone=PST"
+```
+
+```sh
+{
+  "timezone": "PST",
+  "timestamp": "Monday, January 12, 2026 at 5:10:09 PM PST",
+  "iso": "2026-01-13T01:10:09.391Z"
+}                                                                                                                                                                     
+```
+
+## Expose an air quality index endpoint under `/aqi`
+
+- Exposed aqicn.org's `feed` endpoint at `api.raunaqgupta.com/aqi/feed/:city` without requiring to expose the API token. This endpoint takes a city name as a parameter and returns the air quality index data for that city in JSON format.
+- Use Kong Konnect's API gateway to route requests to `https://api.waqi.info/feed/:city/?token=YOUR_API_TOKEN`.
+- Utilize the `Request Transformer Advanced` plugin to store the personal API token in the gateway instead of exposing it on the client side.
+
+### Notes
+
+- Kong Konnect lets you use the Konnect vault in the `Request Transformer Advanced` plugin even though it's not supported. Both copilot chat and documentation confirm this: https://developer.konghq.com/how-to/configure-the-konnect-config-store/#can-i-reference-konnect-config-store-vault-secrets-in-kong-conf
+
+```sh
+curl -X GET "https://api.raunaqgupta.com/aqi/feed/oakland"
+```
+
+```sh
+{"status":"ok","data":{"aqi":25,"idx":5363,"attributions":[{"url":"http://www.arb.ca.gov/","name":"CARB - California Air Resources Board","logo":"USA-CAARB.png"},{"url":"http://www.airnow.gov/","name":"Air Now - US EPA"},{"url":"https://waqi.info/","name":"World Air Quality Index Project"}],"city":{"geo":[37.793635,-122.263356],"name":"Oakland-Laney College, Alameda, California","url":"https://aqicn.org/city/california/alameda/oakland-laney-college","location":""},"dominentpol":"pm25","iaqi":{"co":{"v":1.2},"h":{"v":48},"no2":{"v":5},"p":{"v":1024},"pm25":{"v":25},"t":{"v":16.1},"w":{"v":3},"wg":{"v":4}},"time":{"s":"2026-01-12 17:00:00","tz":"-08:00","v":1768237200,"iso":"2026-01-12T17:00:00-08:00"},"forecast":{"daily":{"pm10":[{"avg":22,"day":"2026-01-10","max":23,"min":19},{"avg":29,"day":"2026-01-11","max":33,"min":20},{"avg":41,"day":"2026-01-12","max":51,"min":28},{"avg":53,"day":"2026-01-13","max":56,"min":44},{"avg":55,"day":"2026-01-14","max":58,"min":49},{"avg":57,"day":"2026-01-15","max":64,"min":46},{"avg":50,"day":"2026-01-16","max":56,"min":39},{"avg":61,"day":"2026-01-17","max":64,"min":55}],"pm25":[{"avg":52,"day":"2026-01-10","max":53,"min":49},{"avg":60,"day":"2026-01-11","max":70,"min":44},{"avg":83,"day":"2026-01-12","max":100,"min":60},{"avg":118,"day":"2026-01-13","max":129,"min":102},{"avg":129,"day":"2026-01-14","max":147,"min":116},{"avg":143,"day":"2026-01-15","max":158,"min":115},{"avg":115,"day":"2026-01-16","max":133,"min":91},{"avg":152,"day":"2026-01-17","max":157,"min":136}],"uvi":[{"avg":1,"day":"2026-01-12","max":2,"min":0},{"avg":1,"day":"2026-01-13","max":3,"min":0},{"avg":1,"day":"2026-01-14","max":3,"min":0},{"avg":1,"day":"2026-01-15","max":3,"min":0},{"avg":1,"day":"2026-01-16","max":3,"min":0},{"avg":0,"day":"2026-01-17","max":0,"min":0}]}},"debug":{"sync":"2026-01-13T10:16:46+09:00"}}                                
+```
+
+## Enable key authentication on all endpoints
+
+- Enabled the key authentication plugin on the API gateway.
+- Created a consumer and assigned it a key auth credential.
+
+```sh
+curl -i https://api.raunaqgupta.com/utilities/datetime \
+  -H "unikey: letmein" \
+  -H "Content-Type: application/json"
+```
+
+```sh
+HTTP/2 200 
+content-type: application/json
+content-length: 123
+x-kong-request-id: 0a2ed304d840dc7188c0c663ac5dd335
+date: Tue, 13 Jan 2026 12:58:01 GMT
+vary: accept-encoding
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=stgwCAJ90ttQz3tLcAObcap5zSiaxHg2qQJbp9wKXaUmtR1zIAPxKkKhpdsszHLkRJ7i4D22HTCKAGR0gnldgBrT1%2FlS1ncT%2FmpwyLUghpk2Vwl0CmlY3C0I2xj7qhHK"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+server: cloudflare
+cf-ray: 9bd5100ff8f7f2f9-EWR
+alt-svc: h3=":443"; ma=86400
+x-kong-upstream-latency: 27
+x-kong-proxy-latency: 14
+via: 1.1 kong/3.12.0.0-enterprise-edition
+
+{
+  "timezone": "GMT",
+  "timestamp": "Tuesday, January 13, 2026 at 12:58:01 PM UTC",
+  "iso": "2026-01-13T12:58:01.610Z"
+}%                                                                                                                                                                      
+```
+
+## Enable an AI gateway under `/ai`
+
+- Used Google Gemini's API key to connect.
+- Added the prompt decorator, and a prompt template plugins.
+- Existing key authentication works out of the box.
+
+### `/ai/haiku` endpoint
+
+```sh
+curl -X POST https://api.raunaqgupta.com/ai/haiku \
+  -H 'unikey: letmein' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "role": "user",
+    "messages": [
+      {
+        "role": "user",
+        "content": "{template://haiku}"
+      }
+    ],
+    "properties": {
+      "topic": "flowers"
+    }
+  }'
+```
+
+```json
+{
+   "choices": [
+      {
+         "index": 0,
+         "finish_reason": "stop",
+         "message": {
+            "content": "Brief words, small and few.\nSilence speaks more than the rest.\nLess is truly more.",
+            "role": "assistant"
+         }
+      }
+   ],
+   "model": "gemini-3-flash-preview",
+   "object": "chat.completion",
+   "created": 0,
+   "usage": {
+      "completion_tokens": 21,
+      "prompt_tokens": 13,
+      "total_tokens": 677
+   },
+   "id": "I0dmac_JKZbRjMcP-aOb4Qs"
+}
+```

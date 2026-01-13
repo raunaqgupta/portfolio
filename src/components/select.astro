@@ -1,5 +1,6 @@
 ---
 const { id, categories } = Astro.props;
+import TriangleDownIcon from "@icons/triangle-down.svg";
 ---
 
 <select id={id}>
@@ -18,7 +19,7 @@ const { id, categories } = Astro.props;
     text-transform: capitalize;
     background-color: var(--color-bg-1);
     cursor: pointer;
-    color: var(--color-body-primary)
+    color: var(--color-body-primary);
   }
 
   select:hover {

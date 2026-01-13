@@ -3,7 +3,8 @@
   "compilerOptions": {
     "paths": {
       "@layouts/*": ["./src/layouts/*"],
-      "@components/*": ["./src/components/*"]
+      "@components/*": ["./src/components/*"],
+      "@icons/*": ["./src/assets/icons/*"]
     }
   }
 }

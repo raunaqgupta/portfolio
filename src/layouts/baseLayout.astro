@@ -1,5 +1,5 @@
 ---
-const { actions } = Astro.props;
+const { actions, robots } = Astro.props;
 
 const title = Astro.props.title || Astro.props.frontmatter?.title || "Untitled";
 import Head from "@components/head.astro";
@@ -10,7 +10,7 @@ import Header from "@components/header.astro";
 ---
 
 <html lang="en">
-  <Head title={title} />
+  <Head title={title} robots={robots} />
   <body>
     <Header />
     <Heading title={title} actions={actions} />

@@ -3,7 +3,6 @@ import Toolbar from "@components/toolbar.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
 import ListMdx from "@components/list.mdx.astro";
 import Input from "@components/input.astro";
-import Select from "@components/select.astro";
 import { getCollection } from "astro:content";
 
 const blog = await getCollection("blog", ({ data }) => {
@@ -27,7 +26,6 @@ const format = { year: "numeric", month: "long", day: "numeric" };
 <BaseLayout title="Blog">
   <Toolbar>
     <Input id="blog-search-input" name="search" placeholder="Search" />
-    <!-- <Select id="category-filter" categories={categories} /> -->
   </Toolbar>
   <div id="blog-list">
     <ListMdx>

@@ -1,5 +1,5 @@
 ---
-const { title } = Astro.props;
+const { title, robots } = Astro.props;
 import { Font } from "astro:assets";
 ---
 
@@ -8,6 +8,7 @@ import { Font } from "astro:assets";
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Personal website of Raunaq Gupta" />
   <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  {robots && <meta name="robots" content={robots} />}
   <meta property="og:title" content="Raunaq Gupta" />
   <meta property="og:type" content="website" />
   <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />

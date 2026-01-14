@@ -1,0 +1,55 @@
+---
+import BaseLayout from "@layouts/baseLayout.astro";
+import Imgmdx from "@components/img.mdx.astro";
+
+import { getCollection } from "astro:content";
+import PostDetails from "@components/PostDetails.astro";
+export async function getStaticPaths() {
+  const blog = await getCollection("blog", ({ data }) => {
+    return data.internal === true;
+  });
+  return blog.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, components } = await entry.render();
+const links = [
+  { text: "Raunaq Gupta", url: "/" },
+  { text: "Internal", url: "/internal" },
+];
+
+const format = { year: "numeric", month: "long", day: "numeric" };
+---
+
+<BaseLayout
+  title={entry.data.title}
+  breadcrumbs={links}
+  robots="noindex, nofollow"
+>
+  <Content components={{ ...components, img: Imgmdx }} />
+  <PostDetails>
+    <div class="date">
+      {entry.data.date.toLocaleDateString("en-US", format)}
+    </div>
+    <div class="separator">-</div>
+    <div class="category">
+      {entry.data.category}
+    </div>
+  </PostDetails>
+</BaseLayout>
+
+<style>
+  .date,
+  .separator,
+  .category {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+  }
+
+  .category {
+    text-transform: capitalize;
+  }
+</style>

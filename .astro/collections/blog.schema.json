@@ -32,6 +32,9 @@
             "audio"
           ]
         },
+        "internal": {
+          "type": "boolean"
+        },
         "$schema": {
           "type": "string"
         }

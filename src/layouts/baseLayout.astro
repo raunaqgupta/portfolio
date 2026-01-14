@@ -13,9 +13,9 @@ import Header from "@components/header.astro";
   <Head title={title} robots={robots} />
   <body>
     <Header />
-    <Heading title={title} actions={actions} />
     <main>
       <Modal />
+      <Heading title={title} actions={actions} />
       <slot />
     </main>
     <Footer />
@@ -69,21 +69,24 @@ import Header from "@components/header.astro";
     }
   }
 
-  html {
-    height: -webkit-fill-available;
-    min-height: 100vh;
-    min-height: 100dvh;
-  }
-
   body {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     background-color: var(--color-bg);
     color: var(--color-body-primary);
     font-family: sans-serif;
     font-size: 1.12em;
     line-height: 28px;
     margin: 0 auto;
-    max-width: 90ch;
+    max-width: 120ch;
+    min-height: 100vh;
+    min-height: 100dvh;
     padding: 8em 8em 0;
+  }
+
+  main {
+    flex: 1;
   }
 
   h1 {

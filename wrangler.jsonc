@@ -3,10 +3,6 @@
   "compatibility_date": "2025-05-10",
   "routes": [
     {
-      "pattern": "raunaqgupta.com",
-      "custom_domain": true
-    },
-    {
       "pattern": "www.raunaqgupta.com",
       "custom_domain": true
     }

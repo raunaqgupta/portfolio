@@ -7,12 +7,12 @@ import Select from "@components/select.astro";
 import { getCollection } from "astro:content";
 
 const blog = await getCollection("blog", ({ data }) => {
-  return data.internal !== true;
+  return data.internal === true;
 });
 
 const newBlog = blog
   .map(({ slug, ...rest }) => ({
-    slug: `/blog/` + slug,
+    slug: `/internal/` + slug,
     ...rest,
   }))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -24,7 +24,7 @@ const categories = [
 const format = { year: "numeric", month: "long", day: "numeric" };
 ---
 
-<BaseLayout title="Blog">
+<BaseLayout title="Internal" robots="noindex, nofollow">
   <Toolbar>
     <Input id="blog-search-input" name="search" placeholder="Search" />
     <!-- <Select id="category-filter" categories={categories} /> -->

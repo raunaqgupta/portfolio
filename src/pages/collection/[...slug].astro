@@ -25,7 +25,7 @@ const links = [
 ---
 
 <PageLayout title={entry.data.title} breadcrumbs={links}>
-  <Hero imageUrl={entry.data.hero} />
+  <Hero imageUrl={entry.data.hero} aspectRatio={2} />
   <Content
     components={{ ...components, img: Imgmdx, ul: Ulmdx, List: Listmdx }}
   />

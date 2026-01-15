@@ -33,6 +33,7 @@ import Head from "@components/head.astro";
     --space-2: 16px;
     --space-3: 24px;
     --space-4: 32px;
+    --border-radius: 6px;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -211,6 +212,24 @@ import Head from "@components/head.astro";
     margin-right: var(--space-2);
     text-align: right;
     color: var(--color-body-tertiary);
+  }
+
+  table {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    padding: var(--space-1);
+    border-radius: var(--border-radius);
+  }
+
+  th {
+    font-size: var(--typography-body-small);
+    font-weight: 200;
+    text-align: left;
+  }
+
+  tr {
+    font-size: var(--typography-body-small);
+    text-align: left;
   }
 
   @media only screen and (max-width: 700px) {

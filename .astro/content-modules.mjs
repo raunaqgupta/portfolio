@@ -22,5 +22,8 @@ export default new Map([
 ["src/content/articles/objects.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fobjects.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/potato-chip-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fpotato-chip-sandwich.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/splunk-o11y-cloud.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fsplunk-o11y-cloud.mdx&astroContentModuleFlag=true")],
-["src/content/articles/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fyogurt-dip.mdx&astroContentModuleFlag=true")]]);
+["src/content/articles/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fyogurt-dip.mdx&astroContentModuleFlag=true")],
+["src/content/articles/o11y.collection.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fo11y.collection.mdx&astroContentModuleFlag=true")],
+["src/content/articles/o11y.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fo11y.mdx&astroContentModuleFlag=true")],
+["src/content/articles/appsec.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fappsec.mdx&astroContentModuleFlag=true")]]);
 		

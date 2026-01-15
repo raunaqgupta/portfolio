@@ -183,22 +183,6 @@ declare module 'astro:content' {
   rendered?: RenderedContent;
   filePath?: string;
 }>;
-"blog": Record<string, {
-  id: string;
-  body?: string;
-  collection: "blog";
-  data: any;
-  rendered?: RenderedContent;
-  filePath?: string;
-}>;
-"casestudies": Record<string, {
-  id: string;
-  body?: string;
-  collection: "casestudies";
-  data: any;
-  rendered?: RenderedContent;
-  filePath?: string;
-}>;
 "education": Record<string, {
   id: string;
   render(): Render[".md"];
@@ -216,14 +200,6 @@ declare module 'astro:content' {
   body: string;
   collection: "jobs";
   data: InferEntrySchema<"jobs">;
-  rendered?: RenderedContent;
-  filePath?: string;
-}>;
-"product": Record<string, {
-  id: string;
-  body?: string;
-  collection: "product";
-  data: any;
   rendered?: RenderedContent;
   filePath?: string;
 }>;

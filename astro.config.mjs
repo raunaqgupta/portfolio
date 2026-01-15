@@ -5,7 +5,7 @@ import { transformerNotationHighlight } from "@shikijs/transformers";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://raunaqgupta.com",
+  site: "https://www.raunaqgupta.com",
   prefetch: true,
   integrations: [mdx(), sitemap()],
   image: {

@@ -5,7 +5,7 @@ import Imgmdx from "@components/img.mdx.astro";
 import { getCollection } from "astro:content";
 import PostDetails from "@components/PostDetails.astro";
 export async function getStaticPaths() {
-  const blog = await getCollection("blog", ({ data }) => {
+  const blog = await getCollection("articles", ({ data }) => {
     return data.internal === true;
   });
   return blog.map((entry) => ({

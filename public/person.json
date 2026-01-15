@@ -9,9 +9,9 @@
     "@type": "Country",
     "name": "India"
   },
-  "url": "https://raunaqgupta.com",
+  "url": "https://www.raunaqgupta.com",
   "email": "mailto:mail@raunaqgupta.com",
-  "birthPlanet": {
+  "birthPlace": {
     "@type": "Place",
     "name": "India"
   },

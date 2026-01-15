@@ -7,7 +7,9 @@ import Hero from "../../components/hero.astro";
 
 import { getCollection } from "astro:content";
 export async function getStaticPaths() {
-  const projects = await getCollection("casestudies");
+  const projects = await getCollection("articles", ({ data }) => {
+    return data.category === "case-study";
+  });
   return projects.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },

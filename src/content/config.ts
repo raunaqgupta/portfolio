@@ -1,24 +1,21 @@
 import { z, defineCollection, reference } from 'astro:content';
 
-const casestudies = defineCollection({
+const articles = defineCollection({
   schema: z.object({
     title: z.string(),
+    date: z.date(),
+    category: z.enum(['recipe', 'poem', 'post', 'audio', 'case-study', 'collection']).optional(),
+    internal: z.boolean().optional(),
+    // Case study specific fields
     description: z.string().optional(),
-    organization: z.string(),
+    organization: z.string().optional(),
     product: z.string().optional(),
-    date: z.date(),
-    thumbnail: z.string().url(),
+    thumbnail: z.string().url().optional(),
     hero: z.string().url().optional(),
-    published: z.boolean().optional()
-  }),
-});
-
-const blog = defineCollection({
-  schema: z.object({
-    title: z.string(),
-    date: z.date(),
-    category: z.enum(['recipe', 'poem', 'post', 'audio']).optional(),
-    internal: z.boolean().optional()
+    published: z.boolean().optional(),
+    // Collection specific fields
+    name: z.string().optional(),
+    caseStudies: z.array(reference('articles')).optional()
   })
 })
 
@@ -28,20 +25,7 @@ const jobs = defineCollection({
     organization: z.string(),
     from: z.date(),
     to: z.date().optional(),
-    caseStudies: z.array(reference('casestudies')).optional()
-  })
-})
-
-const product = defineCollection({
-  schema: z.object({
-    name: z.string(),
-    title: z.string(),
-    date: z.date(),
-    description: z.string().optional(),
-    thumbnail: z.string().url().optional(),
-    hero: z.string().url().optional(),
-    organization: z.string(),
-    caseStudies: z.array(reference('casestudies')).optional()
+    caseStudies: z.array(reference('articles')).optional()
   })
 })
 
@@ -55,9 +39,7 @@ const education = defineCollection({
 })
 
 export const collections = {
-  casestudies,
-  blog,
+  articles,
   jobs,
   education,
-  product,
 };

@@ -5,9 +5,11 @@ import BaseLayout from "../layouts/baseLayout.astro";
 import Button from "../components/button.astro";
 import ArrowRightIcon from "@icons/arrow-right.svg";
 const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
-const products = await getCollection("product");
+const products = await getCollection("articles", ({ data }) => {
+  return data.category === "collection";
+});
 const newProducts = products.map(({ slug, ...rest }) => ({
-  slug: `/product/` + slug,
+  slug: `/collection/` + slug,
   ...rest,
 }));
 ---
@@ -20,8 +22,8 @@ const newProducts = products.map(({ slug, ...rest }) => ({
       organizations.
     </p>
     <p>
-      Hire me to complement your product team with an expert in modeling complex
-      systems, and intuition for designing for developers and 0→1 design &
+      Hire me to complement your product team with expertise in modeling complex
+      systems, design intuition for developer experiences, and 0→1 design &
       prototyping. Reach out at <a href="mailto:mail@raunaqgupta.com"
         >mail@raunaqgupta.com</a
       > for a chat.
@@ -43,9 +45,9 @@ const newProducts = products.map(({ slug, ...rest }) => ({
         postIcon={ArrowRightIcon}
       />
     </section>
-    <section id="case-studies">
+    <section id="case-study-collections">
       <h2>Case study collections</h2>
-      <p>Read various case studies grouped by product engagements.</p>
+      <p>Read case studies grouped by organization & product engagements.</p>
       <Grid collection={newProducts} />
     </section>
   </section>

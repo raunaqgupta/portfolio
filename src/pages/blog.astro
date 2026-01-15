@@ -5,8 +5,8 @@ import ListMdx from "@components/list.mdx.astro";
 import Input from "@components/input.astro";
 import { getCollection } from "astro:content";
 
-const blog = await getCollection("blog", ({ data }) => {
-  return data.internal !== true;
+const blog = await getCollection("articles", ({ data }) => {
+  return data.internal !== true && data.category !== "case-study";
 });
 
 const newBlog = blog

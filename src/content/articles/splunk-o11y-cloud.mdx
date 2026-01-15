@@ -4,6 +4,7 @@ title: Extending an established platform
 description: Designing new verticals on Splunk Observability Cloud
 organization: Cisco
 date: 2024-10-01
+category: collection
 thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/thumbnail.png?f=avif
 hero: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/hero.png?f=avif
 caseStudies:
@@ -14,7 +15,9 @@ import Gallery from '@components/gallery.astro';
 import Grid from '@components/grid.collection.astro';
 import { getCollection, reference } from 'astro:content';
 
-export const allCaseStudies = await getCollection('casestudies');
+export const allCaseStudies = await getCollection('articles', ({ data }) => {
+  return data.category === 'case-study';
+});
 export const referencedSlugs = frontmatter.caseStudies || [];
 export const referencedCaseStudies = allCaseStudies.filter((entry) =>
   referencedSlugs.includes(entry.slug)

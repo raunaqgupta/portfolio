@@ -1,0 +1,57 @@
+---
+const { actions, robots } = Astro.props;
+const title = Astro.props.title || Astro.props.frontmatter?.title || "Untitled";
+
+import BaseLayout from "../layouts/baseLayout.astro";
+import Footer from "@components/footer.astro";
+import Heading from "@components/Heading.astro";
+import Modal from "@components/modal.astro";
+import Header from "@components/header.astro";
+---
+
+<BaseLayout robots={robots}>
+  <body>
+    <Header />
+    <main>
+      <Modal />
+      <Heading title={title} actions={actions} />
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</BaseLayout>
+
+<style>
+  body {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg);
+    color: var(--color-body-primary);
+    font-family: sans-serif;
+    font-size: 1.12em;
+    line-height: 28px;
+    margin: 0 auto;
+    max-width: 120ch;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 8em 8em 0;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  @media only screen and (max-width: 1024px) {
+    body {
+      padding: 4em 4em 0;
+    }
+  }
+
+  @media only screen and (max-width: 700px) {
+    body {
+      min-width: unset;
+      padding: 2em 1.5em 0;
+    }
+  }
+</style>

@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import Grid from "../components/grid.collection.astro";
-import BaseLayout from "../layouts/baseLayout.astro";
+import PageLayout from "../layouts/pageLayout.astro";
 import Button from "../components/button.astro";
 import ArrowRightIcon from "@icons/arrow-right.svg";
 import Message from "@components/message.astro";
@@ -15,7 +15,7 @@ const newProducts = products.map(({ slug, ...rest }) => ({
 }));
 ---
 
-<BaseLayout title="Portfolio" breadcrumbs={breadcrumbs}>
+<PageLayout title="Portfolio" breadcrumbs={breadcrumbs}>
   <section id="summary">
     <p>
       I'm a design technologist with 10+ years of experience shipping enterprise
@@ -52,4 +52,4 @@ const newProducts = products.map(({ slug, ...rest }) => ({
     <p>Read case studies grouped by organization & product engagements.</p>
     <Grid collection={newProducts} />
   </section>
-</BaseLayout>
+</PageLayout>

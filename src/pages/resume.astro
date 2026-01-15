@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../layouts/baseLayout.astro";
+import PageLayout from "@layouts/pageLayout.astro";
 import RangeItem from "../components/rangeItem.astro";
 import CaseStudySmall from "../components/caseStudy.small.astro";
 import DownloadIcon from "@icons/download.svg";
@@ -51,7 +51,7 @@ const actions = [
 ];
 ---
 
-<BaseLayout title="Resume" breadcrumbs={breadcrumbs} actions={actions}>
+<PageLayout title="Resume" breadcrumbs={breadcrumbs} actions={actions}>
   <section>
     <div class="heading">
       <h2>Experience</h2>
@@ -97,7 +97,7 @@ const actions = [
       ))
     }
   </section>
-</BaseLayout>
+</PageLayout>
 
 <style>
   .heading {

@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../../layouts/baseLayout.astro";
+import PageLayout from "../../layouts/pageLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
 import Ulmdx from "@components/ul.mdx.astro";
 import Listmdx from "@components/list.mdx.astro";
@@ -24,9 +24,9 @@ const links = [
 ];
 ---
 
-<BaseLayout title={entry.data.title} breadcrumbs={links}>
+<PageLayout title={entry.data.title} breadcrumbs={links}>
   <Hero imageUrl={entry.data.hero} />
   <Content
     components={{ ...components, img: Imgmdx, ul: Ulmdx, List: Listmdx }}
   />
-</BaseLayout>
+</PageLayout>

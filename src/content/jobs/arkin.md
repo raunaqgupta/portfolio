@@ -9,4 +9,4 @@ to: 2015-12-31
 2. Simplified software-defined datacenter monitoring with emphasis on highly-scalable visualizations to accommodate thousands of monitored devices.
 3. Other notable design pieces include a natural language search interface, and a novel icon design kit.
 
-Note: Co-creator on patent US9923782B1 for a topology visualization.
+Note: Co-creator on patent [US9923782B1](https://patents.google.com/patent/US9923782B1/en?oq=US9923782B1) for a topology visualization.

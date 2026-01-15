@@ -1,9 +1,10 @@
 ---
+const { size = "small" } = Astro.props;
 import Logo from "../assets/logo.svg";
 ---
 
 <div class="logo-container">
-  <a class="logo-link" href="/"><Logo class="logo" /></a>
+  <a class="logo-link" href="/"><Logo class:list={[size]} /></a>
 </div>
 
 <style>
@@ -21,8 +22,13 @@ import Logo from "../assets/logo.svg";
     content: none;
   }
 
-  .logo-container .logo {
+  .small {
     height: 42px;
     width: 42px;
+  }
+
+  .large {
+    height: 128px;
+    width: 128px;
   }
 </style>

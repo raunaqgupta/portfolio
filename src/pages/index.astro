@@ -1,17 +1,49 @@
 ---
+import Logo from "@components/logo.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
-const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
 ---
 
-<BaseLayout
-  title="You've arrived at the personal website of Raunaq Gupta"
-  breadcrumbs={breadcrumbs}
->
-  <p>
-    If you are interested in hiring me, please visit my <a href="/portfolio"
-      >portfolio</a
-    >. Or check out my <a href="/blog">blog</a> where I write about experiments in
-    technology & design, recipes, and literature. More details about me can be found
-    in <a href="/person.json">person.json</a>.
-  </p>
+<BaseLayout title="Home">
+  <body>
+    <Logo size="large" />
+    <div class="content">
+      <h1>Hi, I'm Raunaq</h1>
+      <p>
+        If you are interested in hiring me, please visit my <a href="/portfolio"
+          >portfolio</a
+        >. Or check out my <a href="/blog">blog</a> where I write about experiments
+        in technology & design, recipes, and literature. I'm machine readable at <a
+          href="/raunaq-gupta.json">raunaq-gupta.json</a
+        >.
+      </p>
+    </div>
+  </body>
 </BaseLayout>
+
+<style>
+  body {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--color-bg);
+    color: var(--color-body-primary);
+    font-family: sans-serif;
+    font-size: 1.12em;
+    line-height: 28px;
+    max-width: 80ch;
+    min-height: 100vh;
+    min-height: 100dvh;
+    gap: 64px;
+    margin: auto;
+  }
+
+  @media only screen and (max-width: 700px) {
+    body {
+      padding: 4em;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+    }
+  }
+</style>

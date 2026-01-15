@@ -1,25 +1,13 @@
 ---
-const { actions, robots } = Astro.props;
-
+const { robots } = Astro.props;
 const title = Astro.props.title || Astro.props.frontmatter?.title || "Untitled";
+
 import Head from "@components/head.astro";
-import Footer from "@components/footer.astro";
-import Heading from "@components/Heading.astro";
-import Modal from "@components/modal.astro";
-import Header from "@components/header.astro";
 ---
 
 <html lang="en">
   <Head title={title} robots={robots} />
-  <body>
-    <Header />
-    <main>
-      <Modal />
-      <Heading title={title} actions={actions} />
-      <slot />
-    </main>
-    <Footer />
-  </body>
+  <slot />
 </html>
 
 <style is:global>
@@ -35,7 +23,8 @@ import Header from "@components/header.astro";
     --color-body-secondary: #666;
     --color-body-tertiary: #999;
     --color-heading: #111;
-    --color-highlight: #00659b;
+    --color-highlight: oklch(0.45 0.13 240);
+    --color-info: oklch(0.62 0.22 252);
     --typography-body: 0.9em;
     --typography-body-small: 0.875em;
     --typography-h1: 3em;
@@ -67,26 +56,6 @@ import Header from "@components/header.astro";
       color: var(--shiki-dark) !important;
       background-color: var(--shiki-dark-bg) !important;
     }
-  }
-
-  body {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--color-bg);
-    color: var(--color-body-primary);
-    font-family: sans-serif;
-    font-size: 1.12em;
-    line-height: 28px;
-    margin: 0 auto;
-    max-width: 120ch;
-    min-height: 100vh;
-    min-height: 100dvh;
-    padding: 8em 8em 0;
-  }
-
-  main {
-    flex: 1;
   }
 
   h1 {
@@ -193,12 +162,6 @@ import Header from "@components/header.astro";
     font-size: var(--typography-body);
   }
 
-  .heading {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-  }
-
   code {
     background-color: var(--color-bg-1);
     border-radius: var(--space-0);
@@ -250,21 +213,10 @@ import Header from "@components/header.astro";
     color: var(--color-body-tertiary);
   }
 
-  @media only screen and (max-width: 1024px) {
-    body {
-      padding: 4em 4em 0;
-    }
-  }
-
   @media only screen and (max-width: 700px) {
     h1 {
       font-size: 2em;
       margin: 0.1em 0 0;
-    }
-
-    body {
-      min-width: unset;
-      padding: 2em 1.5em 0;
     }
   }
 

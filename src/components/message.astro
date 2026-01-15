@@ -1,0 +1,22 @@
+---
+interface Props {
+  message?: string;
+}
+
+const { message } = Astro.props;
+import InfoCircled from "@icons/info-circled.svg";
+---
+
+<div class="message">
+  <p><span class="severity"><InfoCircled /></span> {message}</p>
+</div>
+
+<style>
+  .message {
+    gap: var(--space-1);
+  }
+
+  .severity {
+    color: var(--color-info);
+  }
+</style>

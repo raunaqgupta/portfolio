@@ -1,6 +1,6 @@
 ---
 import Toolbar from "@components/toolbar.astro";
-import BaseLayout from "../layouts/baseLayout.astro";
+import PageLayout from "../layouts/pageLayout.astro";
 import ListMdx from "@components/list.mdx.astro";
 import Input from "@components/input.astro";
 import { getCollection } from "astro:content";
@@ -23,7 +23,7 @@ const categories = [
 const format = { year: "numeric", month: "long", day: "numeric" };
 ---
 
-<BaseLayout title="Internal" robots="noindex, nofollow">
+<PageLayout title="Internal" robots="noindex, nofollow">
   <Toolbar>
     <Input id="blog-search-input" name="search" placeholder="Search" />
   </Toolbar>
@@ -45,7 +45,7 @@ const format = { year: "numeric", month: "long", day: "numeric" };
       }
     </ListMdx>
   </div>
-</BaseLayout>
+</PageLayout>
 
 <script type="module">
   const input = document.getElementById("blog-search-input");

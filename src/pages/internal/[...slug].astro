@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "@layouts/baseLayout.astro";
+import PageLayout from "@layouts/pageLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
 
 import { getCollection } from "astro:content";
@@ -24,7 +24,7 @@ const links = [
 const format = { year: "numeric", month: "long", day: "numeric" };
 ---
 
-<BaseLayout
+<PageLayout
   title={entry.data.title}
   breadcrumbs={links}
   robots="noindex, nofollow"
@@ -39,7 +39,7 @@ const format = { year: "numeric", month: "long", day: "numeric" };
       {entry.data.category}
     </div>
   </PostDetails>
-</BaseLayout>
+</PageLayout>
 
 <style>
   .date,

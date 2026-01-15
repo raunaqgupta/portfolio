@@ -4,6 +4,7 @@ import Grid from "../components/grid.collection.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
 import Button from "../components/button.astro";
 import ArrowRightIcon from "@icons/arrow-right.svg";
+import Message from "@components/message.astro";
 const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
 const products = await getCollection("articles", ({ data }) => {
   return data.category === "collection";
@@ -14,7 +15,7 @@ const newProducts = products.map(({ slug, ...rest }) => ({
 }));
 ---
 
-<BaseLayout title="Hi, I'm Raunaq" breadcrumbs={breadcrumbs}>
+<BaseLayout title="Portfolio" breadcrumbs={breadcrumbs}>
   <section id="summary">
     <p>
       I'm a design technologist with 10+ years of experience shipping enterprise
@@ -28,27 +29,27 @@ const newProducts = products.map(({ slug, ...rest }) => ({
         >mail@raunaqgupta.com</a
       > for a chat.
     </p>
+    <Message
+      message="If you are a recruiter, I require a H-1B visa transfer to work for your organization."
+    />
+  </section>
+  <section id="
+      resume">
+    <h2>Resume</h2>
     <p>
-      If you are a recruiter, I'd need a H-1B visa transfer to work for your
-      organization.
+      I'm currently designing products within the Splunk's Observability suite
+      at Cisco.
     </p>
-    <section id="resume">
-      <h2>Resume</h2>
-      <p>
-        I'm currently designing products within the Splunk's Observability suite
-        at Cisco.
-      </p>
-      <Button
-        label="View Resume"
-        url="/resume"
-        isLink={true}
-        postIcon={ArrowRightIcon}
-      />
-    </section>
-    <section id="case-study-collections">
-      <h2>Case study collections</h2>
-      <p>Read case studies grouped by organization & product engagements.</p>
-      <Grid collection={newProducts} />
-    </section>
+    <Button
+      label="View Resume"
+      url="/resume"
+      isLink={true}
+      postIcon={ArrowRightIcon}
+    />
+  </section>
+  <section id="case-study-collections">
+    <h2>Case study collections</h2>
+    <p>Read case studies grouped by organization & product engagements.</p>
+    <Grid collection={newProducts} />
   </section>
 </BaseLayout>

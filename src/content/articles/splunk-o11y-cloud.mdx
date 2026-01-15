@@ -1,7 +1,6 @@
 ---
-name: Splunk Observability Cloud
-title: Extending an established platform
-description: Designing new verticals on Splunk Observability Cloud
+title: Designing observability software across 4 products in 4 years
+description: Launching new verticals, and contributing platform-wide design patterns
 organization: Cisco
 date: 2024-10-01
 category: collection
@@ -23,9 +22,17 @@ export const referencedCaseStudies = allCaseStudies.filter((entry) =>
   referencedSlugs.includes(entry.slug)
 ).map(({ slug, ...rest }) => ({ slug: `/case-studies/${slug}`, ...rest }));
 
-## Overview
+To set the stage, I joined Cisco in 2021 to work on their ongoing efforts to build AppDynamics Cloud; a cloud-native full-stack observability platform. This effort underwent an overhaul in 2023 when it was re-marketed and re-architected as Cisco Observability Platform with the emphasis on "platform". We went from designing a singular product to trying to make a cohesive platform experience that could host multiple observability products.
 
-Splunk's acquisition replaced Cisco's existing efforts in Observability. Splunk Observability Cloud provides application performance monitoring, and infrastructure monitoring for cloud-native environments.
+It didn't last long. Cisco finalized the Splunk acquisition in early 2024, effecively stopping all work on Cisco Observability Platform. Splunk's existing product, Splunk Observability Cloud, became the new Observability kid on the block.
+
+## My journey through these transitions
+
+When you are living and designing a developer tool for 4 years across multiple iterations, all the while trying to catch up to competition, you learn that:
+
+1. UX frameworks and user research won't substitute grokking (i.e. deeply understanding) a technical product,
+2. Developer platforms rely on feature parity to sell well, and
+3. No amount of research and design can solve for misaligned product strategies.
 
 ## Addressing the gap and expanding capabilities
 

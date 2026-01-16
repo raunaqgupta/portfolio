@@ -1,10 +1,28 @@
 ---
-const { size = "small" } = Astro.props;
+const { mode = "2d", size = "small" } = Astro.props;
 import Logo from "../assets/logo.svg";
+import Logo3DDark from "@assets/logo.3d.dark.png";
+import Logo3DLight from "@assets/logo.3d.light.png";
 ---
 
 <div class="logo-container">
-  <a class="logo-link" href="/"><Logo class:list={[size]} /></a>
+  <a class="logo-link" href="/">
+    {
+      mode === "2d" ? (
+        <Logo class:list={[size]} />
+      ) : (
+        <div class:list={["logo-3d", size]}>
+          <picture>
+            <source
+              srcset={Logo3DLight.src}
+              media="(prefers-color-scheme: dark)"
+            />
+            <img src={Logo3DDark.src} />
+          </picture>
+        </div>
+      )
+    }
+  </a>
 </div>
 
 <style>
@@ -30,5 +48,10 @@ import Logo from "../assets/logo.svg";
   .large {
     height: 128px;
     width: 128px;
+  }
+
+  .logo-3d img {
+    width: 100%;
+    height: 100%;
   }
 </style>

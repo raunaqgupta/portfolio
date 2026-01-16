@@ -11,16 +11,9 @@ const {
 
 <a href={url}>
   <article>
-    <div class="text">
+    <div class="content">
       <div class="tag">
         {name && <span>{name}</span>}
-        {
-          caseStudyCount && (
-            <span>
-              {caseStudyCount} case stud{caseStudyCount !== 1 ? "ies" : "y"}
-            </span>
-          )
-        }
       </div>
 
       <div class="title">{title}</div>
@@ -73,7 +66,12 @@ const {
     );
   }
 
-  .text {
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: var(--space-1);
     padding: var(--space-2);
   }
 

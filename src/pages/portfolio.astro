@@ -4,6 +4,7 @@ import Grid from "../components/grid.collection.astro";
 import PageLayout from "../layouts/pageLayout.astro";
 import Button from "../components/button.astro";
 import ArrowRightIcon from "@icons/arrow-right.svg";
+import LinkedInIcon from "@icons/linkedin.svg";
 import Message from "@components/message.astro";
 const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
 const products = await getCollection("articles", ({ data }) => {
@@ -30,26 +31,45 @@ const newProducts = products.map(({ slug, ...rest }) => ({
       > for a chat.
     </p>
     <Message
-      message="If you are a recruiter, I require a H-1B visa transfer to work for your organization."
+      message="If you are a recruiter, I'd require a H-1B visa transfer to work for your organization."
     />
   </section>
   <section id="
-      resume">
-    <h2>Resume</h2>
+      work-experience">
+    <h2>Work Experience</h2>
     <p>
       I'm currently designing products within the Splunk's Observability suite
       at Cisco.
     </p>
-    <Button
-      label="View Resume"
-      url="/resume"
-      isLink={true}
-      postIcon={ArrowRightIcon}
-    />
+    <div class="button-group">
+      <Button
+        label="View Resume"
+        url="/resume"
+        isLink={true}
+        postIcon={ArrowRightIcon}
+      />
+      <Button
+        label="LinkedIn"
+        url="https://www.linkedin.com/in/raunaqgupta/"
+        isLink={true}
+        isExternalLink={true}
+        postIcon={ArrowRightIcon}
+        preIcon={LinkedInIcon}
+      />
+    </div>
   </section>
   <section id="case-study-collections">
     <h2>Case study collections</h2>
     <p>Read case studies grouped by organization & product engagements.</p>
-    <Grid collection={newProducts} />
+    <Grid type="collection" collection={newProducts} />
   </section>
 </PageLayout>
+
+<style>
+  .button-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-1);
+  }
+</style>

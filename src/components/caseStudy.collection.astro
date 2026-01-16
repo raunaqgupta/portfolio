@@ -11,7 +11,8 @@ const {
 
 <a href={url}>
   <article>
-    <div class="text">
+    <div class="image" style={`--img: url("${image}")`}></div>
+    <div class="content">
       <div class="tag">
         {name && <span>{name}</span>}
         {
@@ -26,7 +27,6 @@ const {
       <div class="title">{title}</div>
       <p class="description">{description}</p>
     </div>
-    <div class="image" style={`--img: url("${image}")`}></div>
   </article>
 </a>
 
@@ -55,25 +55,22 @@ const {
     border: 1px solid var(--color-border-1);
     border-radius: 6px;
     backdrop-filter: blur(10px) saturate(130%);
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
     gap: var(--space-1);
     justify-content: space-between;
     height: 100%;
-
-    -webkit-mask-image: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 1) 50%,
-      rgba(255, 255, 255, 1) 95%
-    );
-    mask-image: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 1) 50%,
-      rgba(255, 255, 255, 0) 95%
-    );
+    overflow: hidden;
   }
 
-  .text {
+  .content {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: var(--space-1);
+    justify-content: flex-start;
+    align-items: flex-start;
     padding: var(--space-2);
   }
 
@@ -92,20 +89,24 @@ const {
   }
 
   .image {
-    padding: 0 var(--space-2);
     background-image: var(--img);
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-origin: content-box;
     height: 300px;
     transition: transform 300ms ease-out;
-  }
 
-  .image img {
-    width: 100%;
-    object-fit: fill;
-    display: block;
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(255, 255, 255, 1) 95%
+    );
+    mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(255, 255, 255, 0) 95%
+    );
   }
 
   .title {
@@ -142,7 +143,7 @@ const {
       box-shadow: rgba(0, 0, 0, 0.1) 4px 4px 29px;
     }
 
-    .text {
+    .content {
       color: var(--color-body-primary);
     }
   }

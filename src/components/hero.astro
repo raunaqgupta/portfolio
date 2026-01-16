@@ -1,19 +1,23 @@
 ---
 interface Props {
+  aspectRatio: number;
   imageUrl?: string;
 }
 
-const { imageUrl } = Astro.props;
+const { aspectRatio = 3, imageUrl } = Astro.props;
 ---
 
-<div class="hero">
-  <div style={`--img: url("${imageUrl}")`}></div>
+<div
+  class="hero"
+  style={`--aspect-ratio: ${aspectRatio}; --img: url("${imageUrl}")`}
+>
+  <div></div>
 </div>
 
 <style>
   .hero {
     width: 100%;
-    aspect-ratio: 3;
+    aspect-ratio: var(--aspect-ratio);
     overflow: hidden;
     border-radius: 12px;
     border: 1px solid var(--color-border-bg);

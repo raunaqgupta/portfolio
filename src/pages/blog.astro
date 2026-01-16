@@ -49,31 +49,31 @@ const format = { year: "numeric", month: "long", day: "numeric" };
 
 <script type="module">
   const input = document.getElementById("blog-search-input");
-  const categoryFilter = document.getElementById("category-filter");
+  // const categoryFilter = document.getElementById("category-filter");
   const list = document.querySelector("#blog-list ul");
 
-  if (input && categoryFilter && list) {
+  if (input && list) {
     const items = Array.from(list.querySelectorAll("li"));
 
     const filterItems = () => {
       const searchValue = input.value.trim().toLowerCase();
-      const categoryValue = categoryFilter.value.toLowerCase();
+      // const categoryValue = categoryFilter.value.toLowerCase();
 
       items.forEach((item) => {
         const text = item.textContent?.toLowerCase() ?? "";
-        const itemCategory =
-          item.getAttribute("data-category")?.toLowerCase() ?? "";
+        // const itemCategory =
+        //   item.getAttribute("data-category")?.toLowerCase() ?? "";
 
         const matchesSearch = !searchValue || text.includes(searchValue);
-        const matchesCategory =
-          !categoryValue || itemCategory === categoryValue;
+        // const matchesCategory =
+        //   !categoryValue || itemCategory === categoryValue;
 
-        item.hidden = !(matchesSearch && matchesCategory);
+        item.hidden = !matchesSearch;
       });
     };
 
     input.addEventListener("input", filterItems);
-    categoryFilter.addEventListener("change", filterItems);
+    // categoryFilter.addEventListener("change", filterItems);
   }
 </script>
 

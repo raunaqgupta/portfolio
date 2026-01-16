@@ -23,5 +23,6 @@ export default new Map([
 ["src/content/articles/palak-paneer.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fpalak-paneer.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/planetscale-docs-refresh.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fplanetscale-docs-refresh.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/potato-chip-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fpotato-chip-sandwich.mdx&astroContentModuleFlag=true")],
-["src/content/articles/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fyogurt-dip.mdx&astroContentModuleFlag=true")]]);
+["src/content/articles/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fyogurt-dip.mdx&astroContentModuleFlag=true")],
+["src/content/articles/2026-01-14-postcard.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2026-01-14-postcard.mdx&astroContentModuleFlag=true")]]);
 		

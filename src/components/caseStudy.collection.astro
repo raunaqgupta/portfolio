@@ -11,6 +11,7 @@ const {
 
 <a href={url}>
   <article>
+    <div class="image" style={`--img: url("${image}")`}></div>
     <div class="text">
       <div class="tag">
         {name && <span>{name}</span>}
@@ -26,7 +27,6 @@ const {
       <div class="title">{title}</div>
       <p class="description">{description}</p>
     </div>
-    <div class="image" style={`--img: url("${image}")`}></div>
   </article>
 </a>
 
@@ -60,17 +60,7 @@ const {
     gap: var(--space-1);
     justify-content: space-between;
     height: 100%;
-
-    -webkit-mask-image: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 1) 50%,
-      rgba(255, 255, 255, 1) 95%
-    );
-    mask-image: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 1) 50%,
-      rgba(255, 255, 255, 0) 95%
-    );
+    overflow: hidden;
   }
 
   .text {
@@ -92,20 +82,24 @@ const {
   }
 
   .image {
-    padding: 0 var(--space-2);
     background-image: var(--img);
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-origin: content-box;
     height: 300px;
     transition: transform 300ms ease-out;
-  }
 
-  .image img {
-    width: 100%;
-    object-fit: fill;
-    display: block;
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(255, 255, 255, 1) 95%
+    );
+    mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(255, 255, 255, 0) 95%
+    );
   }
 
   .title {

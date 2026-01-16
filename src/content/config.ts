@@ -10,6 +10,7 @@ const articles = defineCollection({
     description: z.string().optional(),
     organization: z.string().optional(),
     product: z.string().optional(),
+    thumbnail: z.string().url().optional(),
     hero: z.string().url().optional(),
     published: z.boolean().optional(),
     // Collection specific fields

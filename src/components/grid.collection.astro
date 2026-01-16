@@ -1,7 +1,8 @@
 ---
 import CaseStudyBig from "./caseStudy.big.astro";
+import CaseStudyCollection from "@components/caseStudy.collection.astro";
 
-const { collection } = Astro.props;
+const { type, collection } = Astro.props;
 const sortedCollection = [...collection].sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
@@ -9,20 +10,30 @@ const sortedCollection = [...collection].sort(
 
 <section>
   {
-    sortedCollection.map((item) => (
-      <CaseStudyBig
-        image={item.data.thumbnail}
-        product={item.data.name}
-        title={item.data.title}
-        description={item.data.description}
-        url={item.slug}
-        caseStudyCount={
-          Array.isArray(item.data.caseStudies)
-            ? item.data.caseStudies.length
-            : 0
-        }
-      />
-    ))
+    sortedCollection.map((item) =>
+      type === "collection" ? (
+        <CaseStudyCollection
+          image={item.data.thumbnail}
+          name={item.data.organization}
+          title={item.data.title}
+          description={item.data.description}
+          url={item.slug}
+          caseStudyCount={
+            Array.isArray(item.data.caseStudies)
+              ? item.data.caseStudies.length
+              : null
+          }
+        />
+      ) : (
+        <CaseStudyBig
+          image={item.data.thumbnail}
+          name={item.data.product}
+          title={item.data.title}
+          description={item.data.description}
+          url={item.slug}
+        />
+      )
+    )
   }
 </section>
 

@@ -46,6 +46,10 @@
         "product": {
           "type": "string"
         },
+        "thumbnail": {
+          "type": "string",
+          "format": "uri"
+        },
         "hero": {
           "type": "string",
           "format": "uri"

@@ -1,18 +1,13 @@
 ---
 import Logo3DDark from "@assets/logo.3d.dark.png";
 import Logo3DLight from "@assets/logo.3d.light.png";
-
+import Logo from "@components/logo.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
 ---
 
 <BaseLayout title="Home">
   <body>
-    <div class="logo">
-      <picture>
-        <source srcset={Logo3DLight.src} media="(prefers-color-scheme: dark)" />
-        <img src={Logo3DDark.src} />
-      </picture>
-    </div>
+    <Logo mode="3d" size="large" />
 
     <div class="content">
       <h1>Hi, I'm Raunaq</h1>
@@ -57,7 +52,7 @@ import BaseLayout from "../layouts/baseLayout.astro";
 
   @media only screen and (max-width: 700px) {
     body {
-      padding: 4em;
+      padding: 2em;
       flex-direction: column;
       align-items: flex-start;
       gap: 32px;

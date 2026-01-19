@@ -1,5 +1,5 @@
 ---
-const { actions, robots } = Astro.props;
+const { actions, robots, breadcrumbs } = Astro.props;
 const title = Astro.props.title || Astro.props.frontmatter?.title || "Untitled";
 
 import BaseLayout from "../layouts/baseLayout.astro";
@@ -7,12 +7,14 @@ import Footer from "@components/footer.astro";
 import Heading from "@components/Heading.astro";
 import Modal from "@components/modal.astro";
 import Header from "@components/header.astro";
+import Breadcrumbs from "@components/breadcrumbs.astro";
 ---
 
 <BaseLayout title={title} robots={robots}>
   <body>
     <Header />
     <main>
+      {breadcrumbs && <Breadcrumbs breadcrumbs={breadcrumbs} />}
       <Modal />
       <Heading title={title} actions={actions} />
       <slot />

@@ -1,5 +1,5 @@
 ---
-import PageLayout from "../../layouts/pageLayout.astro";
+import PageLayout from "@layouts/pageLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
 import Ulmdx from "@components/ul.mdx.astro";
 import Listmdx from "@components/list.mdx.astro";
@@ -19,8 +19,11 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, components } = await entry.render();
 const links = [
-  { text: "Raunaq Gupta", url: "/" },
   { text: "Portfolio", url: "/portfolio" },
+  {
+    text: entry.data.collection,
+    url: `/collection/${entry.data.collection}`,
+  },
 ];
 ---
 

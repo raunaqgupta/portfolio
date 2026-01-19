@@ -8,7 +8,7 @@ thumbnail: https://r2-image.raunaqgupta.workers.dev/planetscale/hero.png?f=avif
 hero: https://r2-image.raunaqgupta.workers.dev/planetscale/hero.png?f=avif
 caseStudy: true
 caseStudies:
-  - planetscale
+  - flux
 v0:
   - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.login.view.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.eula.view.png?f=avif
@@ -32,6 +32,16 @@ flux:
   
 ---
 import Gallery from '@components/gallery.astro';
+import Grid from '@components/grid.collection.astro';
+import { getCollection, reference } from 'astro:content';
+
+export const allCaseStudies = await getCollection('articles', ({ data }) => {
+  return data.category === 'case-study';
+});
+export const referencedSlugs = frontmatter.caseStudies || [];
+export const referencedCaseStudies = allCaseStudies.filter((entry) =>
+  referencedSlugs.includes(entry.slug)
+).map(({ slug, ...rest }) => ({ slug: `/case-studies/${slug}`, ...rest }));
 
 ## Creating a cloud database from scratch
 
@@ -70,3 +80,7 @@ I was constantly iterating on improving our visual design language inspired by o
 flux was PlanetScale's internal forum built atop PlanetScale. I tried my hands at visual design, and fullstack development.
 
 <Gallery collection={frontmatter.flux}/>
+
+## Case studies
+
+<Grid type="collection" collection={referencedCaseStudies} />

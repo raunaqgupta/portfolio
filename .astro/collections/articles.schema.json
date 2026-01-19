@@ -46,6 +46,9 @@
         "product": {
           "type": "string"
         },
+        "collection": {
+          "type": "string"
+        },
         "thumbnail": {
           "type": "string",
           "format": "uri"

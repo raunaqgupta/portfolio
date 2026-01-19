@@ -18,14 +18,11 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content, components } = await entry.render();
-const links = [
-  { text: "Raunaq Gupta", url: "/" },
-  { text: "Portfolio", url: "/portfolio" },
-];
+const links = [{ text: "Portfolio", url: "/portfolio" }];
 ---
 
 <PageLayout title={entry.data.title} breadcrumbs={links}>
-  <Hero imageUrl={entry.data.hero} aspectRatio={2} />
+  <Hero imageUrl={entry.data.hero} aspectRatio={1.5} />
   <Content
     components={{ ...components, img: Imgmdx, ul: Ulmdx, List: Listmdx }}
   />

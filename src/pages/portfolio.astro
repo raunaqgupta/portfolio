@@ -4,9 +4,7 @@ import Grid from "../components/grid.collection.astro";
 import PageLayout from "../layouts/pageLayout.astro";
 import Button from "../components/button.astro";
 import ArrowRightIcon from "@icons/arrow-right.svg";
-import LinkedInIcon from "@icons/linkedin.svg";
 import Message from "@components/message.astro";
-const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
 const products = await getCollection("articles", ({ data }) => {
   return data.category === "collection";
 });
@@ -16,7 +14,7 @@ const newProducts = products.map(({ slug, ...rest }) => ({
 }));
 ---
 
-<PageLayout title="Portfolio" breadcrumbs={breadcrumbs}>
+<PageLayout title="Portfolio">
   <section id="summary">
     <p>
       I'm a design technologist with 10+ years of experience shipping enterprise

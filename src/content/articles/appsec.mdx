@@ -1,11 +1,32 @@
 ---
-title: Application security and designing for extensibility
+title: Launching Secure Application on Cisco Observability Platform
 description: Defining the blueprint for how products get built on a new platform
 organization: Cisco
 product: Cisco Observability Platform
 date: 2024-03-01
 category: case-study
+collection: o11y
 thumbnail: https://r2-image.raunaqgupta.workers.dev/appsec-for-appd/hero.png?f=avif
 hero: https://r2-image.raunaqgupta.workers.dev/appsec-for-appd/hero.png?f=avif
 published: true
+wireframes:
+  - https://r2-image.raunaqgupta.workers.dev/appsec-for-appd/wireframes/wireframe-1.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/appsec-for-appd/wireframes/wireframe-2.png?f=avif
 ---
+import Gallery from '@components/gallery.astro';
+
+I led the design of Secure Application, a security-focused vertical on Cisco Observability Platform. It was built as one of the first 1st-party applications on the newly devised observability platform, complementing the core verticals of application performance, and infrastructure monitoring.
+
+## What is Secure Application?
+
+Modern applications are a complex network of services that interact with each all the while passing data back and forth. These services may either themselves have vulnerabilities that can comprise the entire network, or they might transmit sensitive data in an insecure manner.
+
+Secure Application on Cisco Observability Platform was designed to facilitate the monitoring of application security across such a complex web of services. It aimed to provide insights into vulnerabilities, data leaks, misconfigurations, and potential threats that could compromise the security of applications. It was designed to provide remediations and best practices to help developers and security teams fortify their applications against potential attacks.
+
+## Wireframes
+
+<Gallery collection={frontmatter.wireframes}/>
+
+### Journey map
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="450" src="https://embed.figma.com/design/XdYe6LwmdT9KRWOVdwBfY4/Case-study--Application-security?node-id=8-30&embed-host=share" allowfullscreen></iframe>

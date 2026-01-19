@@ -1,0 +1,37 @@
+---
+title: Dogfooding PlanetScale
+description: Building an internal forum using PlanetScale
+organization: PlanetScale
+product: PlanetScale
+date: 2021-07-01
+category: case-study
+collection: planetscale
+thumbnail: https://r2-image.raunaqgupta.workers.dev/flux/hero.png?f=avif
+hero: https://r2-image.raunaqgupta.workers.dev/flux/hero.png?f=avif
+published: true
+screens:
+  - https://r2-image.raunaqgupta.workers.dev/flux/login.png
+  - https://r2-image.raunaqgupta.workers.dev/flux/feed.png
+  - https://r2-image.raunaqgupta.workers.dev/flux/feed-filter-username.png
+  - https://r2-image.raunaqgupta.workers.dev/flux/feed-filter-topic.png
+  - https://r2-image.raunaqgupta.workers.dev/flux/feed-filter-unread.png
+  - https://r2-image.raunaqgupta.workers.dev/flux/feed-catchup-notification.png
+  - https://r2-image.raunaqgupta.workers.dev/flux/create-post.png
+  - https://r2-image.raunaqgupta.workers.dev/flux/404.png
+otherArtifacts:
+  - https://r2-image.raunaqgupta.workers.dev/planetscale/flux/fluxLogo.gif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale/flux/themeSwitcher.gif
+---
+import Gallery from '@components/gallery.astro';
+
+What better way to use a cloud database then to build an internal forum for the company itself? Flux was built as a dogfooding exercise to test PlanetScale's capabilities as a cloud database. It was built using Next.js and hosted on Vercel, with PlanetScale serving as the backend database.
+
+I did visual direction, UX design, and front-end development aided by a backend engineer.
+
+## Screens
+
+<Gallery collection={frontmatter.screens}/>
+
+## Other artifacts
+
+<Gallery collection={frontmatter.otherArtifacts}/>

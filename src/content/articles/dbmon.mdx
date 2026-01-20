@@ -17,7 +17,8 @@ databaseMonitoring:
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/trace.view.span.preview.query.preview.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
-import Link from '@components/link.astro';
+import PageLink from '@components/pageLink.astro';
+import FlexColumn from '@components/flexColumn.astro';
 
 ## Addressing the gap and expanding capabilities
 
@@ -65,4 +66,7 @@ I defined and designed AI-assisted workflows such as query summarization, and AI
 
 <Gallery collection={frontmatter.databaseMonitoring}/>
 
-<Link label="Next case study: Secure Application" url="/case-studies/appsec" />
+<FlexColumn>
+  <PageLink direction="prev" label="Collection: Designing Observability SaaS across 4 products in 4 years" url="/collection/o11y" />
+  <PageLink direction="next" label="Case study: Secure Application" url="/case-studies/appsec" />
+</FlexColumn>

@@ -12,7 +12,8 @@ caseStudies:
 ---
 import Gallery from '@components/gallery.astro';
 import Grid from '@components/grid.collection.astro';
-import Link from '@components/link.astro';
+import FlexColumn from '@components/flexColumn.astro';
+import PageLink from '@components/pageLink.astro';
 import { getCollection, reference } from 'astro:content';
 
 export const allCaseStudies = await getCollection('articles', ({ data }) => {
@@ -41,5 +42,6 @@ Any observability software's has two core functions for the various teams of dev
 
 <Grid collection={referencedCaseStudies} />
 
-<Link label="Next collection: PlanetScale" url="/collection/planetscale" />
-
+<FlexColumn>
+  <PageLink direction="next" label="Collection: PlanetScale" url="/collection/planetscale" />
+</FlexColumn>

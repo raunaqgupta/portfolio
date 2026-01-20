@@ -5,17 +5,18 @@ import ArrowLeftIcon from "@icons/arrow-left.svg";
 import ArrowRightIcon from "@icons/arrow-right.svg";
 ---
 
-<a href={url}>
+<a href={url} class={direction}>
   <div class="link">
-    {label}
-    <ArrowRightIcon class="icon" />
+    {direction === "prev" && <ArrowLeftIcon class="icon" />}
+    <div class="label">{label}</div>
+    {direction === "next" && <ArrowRightIcon class="icon" />}
   </div>
 
   <style>
     a {
-      margin-top: var(--space-4);
+      flex: 1;
+      display: flex;
       border-radius: 6px;
-      display: block;
       text-decoration: none;
     }
 
@@ -31,11 +32,16 @@ import ArrowRightIcon from "@icons/arrow-right.svg";
       transform: translateX(var(--space-1));
     }
 
+    a.prev:hover .icon {
+      transform: translateX(calc(-1 * var(--space-1)));
+    }
+
     a:hover .link {
       border-color: var(--color-highlight);
     }
 
     .link {
+      flex: 1;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -43,6 +49,15 @@ import ArrowRightIcon from "@icons/arrow-right.svg";
       border-radius: var(--border-radius);
       padding: var(--space-4);
       border: 1px solid var(--color-border-1);
+      font-size: var(--typography-body-small);
+    }
+
+    .link .label {
+      max-width: 30ch;
+    }
+
+    a.prev .link {
+      text-align: right;
     }
   </style>
 </a>

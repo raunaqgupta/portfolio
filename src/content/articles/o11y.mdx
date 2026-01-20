@@ -9,10 +9,10 @@ thumbnail: https://r2-image.raunaqgupta.workers.dev/o11y/hero.png?f=avif
 caseStudies:
   - dbmon
   - appsec
-  - launching-apopt
 ---
 import Gallery from '@components/gallery.astro';
 import Grid from '@components/grid.collection.astro';
+import Link from '@components/link.astro';
 import { getCollection, reference } from 'astro:content';
 
 export const allCaseStudies = await getCollection('articles', ({ data }) => {
@@ -39,4 +39,6 @@ When you are designing effectively the same developer tool for 4 years across mu
 Any observability software's has two core functions for the various teams of developers and software reliability engineers: **monitoring performance** , and **troubleshooting issues**. The following case studies showcase work done in improving both facets through multiple projects.
 
 <Grid collection={referencedCaseStudies} />
+
+<Link label="Next collection: PlanetScale" url="/collection/planetscale" />
 

@@ -1,0 +1,47 @@
+---
+const { label, url } = Astro.props;
+
+import ArrowRightIcon from "@icons/arrow-right.svg";
+---
+
+<a href={url}>
+  <div class="link">
+    {label}
+    <ArrowRightIcon class="icon" />
+  </div>
+
+  <style>
+    a {
+      margin-top: var(--space-4);
+      border-radius: 6px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .icon {
+      transition: transform 300ms ease-out;
+    }
+
+    a:after {
+      content: none;
+    }
+
+    a:hover .icon {
+      transform: translateX(var(--space-1));
+    }
+
+    a:hover .link {
+      border-color: var(--color-highlight);
+    }
+
+    .link {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: var(--border-radius);
+      padding: var(--space-4);
+      border: 1px solid var(--color-border-1);
+    }
+  </style>
+</a>

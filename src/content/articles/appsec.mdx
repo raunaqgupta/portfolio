@@ -14,6 +14,7 @@ wireframes:
   - https://r2-image.raunaqgupta.workers.dev/appsec-for-appd/wireframes/wireframe-2.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
+import Message from "@components/message.astro";
 
 I led the design of Secure Application, a security-focused vertical on Cisco Observability Platform. It was built as one of the first 1st-party applications on the newly devised observability platform, complementing the (existing) core verticals of application performance, infrastructure monitoring, and real user monitoring.
 
@@ -27,16 +28,33 @@ Modern applications are a complex network of services that fulfil various functi
 
 Secure Application on Cisco Observability Platform is designed to facilitate the monitoring the security posture of such applications. It provides insights into vulnerabilities, data leaks, misconfigurations, and potential threats that could compromise the integrity of such applications. It also provides fixes and best practices to help developers and security teams fortify their applications against potential attacks.
 
+![Entities at play](https://r2-image.raunaqgupta.workers.dev/appsec-for-appd/objects.png?f=avif)
+
 ## Process
 
 I researched the existing landscape of application security tools, and through various design artifacts helped the product management team to refine the roadmap. This was to ensure that the design efforts would be focused on features are most impactful, and feasible to deliver by the engineering team.
 
 I went through several rounds of wireframing, prototyping, and usability testing to validate the designs.
 
-## Wireframes
+## Exploration through wireframes and prototypes
 
-<Gallery collection={frontmatter.wireframes}/>
+### Wireframes
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/XdYe6LwmdT9KRWOVdwBfY4/Case-study--Application-security?page-id=10%3A36&node-id=130-105&p=f&viewport=1193%2C450%2C0.13&scaling=contain&content-scaling=fixed&embed-host=share" allowfullscreen></iframe>
 
 ### Journey map
 
 <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="450" src="https://embed.figma.com/design/XdYe6LwmdT9KRWOVdwBfY4/Case-study--Application-security?node-id=8-30&embed-host=share" allowfullscreen></iframe>
+
+### Prototype
+
+<Message message="Note: This is a complex prototype with multiple non-overlapping Figma flows." />
+
+This prototype was created for AppDynamics Cloud using the Particle design system. It goes through a non-sequential flows covering configuration, using the service explorer with grouping and filtering capabilities, and investigating data security & vulnerability issues in services and logs.
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/XdYe6LwmdT9KRWOVdwBfY4/Case-study--Application-security?page-id=10%3A35&node-id=130-1171&p=f&viewport=239%2C213%2C0.06&scaling=contain&content-scaling=fixed&embed-host=share" allowfullscreen></iframe>
+
+## Scaling down the roadmap
+
+Earlier wireframes and prototypes were shown to existing AppDynamics customers to gather feedback. The discussions helped in refining the roadmap by specifically identifying features that were most impactful, and feasible to deliver by the engineering team within the desired timelines. This resulted in scaling down the initial roadmap to focus on core features that would deliver maximum value to users.
+

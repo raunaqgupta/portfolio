@@ -20,37 +20,46 @@ import Gallery from '@components/gallery.astro';
 import PageLink from '@components/pageLink.astro';
 import FlexColumn from '@components/flexColumn.astro';
 
-## Addressing the gap and expanding capabilities
+## Addressing the gap
 
 Splunk Observability Cloud excelled at application and infrastructure monitoring but lacked the end-to-end insight that database monitoring would provide. That gap forced users to switch tools, even as public forum requests and AppDynamics' $50M ARR success showed clear demand. Launching database monitoring would close the application-database performance divide and unlock a new DBA persona, expanding Splunk Observability Cloud's TAM.
-
-In parallel, Splunk acquired Replex—renamed Application Optimization—for Kubernetes workload tuning that improves application performance. Integrating it into Splunk Observability Cloud added another optimization layer alongside the new database vertical.
 
 ![Extending capabilities at the intersection of applications and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
 
 ## Designing for scalability
 
-I supported two product and engineering teams each working independently within their respective domains by delivering designs that could scale across these new verticals while supporting future extensions. This included:
+I supported a 4-person frontend engineering within a 12-person product and engineering team. Database monitoring also needed to integrate with application performance monitoring, and infrastructure monitoring so there was collaboration with the design and engineering teams working on those products.
 
-1. A new information architecture proposal,
-2. Defining a taxonomy to establish new UI patterns,
-3. Defining product strategy for releasing new beta features within the product,
-4. In-product marketing to enable product-led adoption, and
-5. Paving the way for future AI-assisted workflows.
+In addition to the design and release of the core database monitoring vertical, I also provided cross-functional leadership on initiatives including:
+
+1. Defining product strategy for releasing new beta features within the product,
+2. In-product marketing to enable product-led adoption, and
+3. Paving the way for future AI-assisted workflows.
 
 ## Impact
 
 Alpha launch of Database monitoring had 11 multinational enterprise customers with a conversion rate of 64% within 3 months of launch. This number is currently estimated to grow to 25 by the end of Q1 2026.
 
-> "I don't want to be in the dark when I contact the application developer knowing the issue is with the database... knowing the database team will be looped in eventually. DBMon gives me pertinent information to attach to the ticket."
+> "Our database team use SolarWinds. dbmon [sic database monitoring] gives me query plan information that I'll only know once the application developer knows the issue is with the database... and when the database team will be looped in eventually to the ticket."
 
-## Solution
+## Launching an MVP
+
+The product roadmap prioritized the following features:
+
+1. Surface vital metrics per database query,
+2. Visualize query execution plans, and mark slow operations,
+3. Correlate database queries with application traces, and
+4. Launch database monitoring with AI-assisted workflows.
+
+### Prototype
+
+TODO: Prototype
 
 ### Information architecture
 
 ![Information architecture utilizing the action-oriented UI states](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
 
-### Visualizations and micro-interactions
+## Visualizations and micro-interactions
 
 The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Micro-interactions were obsessed over to ensure that the tree structure was intuitive and easy to navigate.
 
@@ -58,15 +67,11 @@ The query explain plan was visualized using a tree structure to represent the va
 
 ![Various states of the query explain plan component](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/queryExecutionPlan.component.png?f=avif)
 
-### Defining AI-assisted workflows
+## Defining AI-assisted workflows
 
 I defined and designed AI-assisted workflows such as query summarization, and AI-based recommendations to help users optimize their database queries. Both these features are currently in customer preview and are getting positive feedback.
 
 ![AI-assisted query summarization and recommendations](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif)
-
-### Database monitoring
-
-<Gallery collection={frontmatter.databaseMonitoring}/>
 
 <FlexColumn>
   <PageLink direction="prev" label="Collection: Designing Observability SaaS across 4 products in 4 years" url="/collection/o11y" />

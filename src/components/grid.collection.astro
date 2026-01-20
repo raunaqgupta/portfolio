@@ -4,7 +4,7 @@ import CaseStudyCollection from "@components/caseStudy.collection.astro";
 
 const { type, collection } = Astro.props;
 const sortedCollection = [...collection].sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
 ---
 
@@ -32,7 +32,7 @@ const sortedCollection = [...collection].sort(
           description={item.data.description}
           url={item.slug}
         />
-      )
+      ),
     )
   }
 </section>

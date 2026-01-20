@@ -26,15 +26,9 @@ Splunk Observability Cloud excelled at application and infrastructure monitoring
 
 ![Extending capabilities at the intersection of applications and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
 
-## Designing for scalability
+## My role
 
-I supported a 4-person frontend engineering within a 12-person product and engineering team. Database monitoring also needed to integrate with application performance monitoring, and infrastructure monitoring so there was collaboration with the design and engineering teams working on those products.
-
-In addition to the design and release of the core database monitoring vertical, I also provided cross-functional leadership on initiatives including:
-
-1. Defining product strategy for releasing new beta features within the product,
-2. In-product marketing to enable product-led adoption, and
-3. Paving the way for future AI-assisted workflows.
+I led design to bring Database monitoring to market supporting a 12-person product and engineering team. Database monitoring also needed to integrate with application performance monitoring, and infrastructure monitoring so there was collaboration with respective product and design teams.
 
 ## Impact
 
@@ -51,27 +45,54 @@ The product roadmap prioritized the following features:
 3. Correlate database queries with application traces, and
 4. Launch database monitoring with AI-assisted workflows.
 
-### Prototype
+In addition to the design of the core database monitoring vertical, I also provided cross-functional leadership on initiatives including:
 
-TODO: Prototype
+1. Defining product strategy for releasing new beta features within the product,
+2. In-product marketing to enable product-led adoption, and
+3. Paving the way for future AI-assisted workflows. Database monitoring is the first vertical in Splunk Observability Cloud to ship with contextualized AI-assisted features.
+
+## Design overview
+
+The following prototypes, information architecture diagrams, and journey maps provide a glimpse into the kind of artifacts I create to communicate design solutions.
+
+### Prototypes
+
+This prototype takes the user from troubleshooting a trace to investigating the associated database query, and optimizing them using AI-assisted recommendations.
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/JPpP0TlYs4DtYzigaXPDeC/Prototype--Database-monitoring?page-id=0%3A1&node-id=8-46883&p=f&viewport=559%2C627%2C0.06&scaling=contain&content-scaling=fixed&starting-point-node-id=8%3A46883&embed-host=share" allowfullscreen></iframe>
 
 ### Information architecture
 
+The complete information architecture spans new entities and corresponding UI states, alongwith defining connections with existing entities in other domains (Application performance monitoring, Infrastructure monitoring).
+
 ![Information architecture utilizing the action-oriented UI states](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
 
-## Visualizations and micro-interactions
+## Other notable work
 
-The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Micro-interactions were obsessed over to ensure that the tree structure was intuitive and easy to navigate.
+### The query execution plan visualization
+
+The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Micro-interactions were obsessed over to ensure that the tree structure was intuitive and easy to navigate. This is now part of the Splunk UI's design system.
 
 ![Constructing composite components in Figma](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/constructing-components.png?f=avif)
 
 ![Various states of the query explain plan component](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/queryExecutionPlan.component.png?f=avif)
 
-## Defining AI-assisted workflows
+### Defining AI-assisted workflows
 
 I defined and designed AI-assisted workflows such as query summarization, and AI-based recommendations to help users optimize their database queries. Both these features are currently in customer preview and are getting positive feedback.
 
 ![AI-assisted query summarization and recommendations](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif)
+
+### In-product marketing to enable product-led adoption
+
+This additional initiative targeted the opportunity to educate users about database monitoring within the product itself. Instead of relying on the stark zero state that Splunk Observability Cloud was using for existing verticals, I designed an in-product marketing experience that would educate users about the value proposition of database monitoring, and encourage them to contact the sales team to enable the feature.
+
+<FlexColumn>
+  ![Before](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/in-product-marketing-before.png?f=avif)
+  ![After](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/in-product-marketing-after.png?f=avif)
+</FlexColumn>
+
+
 
 <FlexColumn>
   <PageLink direction="prev" label="Collection: Designing Observability SaaS across 4 products in 4 years" url="/collection/o11y" />

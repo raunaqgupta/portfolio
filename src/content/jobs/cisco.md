@@ -6,7 +6,7 @@ caseStudies:
   - launching-dbmon
 ---
 
-1.  Shipped [Database monitoring](https://www.splunk.com/en_us/blog/observability/resolve-database-performance-issues-faster-with-splunk-database-monitoring.html) on Splunk Observability Cloud. Drove user testing during the beta launch with 8 multi-national customers with 100% license conversion. This project defined AI-assisted workflows, and data visualizations adopted by 5+ teams.
+1.  Shipped [Database monitoring](https://www.splunk.com/en_us/blog/observability/resolve-database-performance-issues-faster-with-splunk-database-monitoring.html) on Splunk Observability Cloud. Drove user testing during the beta launch with 11 multi-national customers with 64% conversion to multi-year licenses. This project also defined AI-assisted workflows, and data visualizations adopted by 5+ teams.
 2.  Shipped [Secure Application](https://blogs.cisco.com/applications/cisco-secure-application-makes-it-easier-than-ever-to-secure-your-cloud-native-applications-and-sensitive-data), and its [Data Security Module](https://blogs.cisco.com/applications/protect-your-cloud-environments-with-data-security-observability) on Cisco Observability platform with the biggest customer being T-Mobile. Cisco Observability Platform was sunset in lieu of Cisco's Splunk acquisition.
 3.  Shipped multiple projects on [Splunk IT Service Intelligence](https://www.splunk.com/en_us/products/it-service-intelligence.html).
 4.  Contributed improvements to [Splunk's design system](https://splunkui.splunk.com/DesignSystem/Overview).

@@ -1,0 +1,63 @@
+---
+const { direction, label, url } = Astro.props;
+
+import ArrowLeftIcon from "@icons/arrow-left.svg";
+import ArrowRightIcon from "@icons/arrow-right.svg";
+---
+
+<a href={url} class={direction}>
+  <div class="link">
+    {direction === "prev" && <ArrowLeftIcon class="icon" />}
+    <div class="label">{label}</div>
+    {direction === "next" && <ArrowRightIcon class="icon" />}
+  </div>
+
+  <style>
+    a {
+      flex: 1;
+      display: flex;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    .icon {
+      transition: transform 300ms ease-out;
+    }
+
+    a:after {
+      content: none;
+    }
+
+    a:hover .icon {
+      transform: translateX(var(--space-1));
+    }
+
+    a.prev:hover .icon {
+      transform: translateX(calc(-1 * var(--space-1)));
+    }
+
+    a:hover .link {
+      border-color: var(--color-highlight);
+    }
+
+    .link {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: var(--border-radius);
+      padding: var(--space-4);
+      border: 1px solid var(--color-border-1);
+      font-size: var(--typography-body-small);
+    }
+
+    .link .label {
+      max-width: 30ch;
+    }
+
+    a.prev .link {
+      text-align: right;
+    }
+  </style>
+</a>

@@ -5,6 +5,7 @@ organization: Cisco
 product: Splunk Observability Cloud
 date: 2025-11-25
 category: case-study
+collection: o11y
 thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/hero.png?f=avif
 hero: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/hero.png?f=avif
 published: true
@@ -14,13 +15,10 @@ databaseMonitoring:
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbInstance.view.queries.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/trace.view.span.preview.query.preview.png?f=avif
-applicationOptimization:
-  - https://r2-image.raunaqgupta.workers.dev/appopt-for-splunk-o11y-cloud/aopt.view.png?f=avif
-  - https://r2-image.raunaqgupta.workers.dev/appopt-for-splunk-o11y-cloud/k8sWorkload.view.png?f=avif
-  - https://r2-image.raunaqgupta.workers.dev/appopt-for-splunk-o11y-cloud/opportunity.preview.png?f=avif
-  - https://r2-image.raunaqgupta.workers.dev/appopt-for-splunk-o11y-cloud/opportunity.action.activate.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
+import PageLink from '@components/pageLink.astro';
+import FlexColumn from '@components/flexColumn.astro';
 
 ## Addressing the gap and expanding capabilities
 
@@ -43,6 +41,8 @@ I supported two product and engineering teams each working independently within 
 ## Impact
 
 Alpha launch of Database monitoring had 11 multinational enterprise customers with a conversion rate of 64% within 3 months of launch. This number is currently estimated to grow to 25 by the end of Q1 2026.
+
+> "I don't want to be in the dark when I contact the application developer knowing the issue is with the database... knowing the database team will be looped in eventually. DBMon gives me pertinent information to attach to the ticket."
 
 ## Solution
 
@@ -68,6 +68,7 @@ I defined and designed AI-assisted workflows such as query summarization, and AI
 
 <Gallery collection={frontmatter.databaseMonitoring}/>
 
-### Application optimization
-
-<Gallery collection={frontmatter.applicationOptimization}/>
+<FlexColumn>
+  <PageLink direction="prev" label="Collection: Designing Observability SaaS across 4 products in 4 years" url="/collection/o11y" />
+  <PageLink direction="next" label="Case study: Secure Application" url="/case-studies/appsec" />
+</FlexColumn>

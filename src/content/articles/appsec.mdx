@@ -1,6 +1,6 @@
 ---
-title: Launching Secure Application on Cisco Observability Platform
-description: Defining the blueprint for how products get built on a new platform
+title: Application security on Cisco Observability Platform
+description: Launching a new vertical while defining the blueprint for how products get built on a new platform
 organization: Cisco
 product: Cisco Observability Platform
 date: 2024-03-01
@@ -14,19 +14,51 @@ wireframes:
   - https://r2-image.raunaqgupta.workers.dev/appsec-for-appd/wireframes/wireframe-2.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
+import Message from "@components/message.astro";
 
-I led the design of Secure Application, a security-focused vertical on Cisco Observability Platform. It was built as one of the first 1st-party applications on the newly devised observability platform, complementing the core verticals of application performance, and infrastructure monitoring.
+I led the design of Secure Application, a security-focused vertical on Cisco Observability Platform. It was built as one of the first 1st-party applications on the newly devised observability platform, complementing the (existing) core verticals of application performance, infrastructure monitoring, and real user monitoring.
+
+Cisco Secure Application launched in early 2024. Read more about it [here](https://blogs.cisco.com/applications/cisco-secure-application-makes-it-easier-than-ever-to-secure-your-cloud-native-applications-and-sensitive-data), and [here](https://blogs.cisco.com/applications/protect-your-cloud-environments-with-data-security-observability).
+
+Upon Splunk's acquisition, Secure Application was [re-launched](https://www.splunk.com/en_us/blog/observability/fix-faster-ship-safer-with-secure-application-on-splunk-observability-cloud.html) for Splunk Observability Cloud. I transitioned all my knowledge to the new designer as I wanted to work on new challenges.
 
 ## What is Secure Application?
 
-Modern applications are a complex network of services that interact with each all the while passing data back and forth. These services may either themselves have vulnerabilities that can comprise the entire network, or they might transmit sensitive data in an insecure manner.
+Modern applications are a complex network of services that fulfil various functions by transmitting data between them. These services may either themselves have vulnerabilities that can comprise the entire network, or might transmit sensitive data in an insecure manner.
 
-Secure Application on Cisco Observability Platform was designed to facilitate the monitoring of application security across such a complex web of services. It aimed to provide insights into vulnerabilities, data leaks, misconfigurations, and potential threats that could compromise the security of applications. It was designed to provide remediations and best practices to help developers and security teams fortify their applications against potential attacks.
+Secure Application on Cisco Observability Platform is designed to facilitate the monitoring the security posture of such applications. It provides insights into vulnerabilities, data leaks, misconfigurations, and potential threats that could compromise the integrity of such applications. It also provides fixes and best practices to help developers and security teams fortify their applications against potential attacks.
 
-## Wireframes
+![Entities at play](https://r2-image.raunaqgupta.workers.dev/appsec-for-appd/entities.png?f=avif)
 
-<Gallery collection={frontmatter.wireframes}/>
+## Process
+
+I researched the existing landscape of application security tools, and through various design artifacts helped the product management team to refine the roadmap. This was to ensure that the design efforts would be focused on features are most impactful, and feasible to deliver by the engineering team.
+
+I went through several rounds of wireframing, prototyping, and usability testing to validate the designs.
+
+## Exploring the feasible landscape
+
+We had a good sense of the problem space, with some features such as vulnerability detection being highly feasible. Data security on the other hand was a new area for both the product and engineering team. Multiple rounds of wireframes, and high-fidelity prototypes were utilized to initiate conversations with security engineers and leaders within Cisco to understand the likelihood of adoption, and profitability of building such a thing.
+
+Below are some artifacts that were created during this phase.
+
+### Wireframes
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/XdYe6LwmdT9KRWOVdwBfY4/Case-study--Application-security?page-id=10%3A36&node-id=130-105&p=f&viewport=1193%2C450%2C0.13&scaling=contain&content-scaling=fixed&embed-host=share" allowfullscreen></iframe>
 
 ### Journey map
 
 <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="450" src="https://embed.figma.com/design/XdYe6LwmdT9KRWOVdwBfY4/Case-study--Application-security?node-id=8-30&embed-host=share" allowfullscreen></iframe>
+
+### Prototype
+
+<Message message="Note: This is a complex prototype with multiple non-overlapping Figma flows." />
+
+This prototype was created for AppDynamics Cloud using the Particle design system. It goes through a non-sequential flows covering configuration, using the service explorer with grouping and filtering capabilities, and investigating data security & vulnerability issues in services and logs.
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/XdYe6LwmdT9KRWOVdwBfY4/Case-study--Application-security?page-id=10%3A35&node-id=130-1171&p=f&viewport=239%2C213%2C0.06&scaling=contain&content-scaling=fixed&embed-host=share" allowfullscreen></iframe>
+
+## Scaling down the roadmap
+
+Earlier wireframes and prototypes were shown to existing AppDynamics customers to gather feedback. The discussions helped in refining the roadmap by specifically identifying features that were most impactful, and feasible to deliver by the engineering team within the desired timelines. This resulted in scaling down the initial roadmap to focus on core features that would deliver maximum value to users.
+

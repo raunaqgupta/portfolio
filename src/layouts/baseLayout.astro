@@ -25,9 +25,11 @@ import Head from "@components/head.astro";
     --color-heading: #111;
     --color-highlight: oklch(0.45 0.13 240);
     --color-info: oklch(0.62 0.22 252);
-    --typography-body: 0.9em;
+    --typography-body: 1em;
     --typography-body-small: 0.875em;
     --typography-h1: 3em;
+    --typography-h2: 1.5em;
+    --typography-h3: 1.25em;
     --space-0: 4px;
     --space-1: 8px;
     --space-2: 16px;
@@ -70,13 +72,13 @@ import Head from "@components/head.astro";
 
   h2 {
     color: var(--color-heading);
-    font-size: 1.2rem;
+    font-size: var(--typography-h2);
     margin-top: 2.5em;
   }
 
   h3 {
     color: var(--color-heading);
-    font-size: 1rem;
+    font-size: var(--typography-h3);
     font-weight: 200;
     margin-top: 1em;
   }
@@ -86,6 +88,14 @@ import Head from "@components/head.astro";
     font-size: 1rem;
     font-weight: 200;
     margin-top: 1.5em;
+  }
+
+  blockquote {
+    border-left: 4px solid var(--color-border);
+    padding-left: var(--space-3);
+    color: var(--color-body-secondary);
+    font-style: italic;
+    font-size: var(--typography-body);
   }
 
   p {

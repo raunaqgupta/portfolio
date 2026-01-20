@@ -27,5 +27,6 @@ export default new Map([
 ["src/content/articles/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fyogurt-dip.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/docs.planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fdocs.planetscale.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/docs-planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fdocs-planetscale.mdx&astroContentModuleFlag=true")],
-["src/content/articles/flux-planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fflux-planetscale.mdx&astroContentModuleFlag=true")]]);
+["src/content/articles/flux-planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fflux-planetscale.mdx&astroContentModuleFlag=true")],
+["src/content/articles/login-concept-planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Flogin-concept-planetscale.mdx&astroContentModuleFlag=true")]]);
 		

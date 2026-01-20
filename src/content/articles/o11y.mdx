@@ -23,22 +23,20 @@ export const referencedCaseStudies = allCaseStudies.filter((entry) =>
   referencedSlugs.includes(entry.slug)
 ).map(({ slug, ...rest }) => ({ slug: `/case-studies/${slug}`, ...rest }));
 
-I joined Cisco in 2021 to work on their ongoing efforts to build AppDynamics Cloud; a cloud-native full-stack observability platform. This effort underwent an overhaul in 2023 when it was re-marketed and re-architected as Cisco Observability Platform with the emphasis on "platform". We went from designing a singular product to designinga platform experience that would deliver multiple observability products.
+I joined Cisco in 2021 to work on their ongoing efforts to build AppDynamics Cloud; a cloud-native full-stack observability platform. The project underwent an overhaul in 2023 when it was re-marketed and re-architected as Cisco Observability Platform (with the emphasis on platform). We went from designing a singular product to designing a platform experience that would deliver multiple observability products as inter-connected modules.
 
-It didn't last long. Cisco finalized the Splunk acquisition in early 2024, effecively stopping all work on Cisco Observability Platform. Splunk's existing product, Splunk Observability Cloud, became the new Observability kid on the block.
+It did not last long. Cisco had finalized the Splunk acquisition in early 2024, effectively seizing all work on Cisco Observability Platform. Splunk's existing product, Splunk Observability Cloud, became the new cloud-native Observability kid on the block.
 
 ## My journey through these transitions
 
 When you are designing effectively the same developer tool for 4 years across multiple iterations, all the while trying to catch up to competition, you learn that:
 
-1. Developer platforms rely on feature parity to sell well, and
+1. Developer platforms rely on feature parity and the sales network to sell well, and
 2. Research and design cannot solve for misaligned product strategies.
-
-## Overview
-
-Any observability software's has two core functions for the various teams of developers and software reliability engineers: **monitoring performance** , and **troubleshooting issues**. The following case studies showcase work done in improving both facets through multiple projects.
 
 ## Case studies
 
-<Grid type="collection" collection={referencedCaseStudies} />
+Any observability software's has two core functions for the various teams of developers and software reliability engineers: **monitoring performance** , and **troubleshooting issues**. The following case studies showcase work done in improving both facets through multiple projects.
+
+<Grid collection={referencedCaseStudies} />
 

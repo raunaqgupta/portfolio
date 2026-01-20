@@ -17,11 +17,21 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+const collectionArticle = entry.data.collection
+  ? (await getCollection("articles")).find(
+      (article) => article.slug === entry.data.collection,
+    )
+  : null;
+
 const { Content, components } = await entry.render();
+
 const links = [
-  { text: "Portfolio", url: "/portfolio" },
   {
-    text: entry.data.collection,
+    text: "Portfolio",
+    url: "/portfolio",
+  },
+  {
+    text: `Collection: ${collectionArticle?.data.title || entry.data.collection}`,
     url: `/collection/${entry.data.collection}`,
   },
 ];

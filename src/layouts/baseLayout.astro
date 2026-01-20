@@ -25,9 +25,10 @@ import Head from "@components/head.astro";
     --color-heading: #111;
     --color-highlight: oklch(0.45 0.13 240);
     --color-info: oklch(0.62 0.22 252);
-    --typography-body: 0.9em;
+    --typography-body: 1em;
     --typography-body-small: 0.875em;
     --typography-h1: 3em;
+    --typography-h2: 1.5em;
     --space-0: 4px;
     --space-1: 8px;
     --space-2: 16px;
@@ -70,7 +71,7 @@ import Head from "@components/head.astro";
 
   h2 {
     color: var(--color-heading);
-    font-size: 1.2rem;
+    font-size: var(--typography-h2);
     margin-top: 2.5em;
   }
 

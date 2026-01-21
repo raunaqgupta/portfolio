@@ -34,13 +34,13 @@ The very first version of the web application was purely to demo the core APIs b
 
 <Gallery collection={frontmatter.v0}/>
 
-## v1: How does one sell sharding?
+## How does one sell sharding?
 
 Sharding lets you split your database into smaller, more manageable pieces, called shards. Each shard can be hosted on a different server, allowing for better performance and scalability. This was the core value proposition of PlanetScale, but it was also a complex concept to grasp for new users.
 
 Design outcomes were focused on making sharding more approachable, and selling its benefits without overwhelming users with technical jargon.
 
-#### Improving dashboards
+### Improving dashboards
 
 The database's sharding configuration was visually made more striking to make it easier to understand the databases' current setup at a glance.
 
@@ -49,7 +49,7 @@ The database's sharding configuration was visually made more striking to make it
   ![After](https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v2-database.png?f=avif)
 </FlexColumn>
 
-#### Resharding: From complex config files to simplifying decisions
+### Resharding: From complex config files to simplifying decisions
 
 For a user to reconfigure their database's sharding setup, they would have to modify and update the sharding scheme, and redeploy the database. We first introduced versioning for users to keep track of the changes that were made to the sharding scheme over time.
 

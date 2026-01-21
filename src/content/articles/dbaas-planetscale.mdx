@@ -26,6 +26,9 @@ resharding:
 billing:
   - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/billing-1.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/billing-2.png?f=avif
+byod:
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/byod-1.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/byod-2.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
 import PageLink from '@components/pageLink.astro';
@@ -68,7 +71,9 @@ It was becoming clear that power users could deal with configuration files witho
 
 One of the engineers realized that to showcase the power of PlanetScale's sharding technology, we could let users bring their own existing MySQL databases and shard them on PlanetScale's infrastructure. This would allow users to see the benefits of sharding without having to set up a new database from scratch.
 
-My job then was to help design the user flows and UI components to make this process as seamless as possible. We call this feature: "Bring Your Own Database" (BYOD).
+My job then was to help design the user flows and UI components to make this process as seamless as possible. We called this feature internally: "Bring Your Own Database" (BYOD).
+
+<Gallery collection={frontmatter.byod}/>
 
 ## Improving foundational SaaS UX
 

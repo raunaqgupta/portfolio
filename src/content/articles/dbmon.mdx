@@ -9,12 +9,9 @@ collection: o11y
 thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/hero.png?f=avif
 hero: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/hero.png?f=avif
 published: true
-databaseMonitoring:
-  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbmon.zero.png?f=avif
-  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbmon-view.png?f=avif
-  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/dbInstance.view.queries.png?f=avif
-  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif
-  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/trace.view.span.preview.query.preview.png?f=avif
+aiQuerySummarization:
+  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ai-query-summarization.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ai-query-summarization-2.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
 import PageLink from '@components/pageLink.astro';
@@ -24,7 +21,7 @@ import FlexColumn from '@components/flexColumn.astro';
 
 Splunk Observability Cloud excelled at application and infrastructure monitoring but lacked the end-to-end insight that database monitoring would provide. That gap forced users to switch tools, even as public forum requests and AppDynamics' $50M ARR success showed clear demand. Launching database monitoring would close the application-database performance divide and unlock a new DBA persona, expanding Splunk Observability Cloud's TAM.
 
-![Extending capabilities at the intersection of applications and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/problem.png?f=avif)
+![Databases get categorized under both applications, and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/addressing-the-gap.png?f=avif)
 
 ## My role
 
@@ -47,9 +44,8 @@ The product roadmap prioritized the following features:
 
 In addition to the design of the core database monitoring vertical, I also provided cross-functional leadership on initiatives including:
 
-1. Defining product strategy for releasing new beta features within the product,
-2. In-product marketing to enable product-led adoption, and
-3. Paving the way for future AI-assisted workflows. Database monitoring is the first vertical in Splunk Observability Cloud to ship with contextualized AI-assisted features.
+1. In-product marketing to enable product-led adoption, and
+2. Paving the way for future AI-assisted workflows. Database monitoring is the first vertical in Splunk Observability Cloud to ship with contextualized AI-assisted features.
 
 ## Design overview
 
@@ -61,27 +57,33 @@ This prototype takes the user from troubleshooting a trace to investigating the 
 
 <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/JPpP0TlYs4DtYzigaXPDeC/Prototype--Database-monitoring?page-id=0%3A1&node-id=8-46883&p=f&viewport=559%2C627%2C0.06&scaling=contain&content-scaling=fixed&starting-point-node-id=8%3A46883&embed-host=share" allowfullscreen></iframe>
 
-### Information architecture
-
-The complete information architecture spans new entities and corresponding UI states, alongwith defining connections with existing entities in other domains (Application performance monitoring, Infrastructure monitoring).
-
-![Information architecture utilizing the action-oriented UI states](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ia.png?f=avif)
-
 ## Other notable work
+
+Following are other notable design contributions I made as part of the database monitoring initiative.
 
 ### The query execution plan visualization
 
-The query explain plan was visualized using a tree structure to represent the various operations involved in executing a database query. Micro-interactions were obsessed over to ensure that the tree structure was intuitive and easy to navigate. This is now part of the Splunk UI's design system.
+The query execution plan was visualized using a tree structure to represent the various operations involved in executing a database query. Micro-interactions were obsessed over to ensure that the tree structure was intuitive and easy to navigate. This is now part of the Splunk UI's design system.
 
-![Constructing composite components in Figma](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/constructing-components.png?f=avif)
+In the Figma embed below, you can see how I decompose components into atomic parts which are then assembled into larger components.
 
-![Various states of the query explain plan component](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/queryExecutionPlan.component.png?f=avif)
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="480" src="https://embed.figma.com/design/ulw01z0YIG25tDqvSWjyLA/DBMon---Composites?node-id=13-2616&embed-host=share" allowfullscreen></iframe>
+
+![The query execution plan component](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query-execution-plan.png?f=avif)
 
 ### Defining AI-assisted workflows
 
 I defined and designed AI-assisted workflows such as query summarization, and AI-based recommendations to help users optimize their database queries. Both these features are currently in customer preview and are getting positive feedback.
 
-![AI-assisted query summarization and recommendations](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/query.preview.ai-recommendations.png?f=avif)
+#### On demand AI-generated query summarization
+
+Query summarization is a quick-win, highly deterministic AI-assisted solution to the problem of, “What is this SQL query trying to do?” A question that gets asked very often by SREs who are not the developers who wrote the query in the first place. This helps them figure out everything from the importance of said query, troubleshooting  the query, to contacting the appropriate application team if all else fails.
+
+<Gallery collection={frontmatter.aiQuerySummarization}/>
+
+#### AI recommendations for query optimization
+
+
 
 ### In-product marketing to enable product-led adoption
 
@@ -91,8 +93,6 @@ This additional initiative targeted the opportunity to educate users about datab
   ![Before](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/in-product-marketing-before.png?f=avif)
   ![After](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/in-product-marketing-after.png?f=avif)
 </FlexColumn>
-
-
 
 <FlexColumn>
   <PageLink direction="prev" label="Collection: Designing Observability SaaS across 4 products in 4 years" url="/collection/o11y" />

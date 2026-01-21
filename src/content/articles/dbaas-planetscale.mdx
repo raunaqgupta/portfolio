@@ -16,22 +16,52 @@ v0:
   - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.user.add.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.cluster.view.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/planetscale/v0/v0.keyspace.view.png?f=avif
-v1:
-  - https://r2-image.raunaqgupta.workers.dev/planetscale/v1/v1.database.view.overview.png?f=avif
+improvingDashboards:
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v1-database.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v2-database.png?f=avif
+resharding:
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v1-resharding.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v2-resharding.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v3-resharding.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
 import PageLink from '@components/pageLink.astro';
 import FlexColumn from '@components/flexColumn.astro';
 
-## Version 0
+## v0: Building a demo
 
 The very first version of the web application was purely to demo the core APIs being developed in tandem. The UI let a user create an account, create a company, add users to the company, create database clusters, and create keyspaces within those clusters. Amongst a garish orange backdrop.
 
 <Gallery collection={frontmatter.v0}/>
 
-## Version 1
+## How does one sell sharding?
 
-<Gallery collection={frontmatter.v1}/>
+Sharding lets you split your database into smaller, more manageable pieces, called shards. Each shard can be hosted on a different server, allowing for better performance and scalability. This was the core value proposition of PlanetScale, but it was also a complex concept to grasp for new users.
+
+Design outcomes were focused on making sharding more approachable, and selling its benefits without overwhelming users with technical jargon.
+
+### Improving dashboards
+
+The database's sharding configuration was visually made more striking to make it easier to understand the databases' current setup at a glance.
+
+<FlexColumn>
+  ![Before](https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v1-database.png?f=avif)
+  ![After](https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v2-database.png?f=avif)
+</FlexColumn>
+
+### Resharding: From complex config files to simplifying decisions
+
+For a user to reconfigure their database's sharding setup, they would have to modify and update the sharding scheme, and redeploy the database. We first introduced versioning for users to keep track of the changes that were made to the sharding scheme over time.
+
+It was becoming clear that power users could deal with configuration files without using the UI, and to sell sharding we needed to simplify it further. To that end, we removed the need for users to define a sharding scheme altogether and instead, let them focus on the end goal of increasing the number of shards.
+
+<FlexColumn>
+  ![Sharding scheme](https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v1-resharding.png?f=avif)
+  ![With version history](https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v2-resharding.png?f=avif)
+  ![Simplifying decisions](https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v3-resharding.png?f=avif)
+</FlexColumn>
+
+
 
 <FlexColumn>
   <PageLink direction="prev" label="Collection: Designing a 0→1 SaaS startup" url="/collection/planetscale" />

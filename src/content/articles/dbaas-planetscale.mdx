@@ -23,6 +23,12 @@ resharding:
   - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v1-resharding.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v2-resharding.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v3-resharding.png?f=avif
+billing:
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/billing-1.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/billing-2.png?f=avif
+byod:
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/byod-1.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/byod-2.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
 import PageLink from '@components/pageLink.astro';
@@ -61,7 +67,27 @@ It was becoming clear that power users could deal with configuration files witho
   ![Simplifying decisions](https://r2-image.raunaqgupta.workers.dev/dbaas-planetscale/v3-resharding.png?f=avif)
 </FlexColumn>
 
+## Bring your own database
 
+One of the engineers realized that to showcase the power of PlanetScale's sharding technology, we could let users bring their own existing MySQL databases and shard them on PlanetScale's infrastructure. This would allow users to see the benefits of sharding without having to set up a new database from scratch.
+
+My job then was to help design the user flows and UI components to make this process as seamless as possible. We called this feature internally: "Bring Your Own Database" (BYOD).
+
+<Gallery collection={frontmatter.byod}/>
+
+## Improving foundational SaaS UX
+
+Any SaaS product needs to have a solid foundation of user experience patterns that make it easy for users to onboard, understand the product's value, and manage their accounts. In the case of PlanetScale, this meant focusing on the login and signup flows, billing, and user roles and permissions.
+
+### Login and signup flows
+
+Read about how I revamped the login workflow to showcase the free tier in the case study below.
+
+<PageLink direction="next" label="Case study: Revamping the login workflow to showcase the free tier" url="/case-studies/login-concept-planetscale" />
+
+### Billing
+
+<Gallery collection={frontmatter.billing}/>
 
 <FlexColumn>
   <PageLink direction="prev" label="Collection: Designing a 0→1 SaaS startup" url="/collection/planetscale" />

@@ -1,15 +1,15 @@
 ---
-title: Wrapping Cloudflare workers and third-party AI and non-AI APIs endpoints with key authentication
+title: Wrapping Cloudflare workers and third-party API endpoints with Kong's key authentication
 date: 2026-01-11
 category: post
 ---
 
-This demo will try to:
+This demo aims to:
 
 - Enable `api.raunaqgupta.com`
 - Expose various single-function cloudflare workers under the `/utilities` path.
 - Expose my aqicn.org API token protected endpoint under the `/aqi` path without exposing the token.
-- Enable key authentication on all endpoints.
+- Enable key authentication on all endpoints via Kong Konnect.
 - Expose a basic single-response AI endpoint under the `/ai` path.
 
 ## Enable the `api` sub-domain

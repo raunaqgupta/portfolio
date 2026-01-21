@@ -12,6 +12,14 @@ caseStudies:
   - login-concept-planetscale
   - docs-planetscale
   - flux-planetscale
+visuals:
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/visuals/404.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/visuals/getting-started.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/visuals/planetscale-concepts.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/visuals/planetscaledb-reference.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/visuals/setup-planetscaledb.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/visuals/using-planetscaledb.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/visuals/vitess-operator.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
 import Grid from '@components/grid.collection.astro';
@@ -31,7 +39,7 @@ I joined PlanetScale as a contract design engineer in late 2018. There was nothi
 
 ## Designing for speed
 
-I was the sole product designer leading all design efforts while supporting an engineering team that grew from 10 to 30 engineers. I also contributed to frontend efforts and maintenance of user-facing surfaces such as the marketing site, documentation site, and the web application itself.
+I was the founding designer leading all design efforts while supporting an engineering team that grew from 10 to 30 engineers. I also contributed to frontend efforts and maintenance of user-facing surfaces such as the marketing site, documentation site, and the web application itself.
 
 ## Impact
 
@@ -40,6 +48,10 @@ PlanetScale raised a Series B round of $22 million led by Andreessen Horowitz in
 ## Case studies
 
 <Grid type="collection" collection={referencedCaseStudies} />
+
+## Miscellaneous visuals
+
+<Gallery collection={frontmatter.visuals} />
 
 <FlexColumn>
   <PageLink direction="prev" label="Collection: Designing Observability SaaS across 4 products in 4 years" url="/collection/o11y" />

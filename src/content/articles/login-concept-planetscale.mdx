@@ -6,9 +6,17 @@ product: PlanetScale
 date: 2021-07-03
 category: case-study
 collection: planetscale
-thumbnail: https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/hero.png?f=avif
-hero: https://r2-image.raunaqgupta.workers.dev/planetscale-login-concept/hero.png?f=avif
+thumbnail: https://r2-image.raunaqgupta.workers.dev/login-concept-planetscale/hero.png?f=avif
+hero: https://r2-image.raunaqgupta.workers.dev/login-concept-planetscale/hero.png?f=avif
 published: true
+visuals:
+  - https://r2-image.raunaqgupta.workers.dev/login-concept-planetscale/visuals/404.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/login-concept-planetscale/visuals/getting-started.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/login-concept-planetscale/visuals/planetscale-concepts.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/login-concept-planetscale/visuals/planetscaledb-reference.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/login-concept-planetscale/visuals/setup-planetscaledb.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/login-concept-planetscale/visuals/using-planetscaledb.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/login-concept-planetscale/visuals/vitess-operator.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
 import PageLink from '@components/pageLink.astro';
@@ -27,6 +35,12 @@ This was a hugely successful effort and part of the initiative to rebrand Planet
 <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/hzmtAeOrH4xsxFJaWfdusM/Case-study--PlanetScale-s-login-concept?page-id=1%3A3&node-id=1-47&p=f&viewport=479%2C323%2C0.25&scaling=contain&content-scaling=fixed&embed-host=share" allowfullscreen></iframe>
 
 <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="450" src="https://embed.figma.com/design/hzmtAeOrH4xsxFJaWfdusM/Case-study--PlanetScale-s-login-concept?node-id=1-2&embed-host=share" allowfullscreen></iframe>
+
+## Visual assets
+
+I did a series of illustrations to aid the workflows.
+
+<Gallery collection={frontmatter.visuals} />
 
 <FlexColumn>
   <PageLink direction="prev" label="Case study: What does a database-as-a-service look like?" url="/case-studies/dbaas-planetscale" />

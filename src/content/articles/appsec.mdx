@@ -22,19 +22,17 @@ I led the design of Secure Application, a security-focused vertical on Cisco Obs
 
 Cisco Secure Application launched in early 2024. Read more about it [here](https://blogs.cisco.com/applications/cisco-secure-application-makes-it-easier-than-ever-to-secure-your-cloud-native-applications-and-sensitive-data), and [here](https://blogs.cisco.com/applications/protect-your-cloud-environments-with-data-security-observability).
 
-Upon Splunk's acquisition, Secure Application was [re-launched](https://www.splunk.com/en_us/blog/observability/fix-faster-ship-safer-with-secure-application-on-splunk-observability-cloud.html) for Splunk Observability Cloud. I transitioned all my knowledge to the new designer as I wanted to work on new challenges.
+Following Splunk's acquisition of Cisco, Secure Application was [re-launched](https://www.splunk.com/en_us/blog/observability/fix-faster-ship-safer-with-secure-application-on-splunk-observability-cloud.html) for Splunk Observability Cloud. As I sought new challenges, I helped transition the incoming designer to take over the project.
 
 ## What is Secure Application?
 
-Modern applications are a complex network of services that fulfil various functions by transmitting data between them. These services may either themselves have vulnerabilities that can comprise the entire network, or might transmit sensitive data in an insecure manner.
+Modern applications are a complex network of services that fulfil various functions by transmitting data between them. These services may either themselves have vulnerabilities that can compromise this entire network, or might transmit sensitive data that can be intercepted.
 
-Secure Application on Cisco Observability Platform is designed to facilitate the monitoring the security posture of such applications. It provides insights into vulnerabilities, data leaks, misconfigurations, and potential threats that could compromise the integrity of such applications. It also provides fixes and best practices to help developers and security teams fortify their applications against potential attacks.
-
-![Entities at play](https://r2-image.raunaqgupta.workers.dev/appsec-for-appd/entities.png?f=avif)
+Secure Application on Cisco Observability Platform is designed to monitor the security posture of such applications. It provides insights into vulnerabilities, data leaks, misconfigurations, and potential threats that could compromise the integrity of these applications. It also provides fixes and best practices to help developers and security teams fortify their applications against potential attacks.
 
 ## Process
 
-I researched the existing landscape of application security tools, and through various design artifacts helped the product management team to refine the roadmap. This was to ensure that the design efforts would be focused on features are most impactful, and feasible to deliver by the engineering team.
+I researched the existing landscape of application security tools, and through various design artifacts helped the product team to refine the roadmap. This was to ensure that the design efforts would be focused on features that are most impactful with high feasibility of delivery.
 
 I went through several rounds of wireframing, prototyping, and usability testing to validate the designs.
 
@@ -54,17 +52,35 @@ Below are some artifacts that were created during this phase.
 
 ### Prototype
 
-<Message message="Note: This is a complex prototype with multiple non-overlapping Figma flows." />
+<Message message="Note: This complex prototype has been simplified to be a slidedeck for the purpose of this case study." />
 
-This prototype was created for AppDynamics Cloud using the Particle design system. It goes through a non-sequential flows covering configuration, using the service explorer with grouping and filtering capabilities, and investigating data security & vulnerability issues in services and logs.
+This prototype was created for AppDynamics Cloud using the Particle design system. It goes through non-sequential flows covering configuration, using the service explorer with grouping and filtering capabilities, and investigating data security & vulnerability issues in services and logs.
 
 <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/XdYe6LwmdT9KRWOVdwBfY4/Case-study--Application-security?page-id=10%3A35&node-id=130-1171&p=f&viewport=239%2C213%2C0.06&scaling=contain&content-scaling=fixed&embed-host=share" allowfullscreen></iframe>
 
-## Scaling down the roadmap
+## Scaling down the roadmap for AppDynamics Cloud
 
-Earlier wireframes and prototypes were shown to existing AppDynamics customers to gather feedback. The discussions helped in refining the roadmap by specifically identifying features that were most impactful, and feasible to deliver by the engineering team within the desired timelines. This resulted in scaling down the initial roadmap to focus on core features that would deliver maximum value to users.
+Earlier wireframes and prototypes were shown to existing AppDynamics customers to gather feedback. The discussions helped in refining the roadmap by specifically identifying features that were most impactful, and feasible to deliver by the engineering team within the desired timelines. This resulted in scaling down the initial roadmap to focus on core features such as vulnerability monitoring for Kubernetes, and calculating business risk scores for business transactions, and services.
+
+![Entities at play](https://r2-image.raunaqgupta.workers.dev/appsec-for-appd/entities.png?f=avif)
+
+### Prototype
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/mTR18qhz6KSkLdPR9u6QGT/Cisco-Secure-Application?page-id=3341%3A71024&node-id=5481-96950&p=f&viewport=571%2C-184%2C0.25&scaling=contain&content-scaling=fixed&starting-point-node-id=5481%3A96950&embed-host=share" allowfullscreen></iframe>
+
+## Cisco Observability Platform becomes the new product vision
+
+Appdynamics Cloud was being mutated into a platform play, and Secure Application was slated to be sold as two individual licenses:
+
+1. Cisco Secure Application would provide vulnerability monitoring capabilities for application services, and kubernetes monitoring.
+2. Data Security Posture Management (DSPM) would be sold as a module for Cisco Secure Application, providing data security monitoring capabilities on top of the core application security features.
+
+### Prototype
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/SjHzAeMv2Ty7jQo9LKX5Pp/Cisco-Secure-Application---Mag?page-id=2995%3A49031&node-id=3590-31881&p=f&viewport=1283%2C80%2C0.13&scaling=contain&content-scaling=fixed&starting-point-node-id=3436%3A29877&embed-host=share" allowfullscreen></iframe>
+
 
 <FlexColumn>
   <PageLink direction="prev" label="Case study: Database monitoring on Splunk Observability Cloud" url="/case-studies/dbmon" />
-  <PageLink direction="next" label="Collection: PlanetScale" url="/collection/planetscale" />
+  <PageLink direction="next" label="Collection: Designing a 0→1 SaaS startup" url="/collection/planetscale" />
 </FlexColumn>

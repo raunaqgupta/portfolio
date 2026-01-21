@@ -28,19 +28,17 @@ import Gallery from '@components/gallery.astro';
 import PageLink from '@components/pageLink.astro';
 import FlexColumn from '@components/flexColumn.astro';
 
-## Version 0
+## v0: Building a demo
 
 The very first version of the web application was purely to demo the core APIs being developed in tandem. The UI let a user create an account, create a company, add users to the company, create database clusters, and create keyspaces within those clusters. Amongst a garish orange backdrop.
 
 <Gallery collection={frontmatter.v0}/>
 
-## Version 1, building out the product
+## v1: How does one sell sharding?
 
-PlanetScale introduced several features as well as constant refinements to the core UX. The next version of the web application reflected these changes, and introduced a more polished UI. The focus was on making it easy to create and manage databases, as well as showcasing the unique features of PlanetScale, such as BYOD (Bring your own database, improving how the sharding concept was presented to the user, and other foundation SaaS updates.
+Sharding lets you split your database into smaller, more manageable pieces, called shards. Each shard can be hosted on a different server, allowing for better performance and scalability. This was the core value proposition of PlanetScale, but it was also a complex concept to grasp for new users.
 
-### How to sell sharding?
-
-Sharding lets you split your database into smaller, more manageable pieces, called shards. Each shard can be hosted on a different server, allowing for better performance and scalability.
+Design outcomes were focused on making sharding more approachable, and selling its benefits without overwhelming users with technical jargon.
 
 #### Improving dashboards
 

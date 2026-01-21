@@ -1,9 +1,9 @@
 ---
-title: Creating brand and UX cohesion in the documentation experience
-description: Treating documentation as a first-class citizen
+title: Treating documentation as a first-class citizen
+description: Creating brand and UX cohesion in the documentation experience
 organization: PlanetScale
 product: PlanetScale
-date: 2021-07-01
+date: 2021-07-02
 category: case-study
 collection: planetscale
 thumbnail: https://r2-image.raunaqgupta.workers.dev/docs-planetscale/hero.png?f=avif
@@ -15,8 +15,10 @@ screens:
   - https://r2-image.raunaqgupta.workers.dev/docs-planetscale/inline-image-zoom.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
+import PageLink from '@components/pageLink.astro';
+import FlexColumn from '@components/flexColumn.astro';
 
-PlanetScale documentation was refreshed to maintain strong brand consistency across all end-user touchpoints. I came up with two novel design patterns:
+PlanetScale documentation was refreshed to maintain strong brand consistency across all end-user touchpoints. I launched two novel design patterns:
 
 1. Theme-sensitive images that adapt to light and dark modes
 2. Inline image zoom component for better image viewing experience without using a modal.
@@ -26,3 +28,8 @@ All illustrations by [Shaun Middlebusher](https://www.linkedin.com/in/shaun-midd
 ## Screens
 
 <Gallery collection={frontmatter.screens}/>
+
+<FlexColumn>
+  <PageLink direction="prev" label="Case study: Revamping the login workflow to market the free tier" url="/collection/planetscale" />
+  <PageLink direction="next" label="Case study: Dogfooding PlanetScale" url="/case-studies/flux-planetscale" />
+</FlexColumn>

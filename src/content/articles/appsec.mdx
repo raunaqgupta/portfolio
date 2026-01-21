@@ -1,5 +1,5 @@
 ---
-title: Application security on Cisco Observability Platform
+title: Secure Application on Cisco Observability Platform
 description: Launching a new vertical while defining the blueprint for how products get built on a new platform
 organization: Cisco
 product: Cisco Observability Platform
@@ -15,6 +15,8 @@ wireframes:
 ---
 import Gallery from '@components/gallery.astro';
 import Message from "@components/message.astro";
+import PageLink from '@components/pageLink.astro';
+import FlexColumn from '@components/flexColumn.astro';
 
 I led the design of Secure Application, a security-focused vertical on Cisco Observability Platform. It was built as one of the first 1st-party applications on the newly devised observability platform, complementing the (existing) core verticals of application performance, infrastructure monitoring, and real user monitoring.
 
@@ -62,3 +64,7 @@ This prototype was created for AppDynamics Cloud using the Particle design syste
 
 Earlier wireframes and prototypes were shown to existing AppDynamics customers to gather feedback. The discussions helped in refining the roadmap by specifically identifying features that were most impactful, and feasible to deliver by the engineering team within the desired timelines. This resulted in scaling down the initial roadmap to focus on core features that would deliver maximum value to users.
 
+<FlexColumn>
+  <PageLink direction="prev" label="Case study: Database monitoring on Splunk Observability Cloud" url="/case-studies/dbmon" />
+  <PageLink direction="next" label="Collection: PlanetScale" url="/collection/planetscale" />
+</FlexColumn>

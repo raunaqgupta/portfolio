@@ -23,6 +23,8 @@ otherArtifacts:
   - https://r2-image.raunaqgupta.workers.dev/planetscale/flux/themeSwitcher.gif
 ---
 import Gallery from '@components/gallery.astro';
+import PageLink from '@components/pageLink.astro';
+import FlexColumn from '@components/flexColumn.astro';
 
 What better way to use a cloud database then to build an internal forum for the company itself? Flux was built as a dogfooding exercise to test PlanetScale's capabilities as a cloud database. It was built using Next.js and hosted on Vercel, with PlanetScale serving as the backend database.
 
@@ -35,3 +37,8 @@ I did visual direction, UX design, and front-end development aided by a backend 
 ## Other artifacts
 
 <Gallery collection={frontmatter.otherArtifacts}/>
+
+<FlexColumn>
+  <PageLink direction="prev" label="Case study: Treating documentation as a first-class citizen" url="/case-studies/docs-planetscale" />
+  <PageLink direction="next" label="Collection: Designing observability SaaS across 4 products in 4 years" url="/collection/o11y" />
+</FlexColumn>

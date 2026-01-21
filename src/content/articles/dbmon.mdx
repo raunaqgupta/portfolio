@@ -12,6 +12,10 @@ published: true
 aiQuerySummarization:
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ai-query-summarization.png?f=avif
   - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ai-query-summarization-2.png?f=avif
+aiQueryRecommendation:
+  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ai-query-recommendation.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ai-query-recommendation-2.png?f=avif
+  - https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/ai-query-recommendation-3.png?f=avif
 ---
 import Gallery from '@components/gallery.astro';
 import PageLink from '@components/pageLink.astro';
@@ -83,6 +87,9 @@ Query summarization is a quick-win, highly deterministic AI-assisted solution to
 
 #### AI recommendations for query optimization
 
+AI recommendations was an obvious next step to utilize AI to help users optimize their slow-running database queries. The design took into consideration that there were engineering constraints which prevented ahead-of-time AI analysis of ingested queries. Hence, the design focused on an on-demand system where users could request AI recommendations for specific queries they were investigating.
+
+<Gallery collection={frontmatter.aiQueryRecommendation}/>
 
 
 ### In-product marketing to enable product-led adoption

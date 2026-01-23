@@ -4,9 +4,9 @@ const { collection } = Astro.props;
 
 <section class="gallery" aria-label="Image gallery">
   {
-    collection.map((item) => (
+    collection.map((item, index) => (
       <div class="gallery-item">
-        <img src={item} />
+        <img src={item} alt={`Gallery image ${index + 1}`} loading="lazy" />
       </div>
     ))
   }

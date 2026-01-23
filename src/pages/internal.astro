@@ -4,14 +4,21 @@ import PageLayout from "../layouts/pageLayout.astro";
 import ListMdx from "@components/list.mdx.astro";
 import Input from "@components/input.astro";
 import { getCollection } from "astro:content";
+import { ROUTES } from "../constants";
+import { formatDate } from "../utils";
 
-const blog = await getCollection("articles", ({ data }) => {
-  return data.internal === true;
-});
+let blog = [];
+try {
+  blog = await getCollection("articles", ({ data }) => {
+    return data.internal === true;
+  });
+} catch (error) {
+  console.error("Error fetching internal posts:", error);
+}
 
 const newBlog = blog
   .map(({ slug, ...rest }) => ({
-    slug: `/internal/` + slug,
+    slug: `${ROUTES.INTERNAL}/` + slug,
     ...rest,
   }))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -19,8 +26,6 @@ const newBlog = blog
 const categories = [
   ...new Set(newBlog.map((item) => item.data.category).filter(Boolean)),
 ].sort();
-
-const format = { year: "numeric", month: "long", day: "numeric" };
 ---
 
 <PageLayout title="Internal" robots="noindex, nofollow">
@@ -35,7 +40,7 @@ const format = { year: "numeric", month: "long", day: "numeric" };
             <a href={item.slug}>{item.data.title}</a>{" "}
             <div class="meta">
               <div class="date">
-                {item.data.date.toLocaleDateString("en-US", format)}
+                {formatDate(item.data.date)}
               </div>
               <div class="separator">○</div>
               <div class="category"> {item.data.category} </div>
@@ -49,31 +54,22 @@ const format = { year: "numeric", month: "long", day: "numeric" };
 
 <script type="module">
   const input = document.getElementById("blog-search-input");
-  const categoryFilter = document.getElementById("category-filter");
   const list = document.querySelector("#blog-list ul");
 
-  if (input && categoryFilter && list) {
+  if (input && list) {
     const items = Array.from(list.querySelectorAll("li"));
 
     const filterItems = () => {
       const searchValue = input.value.trim().toLowerCase();
-      const categoryValue = categoryFilter.value.toLowerCase();
 
       items.forEach((item) => {
         const text = item.textContent?.toLowerCase() ?? "";
-        const itemCategory =
-          item.getAttribute("data-category")?.toLowerCase() ?? "";
-
         const matchesSearch = !searchValue || text.includes(searchValue);
-        const matchesCategory =
-          !categoryValue || itemCategory === categoryValue;
-
-        item.hidden = !(matchesSearch && matchesCategory);
+        item.hidden = !matchesSearch;
       });
     };
 
     input.addEventListener("input", filterItems);
-    categoryFilter.addEventListener("change", filterItems);
   }
 </script>
 

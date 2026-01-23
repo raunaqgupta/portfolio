@@ -1,8 +1,23 @@
 ---
 import BaseLayout from "../layouts/baseLayout.astro";
-const breadcrumbs = [{ text: "Raunaq Gupta", url: "/" }];
+import { ROUTES, SITE_URL } from "../constants";
+
+const breadcrumbs = [{ text: "Raunaq Gupta", url: ROUTES.HOME }];
 ---
 
-<BaseLayout title="404" breadcrumbs={breadcrumbs}>
-  <p>Requested page does not exist.</p>
+<BaseLayout
+  title="404"
+  description="The requested page does not exist."
+  canonicalUrl={`${SITE_URL}/404`}
+  robots="noindex, nofollow"
+>
+  <body>
+    <main>
+      <h1>404</h1>
+      <p>Requested page does not exist.</p>
+      <p>
+        <a href={ROUTES.HOME}>Return to home</a>
+      </p>
+    </main>
+  </body>
 </BaseLayout>

@@ -7,28 +7,43 @@ import LinkedInIcon from "@icons/linkedin.svg";
 
 import { getCollection } from "astro:content";
 import { getEntries } from "astro:content";
-const rawJobs = await getCollection("jobs");
+import { ROUTES, SITE_URL } from "../constants";
+
+let rawJobs = [];
+let education = [];
+
+try {
+  rawJobs = await getCollection("jobs");
+  education = await getCollection("education");
+} catch (error) {
+  console.error("Error fetching resume data:", error);
+}
+
 const jobs = await Promise.all(
   rawJobs.map(async (job) => {
-    const rendered = await job.render();
-    const caseStudies = job.data.caseStudies
-      ? await getEntries(job.data.caseStudies)
-      : [];
-    return { ...job, Content: rendered.Content, caseStudies };
+    try {
+      const rendered = await job.render();
+      const caseStudies = job.data.caseStudies
+        ? await getEntries(job.data.caseStudies)
+        : [];
+      return { ...job, Content: rendered.Content, caseStudies };
+    } catch (error) {
+      console.error(`Error rendering job ${job.slug}:`, error);
+      return { ...job, Content: null, caseStudies: [] };
+    }
   })
 );
 const sortedJobs = [...jobs].sort(
   (a, b) => b.data.from.getTime() - a.data.from.getTime()
 );
 
-const education = await getCollection("education");
 const sortedEducation = [...education].sort(
   (a, b) => b.data.from.getTime() - a.data.from.getTime()
 );
 
 const breadcrumbs = [
-  { text: "Raunaq Gupta", url: "/" },
-  { text: "Portfolio", url: "/portfolio" },
+  { text: "Raunaq Gupta", url: ROUTES.HOME },
+  { text: "Portfolio", url: ROUTES.PORTFOLIO },
 ];
 
 const actions = [
@@ -51,7 +66,13 @@ const actions = [
 ];
 ---
 
-<PageLayout title="Resume" breadcrumbs={breadcrumbs} actions={actions}>
+<PageLayout
+  title="Resume"
+  description="Resume and work experience of Raunaq Gupta"
+  canonicalUrl={`${SITE_URL}${ROUTES.RESUME}`}
+  breadcrumbs={breadcrumbs}
+  actions={actions}
+>
   <section>
     <div class="heading">
       <h2>Experience</h2>
@@ -64,20 +85,7 @@ const actions = [
           from={job.data.from}
           to={job.data.to}
         >
-          <job.Content />
-          {/* {job.caseStudies.length > 0 && (
-            <div class="projects">
-              {job.caseStudies.map((caseStudy) => (
-                <CaseStudySmall
-                  image={caseStudy.data.thumbnail}
-                  title={caseStudy.data.title}
-                  url={`/case-studies/${caseStudy.slug}`}
-                  size="small"
-                  theme="flat"
-                />
-              ))}
-            </div>
-          )} */}
+          {job.Content && <job.Content />}
         </RangeItem>
       ))
     }

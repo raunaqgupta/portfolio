@@ -3,18 +3,25 @@ import Logo3DDark from "@assets/logo.3d.dark.png";
 import Logo3DLight from "@assets/logo.3d.light.png";
 import Logo from "@components/logo.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
+import { ROUTES, SITE_URL } from "../constants";
+
+const description = "Personal website of Raunaq Gupta - Design technologist with 10+ years of experience shipping enterprise web applications and developer tools.";
 ---
 
-<BaseLayout title="Home">
+<BaseLayout
+  title="Home"
+  description={description}
+  canonicalUrl={SITE_URL}
+>
   <body>
     <Logo mode="3d" size="large" />
 
     <div class="content">
       <h1>Hi, I'm Raunaq</h1>
       <p>
-        If you are interested in hiring me, visit my <a href="/portfolio"
+        If you are interested in hiring me, visit my <a href={ROUTES.PORTFOLIO}
           >portfolio</a
-        >. Or check out my <a href="/blog">blog</a> where I write about experiments
+        >. Or check out my <a href={ROUTES.BLOG}>blog</a> where I write about experiments
         in technology & design, recipes, and literature. I'm machine readable at <a
           href="/raunaq-gupta.json">raunaq-gupta.json</a
         >.

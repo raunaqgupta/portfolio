@@ -5,7 +5,7 @@ import Cross from "../assets/icons/cross.svg";
 import Button from "./button.astro";
 ---
 
-<dialog id="modal" closedby="any">
+<dialog id="modal">
   <div class="heading">
     <div class="left">
       <Button
@@ -74,7 +74,6 @@ import Button from "./button.astro";
     navigate(-1);
   });
   nextBtn?.addEventListener("click", (e) => {
-    console.log("Next button clicked");
     navigate(1);
   });
 

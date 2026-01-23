@@ -1,12 +1,54 @@
 ---
-const { robots } = Astro.props;
-const title = Astro.props.title || Astro.props.frontmatter?.title || "Untitled";
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  robots?: string;
+  canonicalUrl?: string;
+  frontmatter?: {
+    title?: string;
+    description?: string;
+    hero?: string;
+    thumbnail?: string;
+    date?: Date;
+  };
+}
+
+const {
+  robots,
+  description,
+  image,
+  type,
+  publishedTime,
+  modifiedTime,
+  author,
+  canonicalUrl,
+  frontmatter,
+} = Astro.props;
+const title = Astro.props.title || frontmatter?.title || "Untitled";
+const seoDescription = description || frontmatter?.description;
+const seoImage = image || frontmatter?.hero || frontmatter?.thumbnail;
+const seoPublishedTime = publishedTime || frontmatter?.date?.toISOString();
 
 import Head from "@components/head.astro";
 ---
 
 <html lang="en">
-  <Head title={title} robots={robots} />
+  <Head
+    title={title}
+    description={seoDescription}
+    image={seoImage}
+    type={type}
+    publishedTime={seoPublishedTime}
+    modifiedTime={modifiedTime}
+    author={author}
+    robots={robots}
+    canonicalUrl={canonicalUrl}
+  />
   <slot />
 </html>
 

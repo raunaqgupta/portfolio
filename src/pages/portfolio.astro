@@ -5,16 +5,28 @@ import PageLayout from "../layouts/pageLayout.astro";
 import Button from "../components/button.astro";
 import ArrowRightIcon from "@icons/arrow-right.svg";
 import Message from "@components/message.astro";
-const products = await getCollection("articles", ({ data }) => {
-  return data.category === "collection";
-});
+import { ROUTES, SITE_URL } from "../constants";
+
+let products = [];
+try {
+  products = await getCollection("articles", ({ data }) => {
+    return data.category === "collection";
+  });
+} catch (error) {
+  console.error("Error fetching collections:", error);
+}
+
 const newProducts = products.map(({ slug, ...rest }) => ({
   slug: `/collection/` + slug,
   ...rest,
 }));
 ---
 
-<PageLayout title="Portfolio">
+<PageLayout
+  title="Portfolio"
+  description="Design technologist with 10+ years of experience shipping enterprise web applications and developer tools"
+  canonicalUrl={`${SITE_URL}${ROUTES.PORTFOLIO}`}
+>
   <section id="summary">
     <p>
       I'm a design technologist with 10+ years of experience shipping enterprise
@@ -32,8 +44,7 @@ const newProducts = products.map(({ slug, ...rest }) => ({
       message="I currently require a H-1B visa transfer to work for US-based organizations."
     />
   </section>
-  <section id="
-      work-experience">
+  <section id="work-experience">
     <h2>Work Experience</h2>
     <p>
       I'm currently designing products within the Splunk's Observability suite

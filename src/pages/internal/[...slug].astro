@@ -4,35 +4,47 @@ import Imgmdx from "@components/img.mdx.astro";
 
 import { getCollection } from "astro:content";
 import PostDetails from "@components/PostDetails.astro";
+import { formatDate } from "../../utils";
+import { ROUTES } from "../../constants";
+
 export async function getStaticPaths() {
-  const blog = await getCollection("articles", ({ data }) => {
-    return data.internal === true;
-  });
-  return blog.map((entry) => ({
-    params: { slug: entry.slug },
-    props: { entry },
-  }));
+  try {
+    const blog = await getCollection("articles", ({ data }) => {
+      return data.internal === true;
+    });
+    return blog.map((entry) => ({
+      params: { slug: entry.slug },
+      props: { entry },
+    }));
+  } catch (error) {
+    console.error("Error generating internal paths:", error);
+    return [];
+  }
 }
 
 const { entry } = Astro.props;
+
+if (!entry) {
+  return Astro.redirect("/404");
+}
+
 const { Content, components } = await entry.render();
 const links = [
-  { text: "Raunaq Gupta", url: "/" },
-  { text: "Internal", url: "/internal" },
+  { text: "Raunaq Gupta", url: ROUTES.HOME },
+  { text: "Internal", url: ROUTES.INTERNAL },
 ];
-
-const format = { year: "numeric", month: "long", day: "numeric" };
 ---
 
 <PageLayout
   title={entry.data.title}
   breadcrumbs={links}
   robots="noindex, nofollow"
+  frontmatter={entry.data}
 >
   <Content components={{ ...components, img: Imgmdx }} />
   <PostDetails>
     <div class="date">
-      {entry.data.date.toLocaleDateString("en-US", format)}
+      {formatDate(entry.data.date)}
     </div>
     <div class="separator">-</div>
     <div class="category">

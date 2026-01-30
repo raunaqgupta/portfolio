@@ -9,7 +9,6 @@ interface Props {
   author?: string;
   actions?: Array<{ label: string; url: string; isExternal?: boolean }>;
   robots?: string;
-  breadcrumbs?: Array<{ text: string; url: string }>;
   canonicalUrl?: string;
   frontmatter?: {
     title?: string;
@@ -23,7 +22,6 @@ interface Props {
 const {
   actions,
   robots,
-  breadcrumbs,
   description,
   image,
   type,
@@ -40,7 +38,6 @@ import Footer from "@components/footer.astro";
 import Heading from "@components/Heading.astro";
 import Modal from "@components/modal.astro";
 import Header from "@components/header.astro";
-import Breadcrumbs from "@components/breadcrumbs.astro";
 ---
 
 <BaseLayout
@@ -58,7 +55,6 @@ import Breadcrumbs from "@components/breadcrumbs.astro";
   <body>
     <Header />
     <main>
-      <!-- {breadcrumbs && <Breadcrumbs breadcrumbs={breadcrumbs} />} -->
       <Modal />
       <Heading title={title} actions={actions} />
       <slot />

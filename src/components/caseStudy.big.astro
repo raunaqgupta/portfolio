@@ -1,5 +1,6 @@
 ---
 const { image, title, description, url } = Astro.props;
+import ArrowRightIcon from "@icons/arrow-right.svg";
 ---
 
 <a href={url}>
@@ -8,8 +9,11 @@ const { image, title, description, url } = Astro.props;
       <div></div>
     </div>
     <div class="content">
-      <h2>{title}</h2>
-      <p class="description">{description}</p>
+      <div class="left">
+        <h2>{title}</h2>
+        <p class="description">{description}</p>
+      </div>
+      <ArrowRightIcon class="icon" />
     </div>
   </article>
 </a>
@@ -25,14 +29,36 @@ const { image, title, description, url } = Astro.props;
     content: none;
   }
 
+  a:hover article {
+    transform: translateY(-8px);
+  }
+
+  a:hover .image {
+    filter: saturate(2);
+  }
+
+  a:hover .icon {
+    display: block;
+  }
+
   article {
+    padding: 8px;
+    margin: -8px;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
     justify-content: space-between;
+    transition: transform 300ms ease-out;
   }
 
   .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .left {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -40,16 +66,20 @@ const { image, title, description, url } = Astro.props;
     gap: var(--space-1);
   }
 
-  .content h2 {
+  .left h2 {
     margin: 0;
     margin-top: var(--space-2);
   }
 
-  .content p {
+  .left p {
     margin: 0;
     font-size: 0.9em;
     line-height: 1.3em;
     color: var(--color-body-secondary);
+  }
+
+  .icon {
+    display: none;
   }
 
   .image {

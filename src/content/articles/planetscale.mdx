@@ -25,7 +25,7 @@ export const allCaseStudies = await getCollection('articles', ({ data }) => {
 export const referencedSlugs = frontmatter.caseStudies || [];
 export const referencedCaseStudies = allCaseStudies.filter((entry) =>
   referencedSlugs.includes(entry.slug)
-).map(({ slug, ...rest }) => ({ slug: `/case-studies/${slug}`, ...rest }));
+).map(({ slug, ...rest }) => ({ slug: `/case-study/${slug}`, ...rest }));
 
 I joined PlanetScale as a contract design engineer in late 2018. There was nothing but an idea, and a sizable VC paycheck. The founders were veterans of the database world, having worked on database systems at YouTube, building out Vitess; an open-source database clustering system that scaled YouTube's database needs. Their vision was to build a database-as-a-service that would leverage Vitess to provide a highly scalable, developer-friendly database solution. The question was how do we deliver sharding as a plug-and-play solution to developers?
 

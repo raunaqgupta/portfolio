@@ -1,13 +1,24 @@
 ---
 import Logo from "@components/logo.astro";
+
+const currentPath = Astro.url.pathname;
 ---
 
 <header>
   <Logo mode="3d" size="small" />
   <nav>
-    <a href="/portfolio">Portfolio</a>
-    <a href="/resume">Resume</a>
-    <a href="/blog">Blog</a>
+    <a
+      href="/portfolio"
+      class:list={[{ active: currentPath.startsWith("/portfolio") }]}
+      >Portfolio</a
+    >
+    <a
+      href="/resume"
+      class:list={[{ active: currentPath.startsWith("/resume") }]}>Resume</a
+    >
+    <a href="/blog" class:list={[{ active: currentPath.startsWith("/blog") }]}
+      >Blog</a
+    >
   </nav>
 </header>
 
@@ -24,6 +35,11 @@ import Logo from "@components/logo.astro";
     margin-left: var(--space-1);
     text-decoration: none;
     color: var(--color-body-primary);
+  }
+
+  nav a.active {
+    color: var(--color-body-primary);
+    font-weight: 600;
   }
 
   @media only screen and (max-width: 700px) {

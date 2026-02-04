@@ -25,7 +25,9 @@ import FlexColumn from '@components/flexColumn.astro';
 
 Splunk Observability Cloud excelled at application and infrastructure monitoring but lacked the end-to-end insight that database monitoring would provide. That gap forced users to switch tools, even as public forum requests and AppDynamics' $50M ARR success showed clear demand. Launching database monitoring would close the application-database performance divide and unlock new personas like database administrators, thereby expanding Splunk Observability Cloud's total addressable market.
 
-![Databases get categorized under both applications, and infrastructure](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/addressing-the-gap.png?f=avif)
+![The Splunk Ideas community helps prioritize feature requests on the roadmap](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/case-study/existing-feedback.png?f=avif)
+
+![Database monitoring is a crucial block in all compelling observability platforms](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/case-study/competitive-analysis.png?f=avif)
 
 ## My role
 
@@ -37,42 +39,26 @@ Alpha launch of Database monitoring had 11 multinational enterprise customers wi
 
 > "Our database team use SolarWinds. dbmon [sic database monitoring] gives me query plan information that I'll only know once the application developer knows the issue is with the database... and when the database team will be looped in eventually to the ticket."
 
-## Launching an MVP
+## Designing an MVP
 
-The product roadmap prioritized the following features:
+The first launch targeted query analytics, enabling workflows joining APM and Database monitoring, as well as providing AI-assisted summarization, and recommendation capabilities. The MVP focused on three core user needs:
 
-1. Surface vital metrics per database query,
-2. Visualize query execution plans, and mark slow operations,
-3. Correlate database queries with application traces, and
-4. Launch database monitoring with AI-assisted workflows.
+1. Surface vital metrics and visualize query explain plans for database queries,
+2. Correlate database queries with application traces, and
+3. Launch database monitoring with AI-assisted workflows.
 
-I also provided cross-functional leadership on initiatives including:
+Along the way, I ended up:
 
-1. In-product marketing to encourage product-led adoption, and
-2. Paving the way for future AI-assisted workflows. Database monitoring is the first vertical in Splunk Observability Cloud to ship with contextualized AI-assisted features.
-
-## Design overview
-
-The following prototypes, information architecture diagrams, and journey maps provide a glimpse into the kind of artifacts I create to communicate design solutions.
-
-### Problem definition
-
-![The splunk ideas community provided a rich source of feedback and feature requests](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/case-study/existing-feedback.png?f=avif)
-
-![Database monitoring is a crucial inclusion in all compelling observaility platforms](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/case-study/competitive-analysis.png?f=avif)
-
-### Prototypes
-
-This prototype takes the user from troubleshooting a trace to investigating the associated database query, and optimizing them using AI-assisted recommendations.
-
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/JPpP0TlYs4DtYzigaXPDeC/Prototype--Database-monitoring?page-id=0%3A1&node-id=8-46883&p=f&viewport=559%2C627%2C0.06&scaling=contain&content-scaling=fixed&starting-point-node-id=8%3A46883&embed-host=share" allowfullscreen></iframe>
+1. Defining a new design pattern (In-context previews), and
+2. Experimenting with in-product marketing to encourage product-led adoption
 
 ## Key design decisions
 
-Following are other notable design decisions I made as part of the database monitoring initiative.
+Following are notable design decisions I made as part of the database monitoring initiative.
 
 ### In-context preview
 
+The in-context preview utilizes the concept of [transclusion](https://en.wikipedia.org/wiki/Transclusion) to provide a non-disruptive way to access detailed information without navigating away from the current context. This was especially important when users were investigating application traces and needed to quickly understand the associated database queries.
 ![Location agnostic in-context object preview](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/case-study/in-context-preview.png?f=avif)
 
 ### The query execution plan visualization
@@ -81,7 +67,7 @@ The query execution plan was visualized using a tree structure to represent the 
 
 ![Query execution plan visualization](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/case-study/query-execution-plan.png?f=avif)
 
-### Defining AI-assisted workflows
+### AI-assisted workflows
 
 I defined and designed AI-assisted workflows such as query summarization, and AI-based recommendations to help users optimize their database queries. These features were prioritized based on competitive analysis, and engineering complexity. These are currently in customer preview and are getting positive feedback.
 
@@ -107,7 +93,12 @@ This additional initiative targeted the opportunity to educate users about datab
   ![After](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/in-product-marketing-after.png?f=avif)
 </FlexColumn>
 
+### Prototype
+
+This prototype takes the user from troubleshooting a trace to investigating the associated database query, and optimizing them using AI-assisted recommendations.
+
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/JPpP0TlYs4DtYzigaXPDeC/Prototype--Database-monitoring?page-id=0%3A1&node-id=8-46883&p=f&viewport=559%2C627%2C0.06&scaling=contain&content-scaling=fixed&starting-point-node-id=8%3A46883&embed-host=share" allowfullscreen></iframe>
+
 <FlexColumn>
-  <PageLink direction="prev" label="Collection: Designing Observability SaaS across 4 products in 4 years" url="/collection/o11y" />
   <PageLink direction="next" label="Case study: Secure Application on Cisco Observability Platform" url="/case-study/appsec" />
 </FlexColumn>

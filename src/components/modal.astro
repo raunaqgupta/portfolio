@@ -5,7 +5,7 @@ import Cross from "../assets/icons/cross.svg";
 import Button from "./button.astro";
 ---
 
-<dialog id="modal">
+<dialog>
   <div class="heading">
     <div class="left">
       <Button
@@ -34,29 +34,29 @@ import Button from "./button.astro";
 </dialog>
 
 <script>
-  const modal = document.getElementById("modal");
+  const modal = document.querySelector("dialog");
   const prevBtn = modal?.querySelector(".nav.prev");
   const nextBtn = modal?.querySelector(".nav.next");
   const closeBtn = modal?.querySelector(".nav.close");
 
-  let images = [];
+  let images: HTMLImageElement[] = [];
   let currentIndex = 0;
 
-  function openModal(index) {
+  function openModal(index: number) {
     currentIndex = index;
     updateImage();
     modal?.showModal();
   }
 
   function updateImage() {
-    const modalImg = modal?.querySelector(".content img");
+    const modalImg = modal?.querySelector(".content img") as HTMLImageElement;
     if (modalImg && images[currentIndex]) {
       modalImg.src = images[currentIndex].src;
       modalImg.alt = images[currentIndex].alt || "";
     }
   }
 
-  function navigate(delta) {
+  function navigate(delta: number) {
     currentIndex = (currentIndex + delta + images.length) % images.length;
     updateImage();
   }
@@ -70,29 +70,29 @@ import Button from "./button.astro";
     });
   });
 
-  prevBtn?.addEventListener("click", (e) => {
+  prevBtn?.addEventListener("click", () => {
     navigate(-1);
   });
-  nextBtn?.addEventListener("click", (e) => {
+  nextBtn?.addEventListener("click", () => {
     navigate(1);
   });
 
-  closeBtn?.addEventListener("click", (e) => modal.close());
+  closeBtn?.addEventListener("click", () => modal?.close());
 
   modal?.addEventListener("click", (e) => {
-    if (e.target === modal) modal.close();
+    if (e.target === modal) modal?.close();
   });
 
   document.addEventListener("keydown", (e) => {
     if (!modal?.open) return;
     if (e.key === "ArrowLeft") navigate(-1);
     if (e.key === "ArrowRight") navigate(1);
-    if (e.key === "Escape") modal.close();
+    if (e.key === "Escape") modal?.close();
   });
 </script>
 
 <style>
-  #modal {
+  dialog {
     background-color: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: 8px;
@@ -106,7 +106,7 @@ import Button from "./button.astro";
     overflow: hidden;
   }
 
-  #modal[open] {
+  dialog[open] {
     display: flex;
     flex-direction: column;
   }

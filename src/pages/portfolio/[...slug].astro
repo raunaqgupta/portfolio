@@ -12,7 +12,7 @@ import { getDescription } from "../../utils";
 export async function getStaticPaths() {
   try {
     const projects = await getCollection("articles", ({ data }) => {
-      return data.category === "case-study";
+      return data.category === "portfolio";
     });
     return projects.map((entry) => ({
       params: { slug: entry.slug },
@@ -59,7 +59,7 @@ const links = [
 
 const description =
   entry.data.description || getDescription(undefined, entry.body);
-const canonicalUrl = `${SITE_URL}/case-studies/${entry.slug}`;
+const canonicalUrl = `${SITE_URL}/portfolio/${entry.slug}`;
 ---
 
 <PageLayout

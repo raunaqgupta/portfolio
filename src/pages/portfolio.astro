@@ -7,14 +7,14 @@ import { ROUTES, SITE_URL } from "../constants";
 let caseStudies = [];
 try {
   caseStudies = await getCollection("articles", ({ data }) => {
-    return data.published !== false && data.category === "case-study";
+    return data.published !== false && data.category === "portfolio";
   });
 } catch (error) {
   console.error("Error fetching case studies:", error);
 }
 
 const newProducts = caseStudies.map(({ slug, ...rest }) => ({
-  slug: `/case-study/` + slug,
+  slug: `/portfolio/` + slug,
   ...rest,
 }));
 ---

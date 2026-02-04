@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { transformerNotationHighlight } from "@shikijs/transformers";
@@ -9,30 +9,37 @@ export default defineConfig({
   prefetch: true,
   integrations: [mdx(), sitemap()],
   image: {
-    layout: "constrained"
+    layout: "constrained",
   },
   markdown: {
     syntaxHighlight: "shiki",
     shikiConfig: {
       themes: {
         light: "github-light",
-        dark: "github-dark"
+        dark: "github-dark",
       },
-      transformers: [
-        transformerNotationHighlight()
-      ]
-    }
+      transformers: [transformerNotationHighlight()],
+    },
   },
   experimental: {
-    fonts: [{
-      provider: 'local',
-      name: 'DMSerifDisplay-Italic',
-      cssVariable: '--font-dm-serif-display-italic',
-      variants: [{
-        src: ["./src/assets/fonts/DMSerifDisplay-Italic.woff2"],
-        weight: 400,
-        style: 'normal'
-      }]
-    }]
-  }
+    fonts: [
+      {
+        provider: "local",
+        name: "DMSerifDisplay-Italic",
+        cssVariable: "--font-dm-serif-display-italic",
+        variants: [
+          {
+            src: ["./src/assets/fonts/DMSerifDisplay-Italic.woff2"],
+            weight: 400,
+            style: "normal",
+          },
+        ],
+      },
+      {
+        provider: fontProviders.google(),
+        name: "Cal Sans",
+        cssVariable: "--font-cal-sans",
+      },
+    ],
+  },
 });

@@ -12,7 +12,7 @@ import { getDescription } from "../../utils";
 export async function getStaticPaths() {
   try {
     const projects = await getCollection("articles", ({ data }) => {
-      return data.category === "case-study";
+      return data.category === "portfolio";
     });
     return projects.map((entry) => ({
       params: { slug: entry.slug },
@@ -34,9 +34,9 @@ let collectionArticle = null;
 if (entry.data.collection) {
   try {
     const allArticles = await getCollection("articles");
-    collectionArticle = allArticles.find(
-      (article) => article.slug === entry.data.collection,
-    ) || null;
+    collectionArticle =
+      allArticles.find((article) => article.slug === entry.data.collection) ||
+      null;
   } catch (error) {
     console.error("Error fetching collection article:", error);
   }
@@ -51,12 +51,15 @@ const links = [
   },
   {
     text: `Collection: ${collectionArticle?.data.title || entry.data.collection || "Unknown"}`,
-    url: collectionArticle ? `/collection/${entry.data.collection}` : ROUTES.PORTFOLIO,
+    url: collectionArticle
+      ? `/collection/${entry.data.collection}`
+      : ROUTES.PORTFOLIO,
   },
 ];
 
-const description = entry.data.description || getDescription(undefined, entry.body);
-const canonicalUrl = `${SITE_URL}/case-studies/${entry.slug}`;
+const description =
+  entry.data.description || getDescription(undefined, entry.body);
+const canonicalUrl = `${SITE_URL}/portfolio/${entry.slug}`;
 ---
 
 <PageLayout

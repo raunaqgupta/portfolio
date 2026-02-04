@@ -2,22 +2,19 @@
 import { getCollection } from "astro:content";
 import Grid from "../components/grid.collection.astro";
 import PageLayout from "../layouts/pageLayout.astro";
-import Button from "../components/button.astro";
-import ArrowRightIcon from "@icons/arrow-right.svg";
-import Message from "@components/message.astro";
 import { ROUTES, SITE_URL } from "../constants";
 
-let products = [];
+let caseStudies = [];
 try {
-  products = await getCollection("articles", ({ data }) => {
-    return data.category === "collection";
+  caseStudies = await getCollection("articles", ({ data }) => {
+    return data.published !== false && data.category === "portfolio";
   });
 } catch (error) {
-  console.error("Error fetching collections:", error);
+  console.error("Error fetching case studies:", error);
 }
 
-const newProducts = products.map(({ slug, ...rest }) => ({
-  slug: `/collection/` + slug,
+const newProducts = caseStudies.map(({ slug, ...rest }) => ({
+  slug: `/portfolio/` + slug,
   ...rest,
 }));
 ---
@@ -27,43 +24,7 @@ const newProducts = products.map(({ slug, ...rest }) => ({
   description="Design technologist with 10+ years of experience shipping enterprise web applications and developer tools"
   canonicalUrl={`${SITE_URL}${ROUTES.PORTFOLIO}`}
 >
-  <section id="summary">
-    <p>
-      I'm a design technologist with 10+ years of experience shipping enterprise
-      web applications and developer tools across startups and large
-      organizations.
-    </p>
-    <p>
-      Hire me to complement your product team with expertise in modeling complex
-      systems, design intuition for developer experiences, and 0→1 design &
-      prototyping. Reach out at <a href="mailto:mail@raunaqgupta.com"
-        >mail@raunaqgupta.com</a
-      > for a chat.
-    </p>
-    <Message
-      message="I currently require a H-1B visa transfer to work for US-based organizations."
-    />
-  </section>
-  <section id="work-experience">
-    <h2>Work Experience</h2>
-    <p>
-      I'm currently designing products within the Splunk's Observability suite
-      at Cisco.
-    </p>
-    <div class="button-group">
-      <Button
-        label="View Resume"
-        url="/resume"
-        isLink={true}
-        postIcon={ArrowRightIcon}
-      />
-    </div>
-  </section>
-  <section id="case-study-collections">
-    <h2>Case study collections</h2>
-    <p>Read case studies grouped by organization & product engagements.</p>
-    <Grid type="collection" collection={newProducts} />
-  </section>
+  <Grid collection={newProducts} />
 </PageLayout>
 
 <style>

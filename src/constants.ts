@@ -24,6 +24,6 @@ export const CATEGORIES = {
   POEM: "poem",
   POST: "post",
   AUDIO: "audio",
-  CASE_STUDY: "case-study",
+  PORTFOLIO: "portfolio",
   COLLECTION: "collection",
 } as const;

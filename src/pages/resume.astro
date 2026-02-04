@@ -4,6 +4,7 @@ import RangeItem from "../components/rangeItem.astro";
 import CaseStudySmall from "../components/caseStudy.small.astro";
 import DownloadIcon from "@icons/download.svg";
 import LinkedInIcon from "@icons/linkedin.svg";
+import Message from "@components/message.astro";
 
 import { getCollection } from "astro:content";
 import { getEntries } from "astro:content";
@@ -31,14 +32,14 @@ const jobs = await Promise.all(
       console.error(`Error rendering job ${job.slug}:`, error);
       return { ...job, Content: null, caseStudies: [] };
     }
-  })
+  }),
 );
 const sortedJobs = [...jobs].sort(
-  (a, b) => b.data.from.getTime() - a.data.from.getTime()
+  (a, b) => b.data.from.getTime() - a.data.from.getTime(),
 );
 
 const sortedEducation = [...education].sort(
-  (a, b) => b.data.from.getTime() - a.data.from.getTime()
+  (a, b) => b.data.from.getTime() - a.data.from.getTime(),
 );
 
 const breadcrumbs = [
@@ -73,6 +74,16 @@ const actions = [
   breadcrumbs={breadcrumbs}
   actions={actions}
 >
+  <section id="summary">
+    <p>
+      I'm a design technologist with 10+ years of experience shipping enterprise
+      web applications and developer tools across startups and large
+      organizations.
+    </p>
+    <Message
+      message="I currently require a H-1B visa transfer to work for US-based organizations."
+    />
+  </section>
   <section>
     <div class="heading">
       <h2>Experience</h2>

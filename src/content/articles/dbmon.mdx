@@ -20,6 +20,22 @@ aiQueryRecommendation:
 import Gallery from '@components/gallery.astro';
 import PageLink from '@components/pageLink.astro';
 import FlexColumn from '@components/flexColumn.astro';
+import { IMAGE_BUCKET_URL } from "@src/constants.ts";
+
+## Table of contents
+
+- [Addressing the gap](#addressing-the-gap)
+- [My role](#my-role)
+- [Impact](#impact)
+- [Designing an MVP](#designing-an-mvp)
+- [Key design decisions](#key-design-decisions)
+  - [In-context preview](#in-context-preview)
+  - [The query execution plan visualization](#the-query-execution-plan-visualization)
+  - [AI-assisted workflows](#ai-assisted-workflows)
+  - [In-product marketing to enable product-led adoption](#in-product-marketing-to-enable-product-led-adoption)
+- [Prototype](#prototype)
+
+
 
 ## Addressing the gap
 
@@ -32,6 +48,8 @@ Splunk Observability Cloud excelled at application and infrastructure monitoring
 ## My role
 
 I led design to bring Database monitoring to market, supporting a 12-person product and engineering team. Database monitoring also needed to integrate with application performance monitoring, and infrastructure monitoring, leading to close collaboration with their respective product and design teams.
+
+![Project timeline](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/case-study/project-timeline.png?f=avif)
 
 ## Impact
 
@@ -71,13 +89,13 @@ The query execution plan was visualized using a tree structure to represent the 
 
 I defined and designed AI-assisted workflows such as query summarization, and AI-based recommendations to help users optimize their database queries. These features were prioritized based on competitive analysis, and engineering complexity. These are currently in customer preview and are getting positive feedback.
 
-#### On demand AI-generated query summarization
+#### A. On demand AI-generated query summarization
 
 Query summarization is a quick-win, highly deterministic AI-assisted solution to the problem of, “What is this SQL query trying to do?” A question that gets asked very often by SREs who are not the developers who wrote the query in the first place. This helps them figure out everything from the importance of said query, troubleshooting  the query, to contacting the appropriate application team if all else fails.
 
 <Gallery collection={frontmatter.aiQuerySummarization}/>
 
-#### AI recommendations for query optimization
+#### B. AI recommendations for query optimization
 
 AI recommendations was an obvious next step to utilize AI to help users optimize their slow-running database queries. The design took into consideration that there were engineering constraints which prevented ahead-of-time AI analysis of ingested queries. Hence, the design focused on an on-demand system where users could request AI recommendations for specific queries they were investigating.
 
@@ -93,7 +111,7 @@ This additional initiative targeted the opportunity to educate users about datab
   ![After](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/in-product-marketing-after.png?f=avif)
 </FlexColumn>
 
-### Prototype
+## Prototype
 
 This prototype takes the user from troubleshooting a trace to investigating the associated database query, and optimizing them using AI-assisted recommendations.
 

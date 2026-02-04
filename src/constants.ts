@@ -4,6 +4,7 @@ export const SITE_URL = "https://www.raunaqgupta.com";
 export const SITE_NAME = "Raunaq Gupta";
 export const DEFAULT_DESCRIPTION = "Personal website of Raunaq Gupta";
 export const DEFAULT_AUTHOR = "Raunaq Gupta";
+export const IMAGE_BUCKET_URL = "https://r2-image.raunaqgupta.workers.dev";
 
 export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
   year: "numeric",

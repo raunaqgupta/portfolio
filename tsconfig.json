@@ -5,12 +5,13 @@
       "@layouts/*": ["./src/layouts/*"],
       "@components/*": ["./src/components/*"],
       "@icons/*": ["./src/assets/icons/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@src/*": ["./src/*"],
     },
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
 }

@@ -1,7 +1,8 @@
 ---
 import PageLayout from "@layouts/pageLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
-import Prose from "@components/prose.astro";
+import Codemdx from "@components/Code.mdx.astro";
+import Prose from "@components/Prose.astro";
 import { getCollection } from "astro:content";
 import PostDetails from "@components/PostDetails.astro";
 import { formatDate } from "../../utils";
@@ -45,7 +46,7 @@ const publishedTime = entry.data.date.toISOString();
   canonicalUrl={canonicalUrl}
   frontmatter={entry.data}
 >
-  <Prose><Content components={{ img: Imgmdx }} /></Prose>
+  <Prose><Content components={{ img: Imgmdx, pre: Codemdx }} /></Prose>
   <PostDetails>
     <div class="date">
       {formatDate(entry.data.date)}

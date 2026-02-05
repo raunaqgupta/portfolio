@@ -1,10 +1,5 @@
 // Type definitions for the portfolio site
 
-export interface Breadcrumb {
-  text: string;
-  url: string;
-}
-
 export interface Action {
   label: string;
   url: string;
@@ -26,7 +21,6 @@ export interface SEOProps {
 export interface PageProps {
   title: string;
   description?: string;
-  breadcrumbs?: Breadcrumb[];
   actions?: Action[];
   robots?: string;
   seoImage?: string;

@@ -12,7 +12,7 @@ import { getDescription } from "../../utils";
 export async function getStaticPaths() {
   try {
     const blog = await getCollection("articles", ({ data }) => {
-      return data.internal !== true && data.category !== "case-study";
+      return data.internal !== true && data.category !== "portfolio";
     });
     return blog.map((entry) => ({
       params: { slug: entry.slug },

@@ -4,44 +4,43 @@ import GitHubIcon from "../assets/icons/github.svg";
 ---
 
 <footer>
-    <small>© <span id="year">{initialYear}</span> Raunaq Gupta</small>
-    <a
-        href="https://github.com/raunaqgupta"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="GitHub"
-    >
-        <GitHubIcon />
-    </a>
+  <small>© <span id="year">{initialYear}</span> Raunaq Gupta</small>
+  <a
+    href="https://github.com/raunaqgupta"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="GitHub"
+  >
+    <GitHubIcon />
+  </a>
 </footer>
 
 <script type="module">
-    const el = document.getElementById("year");
-    if (el) {
-        const current = new Date().getFullYear();
-        if (el.textContent !== String(current))
-            el.textContent = String(current);
-    }
+  const el = document.getElementById("year");
+  if (el) {
+    const current = new Date().getFullYear();
+    if (el.textContent !== String(current)) el.textContent = String(current);
+  }
 </script>
 
 <style>
-    footer {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        color: var(--color-body-tertiary);
-        padding: var(--space-2) 0;
-        margin-top: var(--space-2);
-        border-top: 1px solid var(--color-border-bg);
-    }
+  footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--color-body-tertiary);
+    padding: var(--space-2) 0;
+    margin-top: var(--space-2);
+    border-top: 1px solid var(--color-border-1);
+  }
 
-    footer a {
-        text-decoration: none;
-        color: var(--color-body-tertiary);
-    }
+  footer a {
+    text-decoration: none;
+    color: var(--color-body-tertiary);
+  }
 
-    footer a:after {
-        content: none;
-    }
+  footer a:after {
+    content: none;
+  }
 </style>

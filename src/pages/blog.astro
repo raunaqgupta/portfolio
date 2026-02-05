@@ -10,7 +10,7 @@ import { formatDate } from "../utils";
 let blog = [];
 try {
   blog = await getCollection("articles", ({ data }) => {
-    return data.internal !== true && data.category !== "case-study";
+    return data.internal !== true && data.category !== "portfolio";
   });
 } catch (error) {
   console.error("Error fetching blog posts:", error);
@@ -43,9 +43,7 @@ const categories = [
           <li data-category={item.data.category || ""}>
             <a href={item.slug}>{item.data.title}</a>{" "}
             <div class="meta">
-              <div class="date">
-                {formatDate(item.data.date)}
-              </div>
+              <div class="date">{formatDate(item.data.date)}</div>
               <div class="separator">○</div>
               <div class="category"> {item.data.category} </div>
             </div>

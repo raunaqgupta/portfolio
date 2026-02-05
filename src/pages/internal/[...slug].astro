@@ -1,11 +1,10 @@
 ---
 import PageLayout from "@layouts/pageLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
-
+import Prose from "@components/Prose.astro";
 import { getCollection } from "astro:content";
 import PostDetails from "@components/PostDetails.astro";
 import { formatDate } from "../../utils";
-import { ROUTES } from "../../constants";
 
 export async function getStaticPaths() {
   try {
@@ -28,20 +27,15 @@ if (!entry) {
   return Astro.redirect("/404");
 }
 
-const { Content, components } = await entry.render();
-const links = [
-  { text: "Raunaq Gupta", url: ROUTES.HOME },
-  { text: "Internal", url: ROUTES.INTERNAL },
-];
+const { Content } = await entry.render();
 ---
 
 <PageLayout
   title={entry.data.title}
-  breadcrumbs={links}
   robots="noindex, nofollow"
   frontmatter={entry.data}
 >
-  <Content components={{ ...components, img: Imgmdx }} />
+  <Prose><Content components={{ img: Imgmdx }} /></Prose>
   <PostDetails>
     <div class="date">
       {formatDate(entry.data.date)}

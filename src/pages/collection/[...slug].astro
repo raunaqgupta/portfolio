@@ -6,7 +6,7 @@ import Listmdx from "@components/list.mdx.astro";
 import Hero from "@components/hero.astro";
 
 import { getCollection } from "astro:content";
-import { ROUTES, SITE_URL } from "../../constants";
+import { SITE_URL } from "../../constants";
 import { getDescription } from "../../utils";
 
 export async function getStaticPaths() {
@@ -30,10 +30,10 @@ if (!entry) {
   return Astro.redirect("/404");
 }
 
-const { Content, components } = await entry.render();
-const links = [{ text: "Portfolio", url: ROUTES.PORTFOLIO }];
+const { Content } = await entry.render();
 
-const description = entry.data.description || getDescription(undefined, entry.body);
+const description =
+  entry.data.description || getDescription(undefined, entry.body);
 const canonicalUrl = `${SITE_URL}/collection/${entry.slug}`;
 ---
 
@@ -42,11 +42,8 @@ const canonicalUrl = `${SITE_URL}/collection/${entry.slug}`;
   description={description}
   image={entry.data.hero || entry.data.thumbnail}
   canonicalUrl={canonicalUrl}
-  breadcrumbs={links}
   frontmatter={entry.data}
 >
   <Hero imageUrl={entry.data.hero} aspectRatio={1.5} />
-  <Content
-    components={{ ...components, img: Imgmdx, ul: Ulmdx, List: Listmdx }}
-  />
+  <Content components={{ img: Imgmdx, ul: Ulmdx, List: Listmdx }} />
 </PageLayout>

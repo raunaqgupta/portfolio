@@ -4,6 +4,7 @@ import Prose from "@components/Prose.astro";
 import Imgmdx from "@components/img.mdx.astro";
 import Ulmdx from "@components/ul.mdx.astro";
 import Listmdx from "@components/list.mdx.astro";
+import Codemdx from "@components/Code.mdx.astro";
 import Hero from "@components/hero.astro";
 
 import { getCollection } from "astro:content";
@@ -48,6 +49,6 @@ const canonicalUrl = `${SITE_URL}/portfolio/${entry.slug}`;
 >
   <Hero imageUrl={entry.data.hero} />
   <Prose>
-    <Content components={{ img: Imgmdx, ul: Ulmdx, List: Listmdx }} />
+    <Content components={{ img: Imgmdx, ul: Ulmdx, code: Codemdx }} />
   </Prose>
 </PageLayout>

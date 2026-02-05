@@ -1,0 +1,76 @@
+---
+const props = Astro.props;
+---
+
+<div class="code-block">
+  <div class="header">
+    <span class="language">{props["data-language"]}</span>
+  </div>
+  <pre class={props.class} data-language={props["data-language"]}><slot /></pre>
+</div>
+
+<style>
+  .code-block {
+    border: 1px solid var(--color-border);
+    border-radius: var(--space-0);
+    margin: var(--space-2) 0;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-1) var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--typography-body-small);
+    color: var(--color-body-tertiary);
+  }
+
+  .language {
+    flex: 1;
+  }
+
+  :global(pre) {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  :global(pre > code) {
+    background-color: unset;
+    padding: 0;
+    border-radius: unset;
+    font-size: unset;
+    counter-reset: line-number;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  :global(pre > code .line) {
+    counter-increment: line-number;
+    display: grid;
+    grid-template-columns: auto 1fr;
+  }
+
+  :global(pre > code .line.highlighted) {
+    background-color: var(--color-bg-1) !important;
+  }
+
+  :global(pre > code .line > span) {
+    display: contents;
+  }
+
+  :global(pre > code .line::before) {
+    grid-column: 1;
+    content: counter(line-number);
+    width: 2.5em;
+    padding: 0 var(--space-1);
+    border-right: 1px solid var(--color-border);
+    margin-right: var(--space-2);
+    text-align: right;
+    color: var(--color-body-tertiary);
+  }
+</style>

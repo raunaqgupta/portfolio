@@ -104,6 +104,15 @@ import Head from "@components/head.astro";
     }
   }
 
+  @media only screen and (max-width: 700px) {
+    :root {
+      --typography-h1: 1.75em;
+      --typography-h2: 1.2em;
+      --typography-h3: 1em;
+      --typography-h4: 0.9em;
+    }
+  }
+
   h1 {
     color: var(--color-heading);
     font-family: var(--font-cal-sans), sans-serif;
@@ -115,24 +124,24 @@ import Head from "@components/head.astro";
   h2 {
     color: var(--color-heading);
     font-size: var(--typography-h2);
+    line-height: 1.25;
     margin-top: 2.5em;
   }
 
   h3 {
     color: var(--color-heading);
     font-size: var(--typography-h3);
-    font-weight: 200;
     margin-top: 1em;
   }
 
   h4 {
     color: var(--color-heading);
     font-size: var(--typography-h4);
-    font-weight: 600;
     margin-top: 1.5em;
   }
 
   blockquote {
+    box-sizing: border-box;
     border-left: 4px solid var(--color-border);
     padding-left: var(--space-3);
     color: var(--color-body-secondary);
@@ -142,6 +151,7 @@ import Head from "@components/head.astro";
 
   p {
     font-size: var(--typography-body);
+    max-width: 80ch;
   }
 
   figure {
@@ -211,6 +221,7 @@ import Head from "@components/head.astro";
 
   ul,
   ol {
+    box-sizing: border-box;
     padding-inline-start: 1.5em;
     font-size: var(--typography-body);
   }
@@ -282,13 +293,6 @@ import Head from "@components/head.astro";
   tr {
     font-size: var(--typography-body-small);
     text-align: left;
-  }
-
-  @media only screen and (max-width: 700px) {
-    h1 {
-      font-size: 2em;
-      margin: 0.1em 0 0;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -3,6 +3,7 @@ import Toolbar from "@components/toolbar.astro";
 import PageLayout from "@layouts/pageLayout.astro";
 import ListMdx from "@components/list.mdx.astro";
 import Input from "@components/input.astro";
+import DotFilledIcon from "@icons/dot-filled.svg";
 import { getCollection } from "astro:content";
 import { ROUTES, SITE_URL } from "../constants";
 import { formatDate } from "../utils";
@@ -22,10 +23,6 @@ const newBlog = blog
     ...rest,
   }))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-
-const categories = [
-  ...new Set(newBlog.map((item) => item.data.category).filter(Boolean)),
-].sort();
 ---
 
 <PageLayout
@@ -44,7 +41,7 @@ const categories = [
             <a href={item.slug}>{item.data.title}</a>{" "}
             <div class="meta">
               <div class="date">{formatDate(item.data.date)}</div>
-              <div class="separator">○</div>
+              <DotFilledIcon class="separator" />
               <div class="category"> {item.data.category} </div>
             </div>
           </li>
@@ -78,6 +75,7 @@ const categories = [
 <style>
   li .meta {
     display: flex;
+    align-items: center;
     gap: var(--space-0);
     font-size: 0.5em;
     color: var(--color-body-tertiary);
@@ -85,5 +83,10 @@ const categories = [
 
   li .meta .category {
     text-transform: capitalize;
+  }
+
+  li .meta .separator {
+    width: var(--space-1);
+    height: var(--space-1);
   }
 </style>

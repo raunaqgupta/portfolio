@@ -1,7 +1,6 @@
 ---
 import PageLayout from "@layouts/pageLayout.astro";
 import RangeItem from "../components/rangeItem.astro";
-import CaseStudySmall from "../components/caseStudy.small.astro";
 import DownloadIcon from "@icons/download.svg";
 import LinkedInIcon from "@icons/linkedin.svg";
 import Message from "@components/message.astro";
@@ -42,11 +41,6 @@ const sortedEducation = [...education].sort(
   (a, b) => b.data.from.getTime() - a.data.from.getTime(),
 );
 
-const breadcrumbs = [
-  { text: "Raunaq Gupta", url: ROUTES.HOME },
-  { text: "Portfolio", url: ROUTES.PORTFOLIO },
-];
-
 const actions = [
   {
     label: "LinkedIn",
@@ -71,7 +65,6 @@ const actions = [
   title="Resume"
   description="Resume and work experience of Raunaq Gupta"
   canonicalUrl={`${SITE_URL}${ROUTES.RESUME}`}
-  breadcrumbs={breadcrumbs}
   actions={actions}
 >
   <section id="summary">

@@ -26,7 +26,7 @@ This demo aims to:
 curl -X GET "https://api.raunaqgupta.com/utilities/datetime?timezone=PST"
 ```
 
-```sh
+```json
 {
   "timezone": "PST",
   "timestamp": "Monday, January 12, 2026 at 5:10:09 PM PST",
@@ -48,8 +48,87 @@ curl -X GET "https://api.raunaqgupta.com/utilities/datetime?timezone=PST"
 curl -X GET "https://api.raunaqgupta.com/aqi/feed/oakland"
 ```
 
-```sh
-{"status":"ok","data":{"aqi":25,"idx":5363,"attributions":[{"url":"http://www.arb.ca.gov/","name":"CARB - California Air Resources Board","logo":"USA-CAARB.png"},{"url":"http://www.airnow.gov/","name":"Air Now - US EPA"},{"url":"https://waqi.info/","name":"World Air Quality Index Project"}],"city":{"geo":[37.793635,-122.263356],"name":"Oakland-Laney College, Alameda, California","url":"https://aqicn.org/city/california/alameda/oakland-laney-college","location":""},"dominentpol":"pm25","iaqi":{"co":{"v":1.2},"h":{"v":48},"no2":{"v":5},"p":{"v":1024},"pm25":{"v":25},"t":{"v":16.1},"w":{"v":3},"wg":{"v":4}},"time":{"s":"2026-01-12 17:00:00","tz":"-08:00","v":1768237200,"iso":"2026-01-12T17:00:00-08:00"},"forecast":{"daily":{"pm10":[{"avg":22,"day":"2026-01-10","max":23,"min":19},{"avg":29,"day":"2026-01-11","max":33,"min":20},{"avg":41,"day":"2026-01-12","max":51,"min":28},{"avg":53,"day":"2026-01-13","max":56,"min":44},{"avg":55,"day":"2026-01-14","max":58,"min":49},{"avg":57,"day":"2026-01-15","max":64,"min":46},{"avg":50,"day":"2026-01-16","max":56,"min":39},{"avg":61,"day":"2026-01-17","max":64,"min":55}],"pm25":[{"avg":52,"day":"2026-01-10","max":53,"min":49},{"avg":60,"day":"2026-01-11","max":70,"min":44},{"avg":83,"day":"2026-01-12","max":100,"min":60},{"avg":118,"day":"2026-01-13","max":129,"min":102},{"avg":129,"day":"2026-01-14","max":147,"min":116},{"avg":143,"day":"2026-01-15","max":158,"min":115},{"avg":115,"day":"2026-01-16","max":133,"min":91},{"avg":152,"day":"2026-01-17","max":157,"min":136}],"uvi":[{"avg":1,"day":"2026-01-12","max":2,"min":0},{"avg":1,"day":"2026-01-13","max":3,"min":0},{"avg":1,"day":"2026-01-14","max":3,"min":0},{"avg":1,"day":"2026-01-15","max":3,"min":0},{"avg":1,"day":"2026-01-16","max":3,"min":0},{"avg":0,"day":"2026-01-17","max":0,"min":0}]}},"debug":{"sync":"2026-01-13T10:16:46+09:00"}}                                
+```json
+{
+  "status": "ok",
+  "data": {
+    "aqi": 25,
+    "idx": 5363,
+    "attributions": [
+      {
+        "url": "http://www.arb.ca.gov/",
+        "name": "CARB - California Air Resources Board",
+        "logo": "USA-CAARB.png"
+      },
+      {
+        "url": "http://www.airnow.gov/",
+        "name": "Air Now - US EPA"
+      },
+      {
+        "url": "https://waqi.info/",
+        "name": "World Air Quality Index Project"
+      }
+    ],
+    "city": {
+      "geo": [37.793635, -122.263356],
+      "name": "Oakland-Laney College, Alameda, California",
+      "url": "https://aqicn.org/city/california/alameda/oakland-laney-college",
+      "location": ""
+    },
+    "dominentpol": "pm25",
+    "iaqi": {
+      "co": { "v": 1.2 },
+      "h": { "v": 48 },
+      "no2": { "v": 5 },
+      "p": { "v": 1024 },
+      "pm25": { "v": 25 },
+      "t": { "v": 16.1 },
+      "w": { "v": 3 },
+      "wg": { "v": 4 }
+    },
+    "time": {
+      "s": "2026-01-12 17:00:00",
+      "tz": "-08:00",
+      "v": 1768237200,
+      "iso": "2026-01-12T17:00:00-08:00"
+    },
+    "forecast": {
+      "daily": {
+        "pm10": [
+          { "avg": 22, "day": "2026-01-10", "max": 23, "min": 19 },
+          { "avg": 29, "day": "2026-01-11", "max": 33, "min": 20 },
+          { "avg": 41, "day": "2026-01-12", "max": 51, "min": 28 },
+          { "avg": 53, "day": "2026-01-13", "max": 56, "min": 44 },
+          { "avg": 55, "day": "2026-01-14", "max": 58, "min": 49 },
+          { "avg": 57, "day": "2026-01-15", "max": 64, "min": 46 },
+          { "avg": 50, "day": "2026-01-16", "max": 56, "min": 39 },
+          { "avg": 61, "day": "2026-01-17", "max": 64, "min": 55 }
+        ],
+        "pm25": [
+          { "avg": 52, "day": "2026-01-10", "max": 53, "min": 49 },
+          { "avg": 60, "day": "2026-01-11", "max": 70, "min": 44 },
+          { "avg": 83, "day": "2026-01-12", "max": 100, "min": 60 },
+          { "avg": 118, "day": "2026-01-13", "max": 129, "min": 102 },
+          { "avg": 129, "day": "2026-01-14", "max": 147, "min": 116 },
+          { "avg": 143, "day": "2026-01-15", "max": 158, "min": 115 },
+          { "avg": 115, "day": "2026-01-16", "max": 133, "min": 91 },
+          { "avg": 152, "day": "2026-01-17", "max": 157, "min": 136 }
+        ],
+        "uvi": [
+          { "avg": 1, "day": "2026-01-12", "max": 2, "min": 0 },
+          { "avg": 1, "day": "2026-01-13", "max": 3, "min": 0 },
+          { "avg": 1, "day": "2026-01-14", "max": 3, "min": 0 },
+          { "avg": 1, "day": "2026-01-15", "max": 3, "min": 0 },
+          { "avg": 1, "day": "2026-01-16", "max": 3, "min": 0 },
+          { "avg": 0, "day": "2026-01-17", "max": 0, "min": 0 }
+        ]
+      }
+    },
+    "debug": {
+      "sync": "2026-01-13T10:16:46+09:00"
+    }
+  }
+}
 ```
 
 ## Enable key authentication on all endpoints

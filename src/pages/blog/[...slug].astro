@@ -1,11 +1,11 @@
 ---
 import PageLayout from "@layouts/pageLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
-
+import Prose from "@components/prose.astro";
 import { getCollection } from "astro:content";
 import PostDetails from "@components/PostDetails.astro";
 import { formatDate } from "../../utils";
-import { ROUTES, SITE_URL } from "../../constants";
+import { SITE_URL } from "../../constants";
 import { getDescription } from "../../utils";
 
 export async function getStaticPaths() {
@@ -29,14 +29,11 @@ if (!entry) {
   return Astro.redirect("/404");
 }
 
-const { Content, components } = await entry.render();
-const links = [
-  { text: "Raunaq Gupta", url: ROUTES.HOME },
-  { text: "Blog", url: ROUTES.BLOG },
-];
+const { Content } = await entry.render();
 
-const description = entry.data.description || getDescription(undefined, entry.body);
-const canonicalUrl = `${SITE_URL}${ROUTES.BLOG}/${entry.slug}`;
+const description =
+  entry.data.description || getDescription(undefined, entry.body);
+const canonicalUrl = `${SITE_URL}/blog/${entry.slug}`;
 const publishedTime = entry.data.date.toISOString();
 ---
 
@@ -46,10 +43,9 @@ const publishedTime = entry.data.date.toISOString();
   type="article"
   publishedTime={publishedTime}
   canonicalUrl={canonicalUrl}
-  breadcrumbs={links}
   frontmatter={entry.data}
 >
-  <Content components={{ ...components, img: Imgmdx }} />
+  <Prose><Content components={{ img: Imgmdx }} /></Prose>
   <PostDetails>
     <div class="date">
       {formatDate(entry.data.date)}

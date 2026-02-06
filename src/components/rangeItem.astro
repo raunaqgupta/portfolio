@@ -1,5 +1,6 @@
 ---
 const { title, org, from, to } = Astro.props;
+import DotIcon from "@icons/dot.svg";
 ---
 
 <section>
@@ -11,7 +12,7 @@ const { title, org, from, to } = Astro.props;
 
   <div class="heading">
     <h3>{title}</h3>
-    <div class="separator">○</div>
+    <DotIcon />
     <div>{org}</div>
   </div>
   <div class="content">

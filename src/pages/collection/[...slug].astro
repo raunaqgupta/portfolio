@@ -1,8 +1,6 @@
 ---
 import PageLayout from "../../layouts/pageLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
-import Ulmdx from "@components/ul.mdx.astro";
-import Listmdx from "@components/list.mdx.astro";
 import Hero from "@components/hero.astro";
 
 import { getCollection } from "astro:content";
@@ -45,5 +43,5 @@ const canonicalUrl = `${SITE_URL}/collection/${entry.slug}`;
   frontmatter={entry.data}
 >
   <Hero imageUrl={entry.data.hero} aspectRatio={1.5} />
-  <Content components={{ img: Imgmdx, ul: Ulmdx, List: Listmdx }} />
+  <Content components={{ img: Imgmdx }} />
 </PageLayout>

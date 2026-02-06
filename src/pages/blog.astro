@@ -1,7 +1,7 @@
 ---
 import Toolbar from "@components/toolbar.astro";
 import PageLayout from "@layouts/pageLayout.astro";
-import ListMdx from "@components/list.mdx.astro";
+import Olmdx from "@components/Ol.mdx.astro";
 import Input from "@components/input.astro";
 import DotFilledIcon from "@icons/dot-filled.svg";
 import { getCollection } from "astro:content";
@@ -34,7 +34,7 @@ const newBlog = blog
     <Input id="blog-search-input" name="search" placeholder="Search" />
   </Toolbar>
   <div id="blog-list">
-    <ListMdx>
+    <Olmdx>
       {
         newBlog.map((item) => (
           <li data-category={item.data.category || ""}>
@@ -47,7 +47,7 @@ const newBlog = blog
           </li>
         ))
       }
-    </ListMdx>
+    </Olmdx>
   </div>
 </PageLayout>
 

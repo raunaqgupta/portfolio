@@ -1,7 +1,7 @@
 ---
 import Toolbar from "@components/toolbar.astro";
 import PageLayout from "../layouts/pageLayout.astro";
-import ListMdx from "@components/list.mdx.astro";
+import Olmdx from "@components/Ol.mdx.astro";
 import Input from "@components/input.astro";
 import { getCollection } from "astro:content";
 import { ROUTES } from "../constants";
@@ -33,22 +33,20 @@ const categories = [
     <Input id="blog-search-input" name="search" placeholder="Search" />
   </Toolbar>
   <div id="blog-list">
-    <ListMdx>
+    <Olmdx>
       {
         newBlog.map((item) => (
           <li data-category={item.data.category || ""}>
             <a href={item.slug}>{item.data.title}</a>{" "}
             <div class="meta">
-              <div class="date">
-                {formatDate(item.data.date)}
-              </div>
+              <div class="date">{formatDate(item.data.date)}</div>
               <div class="separator">○</div>
               <div class="category"> {item.data.category} </div>
             </div>
           </li>
         ))
       }
-    </ListMdx>
+    </Olmdx>
   </div>
 </PageLayout>
 

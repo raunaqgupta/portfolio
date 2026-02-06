@@ -4,6 +4,7 @@ import RangeItem from "../components/rangeItem.astro";
 import DownloadIcon from "@icons/download.svg";
 import LinkedInIcon from "@icons/linkedin.svg";
 import Message from "@components/message.astro";
+import Olmdx from "@components/Ol.mdx.astro";
 
 import { getCollection } from "astro:content";
 import { getEntries } from "astro:content";
@@ -89,7 +90,7 @@ const actions = [
           from={job.data.from}
           to={job.data.to}
         >
-          {job.Content && <job.Content />}
+          {job.Content && <job.Content components={{ ol: Olmdx }} />}
         </RangeItem>
       ))
     }

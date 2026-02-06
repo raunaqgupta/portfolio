@@ -17,12 +17,12 @@ import PageLink from '@components/pageLink.astro';
 import { getCollection, reference } from 'astro:content';
 
 export const allCaseStudies = await getCollection('articles', ({ data }) => {
-  return data.category === 'case-study';
+  return data.category === 'portfolio';
 });
 export const referencedSlugs = frontmatter.caseStudies || [];
 export const referencedCaseStudies = allCaseStudies.filter((entry) =>
   referencedSlugs.includes(entry.slug)
-).map(({ slug, ...rest }) => ({ slug: `/case-study/${slug}`, ...rest }));
+).map(({ slug, ...rest }) => ({ slug: `/portfolio/${slug}`, ...rest }));
 
 I joined Cisco in 2021 to work on their ongoing efforts to build AppDynamics Cloud; a cloud-native full-stack observability platform. The project underwent an overhaul in 2023 when it was re-marketed and re-architected as Cisco Observability Platform (with the emphasis on platform). We went from designing a singular product to designing a platform experience that would deliver multiple observability products as inter-connected modules.
 
@@ -43,7 +43,3 @@ When you are designing effectively the same developer tool for 4 years across mu
 Any observability software's has two core functions for the various teams of developers and software reliability engineers that use it: **monitoring application performance**, and **troubleshooting issues**. The following case studies showcase work done in improving both facets.
 
 <Grid collection={referencedCaseStudies} />
-
-<FlexColumn>
-  <PageLink direction="next" label="Collection: PlanetScale" url="/collection/planetscale" />
-</FlexColumn>

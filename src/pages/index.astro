@@ -1,18 +1,13 @@
 ---
-import Logo3DDark from "@assets/logo.3d.dark.png";
-import Logo3DLight from "@assets/logo.3d.light.png";
 import Logo from "@components/logo.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
 import { ROUTES, SITE_URL } from "../constants";
 
-const description = "Personal website of Raunaq Gupta - Design technologist with 10+ years of experience shipping enterprise web applications and developer tools.";
+const description =
+  "Personal website of Raunaq Gupta - Design technologist with 10+ years of experience shipping enterprise web applications and developer tools.";
 ---
 
-<BaseLayout
-  title="Home"
-  description={description}
-  canonicalUrl={SITE_URL}
->
+<BaseLayout title="Home" description={description} canonicalUrl={SITE_URL}>
   <body>
     <Logo mode="3d" size="large" />
 

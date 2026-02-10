@@ -18,6 +18,7 @@ export const ROUTES = {
   BLOG: "/blog",
   RESUME: "/resume",
   INTERNAL: "/internal",
+  AUDIO: "/audio",
 } as const;
 
 export const CATEGORIES = {

@@ -3,7 +3,6 @@ import Toolbar from "@components/toolbar.astro";
 import PageLayout from "@layouts/pageLayout.astro";
 import Olmdx from "@components/Ol.mdx.astro";
 import Input from "@components/input.astro";
-import DotFilledIcon from "@icons/dot-filled.svg";
 import { getCollection } from "astro:content";
 import { ROUTES, SITE_URL } from "../constants";
 import { formatDate } from "../utils";
@@ -38,12 +37,10 @@ const newBlog = blog
       {
         newBlog.map((item) => (
           <li data-category={item.data.category || ""}>
-            <a href={item.slug}>{item.data.title}</a>{" "}
-            <div class="meta">
-              <div class="date">{formatDate(item.data.date)}</div>
-              <DotFilledIcon class="separator" />
-              <div class="category"> {item.data.category} </div>
-            </div>
+            <div class="date">{formatDate(item.data.date)}</div>
+            <span>
+              <a href={item.slug}>{item.data.title}</a>
+            </span>
           </li>
         ))
       }
@@ -73,20 +70,35 @@ const newBlog = blog
 </script>
 
 <style>
-  li .meta {
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  li a {
+    display: inline;
+  }
+
+  li .date,
+  li .category {
     display: flex;
     align-items: center;
     gap: var(--space-0);
-    font-size: 0.5em;
     color: var(--color-body-tertiary);
-  }
-
-  li .meta .category {
     text-transform: capitalize;
   }
 
-  li .meta .separator {
-    width: var(--space-1);
-    height: var(--space-1);
+  @media (max-width: 768px) {
+    li {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: var(--space-0);
+    }
+
+    li .date {
+      font-size: var(--typography-body-small);
+      margin-bottom: var(--space-1);
+    }
   }
 </style>

@@ -8,8 +8,8 @@ export const IMAGE_BUCKET_URL = "https://r2-image.raunaqgupta.workers.dev";
 
 export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
   year: "numeric",
-  month: "long",
-  day: "numeric",
+  month: "2-digit",
+  day: "2-digit",
 };
 
 export const ROUTES = {

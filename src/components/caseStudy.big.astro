@@ -3,7 +3,7 @@ const { image, title, description, url } = Astro.props;
 import ArrowRightIcon from "@icons/arrow-right.svg";
 ---
 
-<a href={url}>
+<a class="no-decoration no-hover" href={url}>
   <article>
     <div class="image" style={`--img: url("${image}")`}>
       <div></div>

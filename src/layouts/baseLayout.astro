@@ -183,40 +183,57 @@ import Head from "@components/head.astro";
   }
 
   a {
-    box-sizing: border-box;
     color: var(--color-body-primary);
-    display: inline;
-    padding-bottom: 1px;
     position: relative;
     text-decoration: none;
-    text-decoration-color: var(--color-border);
-    text-decoration-line: underline;
-    text-decoration-skip-ink: auto;
-    text-decoration-style: solid;
-    text-underline-offset: 5px;
-    transition: text-decoration-color 0.5s ease-out;
-  }
-
-  a:after {
-    border-bottom: 2px solid var(--color-highlight);
-    bottom: -1px;
-    content: "";
-    left: 0;
-    position: absolute;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.2s ease-out;
-    width: 100%;
-  }
-
-  a:hover::after,
-  a:focus::after {
-    transform: scaleX(1);
+    background-image:
+      linear-gradient(to right, var(--color-highlight), var(--color-highlight)),
+      linear-gradient(to right, var(--color-border), var(--color-border));
+    background-position:
+      0 100%,
+      0 100%;
+    background-repeat: no-repeat, no-repeat;
+    background-size:
+      0% 2px,
+      100% 1px;
+    transition: background-size 0.2s ease-out;
   }
 
   a:hover,
   a:focus {
-    text-decoration-color: var(--color-highlight);
+    background-size:
+      100% 2px,
+      100% 1px;
+  }
+
+  a.no-decoration {
+    background-image: linear-gradient(
+      to right,
+      var(--color-highlight),
+      var(--color-highlight)
+    );
+    background-size: 0% 2px;
+  }
+
+  a.no-decoration:hover,
+  a.no-decoration:focus {
+    background-size: 100% 2px;
+  }
+
+  a.no-hover:hover,
+  a.no-hover:focus {
+    background-image: none;
+  }
+
+  a.active {
+    color: var(--color-body-primary);
+    font-weight: 600;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a {
+      transition: none;
+    }
   }
 
   ul,

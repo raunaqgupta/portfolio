@@ -24,18 +24,6 @@ export default defineConfig({
   experimental: {
     fonts: [
       {
-        provider: "local",
-        name: "DMSerifDisplay-Italic",
-        cssVariable: "--font-dm-serif-display-italic",
-        variants: [
-          {
-            src: ["./src/assets/fonts/DMSerifDisplay-Italic.woff2"],
-            weight: 400,
-            style: "normal",
-          },
-        ],
-      },
-      {
         provider: fontProviders.google(),
         name: "Cal Sans",
         cssVariable: "--font-cal-sans",

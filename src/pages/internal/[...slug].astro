@@ -1,5 +1,5 @@
 ---
-import PageLayout from "@layouts/pageLayout.astro";
+import NarrowLayout from "@layouts/NarrowLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
 import Prose from "@components/Prose.astro";
 import { getCollection } from "astro:content";
@@ -30,7 +30,7 @@ if (!entry) {
 const { Content } = await entry.render();
 ---
 
-<PageLayout
+<NarrowLayout
   title={entry.data.title}
   robots="noindex, nofollow"
   frontmatter={entry.data}
@@ -45,7 +45,7 @@ const { Content } = await entry.render();
       {entry.data.category}
     </div>
   </PostDetails>
-</PageLayout>
+</NarrowLayout>
 
 <style>
   .date,

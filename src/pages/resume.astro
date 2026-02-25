@@ -1,5 +1,5 @@
 ---
-import PageLayout from "@layouts/pageLayout.astro";
+import WideLayout from "@layouts/WideLayout.astro";
 import RangeItem from "../components/rangeItem.astro";
 import DownloadIcon from "@icons/download.svg";
 import LinkedInIcon from "@icons/linkedin.svg";
@@ -62,7 +62,7 @@ const actions = [
 ];
 ---
 
-<PageLayout
+<WideLayout
   title="Resume"
   description="Resume and work experience of Raunaq Gupta"
   canonicalUrl={`${SITE_URL}${ROUTES.RESUME}`}
@@ -110,7 +110,7 @@ const actions = [
       ))
     }
   </section>
-</PageLayout>
+</WideLayout>
 
 <style>
   .heading {

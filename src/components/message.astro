@@ -17,7 +17,7 @@ import InfoCircled from "@icons/info-circled.svg";
   .message {
     display: inline-flex;
     gap: var(--space-1);
-    align-items: center;
+    align-items: flex-start;
     padding: var(--space-1) var(--space-2);
     background-color: color-mix(in srgb, var(--color-info) 10%, transparent);
     border-radius: 6px;
@@ -35,10 +35,10 @@ import InfoCircled from "@icons/info-circled.svg";
     .message {
       align-items: flex-start;
       padding: var(--space-1);
-      font-size: var(--typography-body-small);
     }
 
     .text {
+      font-size: var(--typography-body-small);
       line-height: 1.5;
     }
   }

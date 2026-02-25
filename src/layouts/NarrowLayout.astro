@@ -1,0 +1,115 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  actions?: Array<{ label: string; url: string; isExternal?: boolean }>;
+  robots?: string;
+  canonicalUrl?: string;
+  frontmatter?: {
+    title?: string;
+    description?: string;
+    hero?: string;
+    thumbnail?: string;
+    date?: Date;
+  };
+}
+
+const {
+  actions,
+  robots,
+  description,
+  image,
+  type,
+  publishedTime,
+  modifiedTime,
+  author,
+  canonicalUrl,
+  frontmatter,
+} = Astro.props;
+const title = Astro.props.title || frontmatter?.title || "Untitled";
+
+import BaseLayout from "../layouts/baseLayout.astro";
+import Footer from "@components/footer.astro";
+import Heading from "@components/Heading.astro";
+import PostDetails from "@components/PostDetails.astro";
+import Modal from "@components/modal.astro";
+import Header from "@components/header.astro";
+import { formatDate } from "@src/utils";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  type={type}
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+  author={author}
+  robots={robots}
+  canonicalUrl={canonicalUrl}
+  frontmatter={frontmatter}
+>
+  <body>
+    <Header />
+    <main>
+      <Modal />
+      <PostDetails>
+        <div class="date">
+          {formatDate(frontmatter.date)}
+        </div>
+      </PostDetails>
+      <Heading title={title} actions={actions} />
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</BaseLayout>
+
+<style>
+  body {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg);
+    color: var(--color-body-primary);
+    font-family: sans-serif;
+    font-size: 1.12em;
+    line-height: 28px;
+    margin: 0 auto;
+    max-width: 120ch;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: var(--space-4) 4em 0;
+  }
+
+  main {
+    flex: 1;
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: var(--space-4) 4em 0;
+    width: 100%;
+  }
+
+  @media only screen and (max-width: 1024px) {
+    body {
+      padding: 4em 4em 0;
+    }
+  }
+
+  @media only screen and (max-width: 700px) {
+    body {
+      min-width: unset;
+      padding: 2em 1.5em 0;
+    }
+
+    main {
+      padding-inline: 0;
+    }
+  }
+</style>

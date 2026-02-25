@@ -1,6 +1,6 @@
 ---
 import Toolbar from "@components/toolbar.astro";
-import PageLayout from "../layouts/pageLayout.astro";
+import WideLayout from "../layouts/WideLayout.astro";
 import Olmdx from "@components/Ol.mdx.astro";
 import Input from "@components/input.astro";
 import { getCollection } from "astro:content";
@@ -28,7 +28,7 @@ const categories = [
 ].sort();
 ---
 
-<PageLayout title="Internal" robots="noindex, nofollow">
+<WideLayout title="Internal" robots="noindex, nofollow">
   <Toolbar>
     <Input id="blog-search-input" name="search" placeholder="Search" />
   </Toolbar>
@@ -48,7 +48,7 @@ const categories = [
       }
     </Olmdx>
   </div>
-</PageLayout>
+</WideLayout>
 
 <script type="module">
   const input = document.getElementById("blog-search-input");

@@ -5,6 +5,7 @@ This file shows all changes made to the codebase in reverse chronological order.
 ---
 
 ## Codebase Reorganization: Moved Files from .ai to src
+
 **Severity:** Low  
 **Timestamp:** 2026-01-23T14:20:00Z  
 **Heading:** Project Structure
@@ -15,6 +16,7 @@ Moved all files from `src/.ai/` directory directly to `src/` directory. Renamed 
 ---
 
 ## TypeScript: Enhanced Type Safety
+
 **Severity:** Medium  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** TypeScript Improvements
@@ -25,6 +27,7 @@ Created comprehensive type definitions in `types.ts` for Breadcrumb, Action, SEO
 ---
 
 ## Code Quality: Created Utility Functions and Constants
+
 **Severity:** Medium  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** Code Quality
@@ -35,6 +38,7 @@ Created `utils.ts` with utility functions: `formatDate()` for consistent date fo
 ---
 
 ## Error Handling: Added Comprehensive Error Handling
+
 **Severity:** High  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** Error Handling
@@ -45,26 +49,29 @@ Added try-catch blocks around all `getCollection` calls throughout the codebase.
 ---
 
 ## Code Quality: Removed Commented Code
+
 **Severity:** Low  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** Code Quality
 
 **Description:**  
-Removed all commented-out code including: breadcrumbs code in pageLayout.astro, category filter code in blog.astro, and case studies display code in resume.astro. Cleaned up codebase for better maintainability.
+Removed all commented-out code including: breadcrumbs code in WideLayout.astro, category filter code in blog.astro, and case studies display code in resume.astro. Cleaned up codebase for better maintainability.
 
 ---
 
 ## Accessibility: Enabled Breadcrumbs and Added Alt Text
+
 **Severity:** Medium  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** Accessibility Improvements
 
 **Description:**  
-Uncommented and enabled breadcrumbs component in pageLayout.astro. Breadcrumbs now display on all pages that provide them. Added descriptive alt text to all gallery images in gallery.astro component. Added `loading="lazy"` attribute for performance.
+Uncommented and enabled breadcrumbs component in WideLayout.astro. Breadcrumbs now display on all pages that provide them. Added descriptive alt text to all gallery images in gallery.astro component. Added `loading="lazy"` attribute for performance.
 
 ---
 
 ## SEO: Comprehensive SEO Enhancements
+
 **Severity:** High  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** SEO Enhancements
@@ -75,6 +82,7 @@ Enhanced head.astro component with support for dynamic meta descriptions, Open G
 ---
 
 ## Bug Fix: Fixed Broken HTML Attribute
+
 **Severity:** High  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** Critical Bug Fixes
@@ -85,6 +93,7 @@ Fixed malformed `id` attribute in portfolio.astro (line 35) that contained a new
 ---
 
 ## Bug Fix: Added Missing Alt Text to Gallery Images
+
 **Severity:** High  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** Critical Bug Fixes
@@ -95,6 +104,7 @@ Added missing alt text to gallery images in gallery.astro component. Gallery ima
 ---
 
 ## Bug Fix: Fixed Button Event Handler
+
 **Severity:** High  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** Critical Bug Fixes
@@ -105,6 +115,7 @@ Fixed incorrect button event handler in button.astro. Changed from `onclick={url
 ---
 
 ## Bug Fix: Fixed Invalid HTML Attribute
+
 **Severity:** High  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** Critical Bug Fixes
@@ -115,6 +126,7 @@ Removed invalid `closedby="any"` attribute from `<dialog>` element in modal.astr
 ---
 
 ## Bug Fix: Removed Debug Code
+
 **Severity:** Medium  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** Critical Bug Fixes
@@ -125,6 +137,7 @@ Removed `console.log("Next button clicked")` debug statement from modal.astro co
 ---
 
 ## UI/UX: Enhanced 404 Page
+
 **Severity:** Low  
 **Timestamp:** 2026-01-23T14:16:00Z  
 **Heading:** UI/UX Enhancements

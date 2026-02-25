@@ -1,5 +1,5 @@
 ---
-import PageLayout from "../../layouts/pageLayout.astro";
+import WideLayout from "../../layouts/WideLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
 import Hero from "@components/hero.astro";
 
@@ -35,7 +35,7 @@ const description =
 const canonicalUrl = `${SITE_URL}/collection/${entry.slug}`;
 ---
 
-<PageLayout
+<WideLayout
   title={entry.data.title}
   description={description}
   image={entry.data.hero || entry.data.thumbnail}
@@ -44,4 +44,4 @@ const canonicalUrl = `${SITE_URL}/collection/${entry.slug}`;
 >
   <Hero imageUrl={entry.data.hero} aspectRatio={1.5} />
   <Content components={{ img: Imgmdx }} />
-</PageLayout>
+</WideLayout>

@@ -1,11 +1,9 @@
 ---
-import PageLayout from "@layouts/pageLayout.astro";
+import NarrowLayout from "@layouts/NarrowLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
 import Codemdx from "@components/Code.mdx.astro";
 import Prose from "@components/Prose.astro";
 import { getCollection } from "astro:content";
-import PostDetails from "@components/PostDetails.astro";
-import { formatDate } from "../../utils";
 import { SITE_URL } from "../../constants";
 import { getDescription } from "../../utils";
 
@@ -38,7 +36,7 @@ const canonicalUrl = `${SITE_URL}/blog/${entry.slug}`;
 const publishedTime = entry.data.date.toISOString();
 ---
 
-<PageLayout
+<NarrowLayout
   title={entry.data.title}
   description={description}
   type="article"
@@ -47,16 +45,7 @@ const publishedTime = entry.data.date.toISOString();
   frontmatter={entry.data}
 >
   <Prose><Content components={{ img: Imgmdx, pre: Codemdx }} /></Prose>
-  <PostDetails>
-    <div class="date">
-      {formatDate(entry.data.date)}
-    </div>
-    <div class="separator">-</div>
-    <div class="category">
-      {entry.data.category}
-    </div>
-  </PostDetails>
-</PageLayout>
+</NarrowLayout>
 
 <style>
   .date,

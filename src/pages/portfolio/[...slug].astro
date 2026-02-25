@@ -1,5 +1,5 @@
 ---
-import PageLayout from "@layouts/pageLayout.astro";
+import WideLayout from "@layouts/WideLayout.astro";
 import Prose from "@components/Prose.astro";
 import Imgmdx from "@components/img.mdx.astro";
 import Ulmdx from "@components/ul.mdx.astro";
@@ -39,7 +39,7 @@ const description =
 const canonicalUrl = `${SITE_URL}/portfolio/${entry.slug}`;
 ---
 
-<PageLayout
+<WideLayout
   title={entry.data.title}
   description={description}
   image={entry.data.hero || entry.data.thumbnail}
@@ -51,4 +51,4 @@ const canonicalUrl = `${SITE_URL}/portfolio/${entry.slug}`;
   <Prose>
     <Content components={{ img: Imgmdx, ul: Ulmdx, code: Codemdx }} />
   </Prose>
-</PageLayout>
+</WideLayout>

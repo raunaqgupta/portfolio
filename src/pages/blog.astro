@@ -1,6 +1,6 @@
 ---
 import Toolbar from "@components/toolbar.astro";
-import PageLayout from "@layouts/pageLayout.astro";
+import WideLayout from "@layouts/WideLayout.astro";
 import Olmdx from "@components/Ol.mdx.astro";
 import Input from "@components/input.astro";
 import { getCollection } from "astro:content";
@@ -24,7 +24,7 @@ const newBlog = blog
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
-<PageLayout
+<WideLayout
   title="Blog"
   description="Blog posts about experiments in technology & design, recipes, and literature"
   canonicalUrl={`${SITE_URL}${ROUTES.BLOG}`}
@@ -46,7 +46,7 @@ const newBlog = blog
       }
     </Olmdx>
   </div>
-</PageLayout>
+</WideLayout>
 
 <script type="module">
   const input = document.getElementById("blog-search-input");

@@ -13,10 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@astrojs/mdx": "^4.3.11",
-    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/sitemap": "^3.7.0",
     "@shikijs/transformers": "^3.20.0",
-    "astro": "^5.16.0",
+    "astro": "^5.18.0",
     "cooklang": "^0.3.0"
   },
   "devDependencies": {

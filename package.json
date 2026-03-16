@@ -15,6 +15,7 @@
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/sitemap": "^3.7.0",
+    "@sentry/astro": "^10.43.0",
     "@shikijs/transformers": "^3.20.0",
     "astro": "^5.18.0",
     "cooklang": "^0.3.0"

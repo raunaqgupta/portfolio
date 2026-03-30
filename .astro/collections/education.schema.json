@@ -1,58 +1,28 @@
 {
-  "$ref": "#/definitions/education",
-  "definitions": {
-    "education": {
-      "type": "object",
-      "properties": {
-        "role": {
-          "type": "string"
-        },
-        "organization": {
-          "type": "string"
-        },
-        "from": {
-          "anyOf": [
-            {
-              "type": "string",
-              "format": "date-time"
-            },
-            {
-              "type": "string",
-              "format": "date"
-            },
-            {
-              "type": "integer",
-              "format": "unix-time"
-            }
-          ]
-        },
-        "to": {
-          "anyOf": [
-            {
-              "type": "string",
-              "format": "date-time"
-            },
-            {
-              "type": "string",
-              "format": "date"
-            },
-            {
-              "type": "integer",
-              "format": "unix-time"
-            }
-          ]
-        },
-        "$schema": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "role",
-        "organization",
-        "from"
-      ],
-      "additionalProperties": false
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string"
+    },
+    "organization": {
+      "type": "string"
+    },
+    "from": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "to": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "$schema": {
+      "type": "string"
     }
   },
-  "$schema": "http://json-schema.org/draft-07/schema#"
+  "required": [
+    "role",
+    "organization",
+    "from"
+  ]
 }

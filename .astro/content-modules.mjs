@@ -1,18 +1,15 @@
 
 export default new Map([
-["src/content/jobs/arkin.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fjobs%2Farkin.mdx&astroContentModuleFlag=true")],
-["src/content/jobs/cisco.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fjobs%2Fcisco.mdx&astroContentModuleFlag=true")],
-["src/content/jobs/planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fjobs%2Fplanetscale.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/2020-12-31.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2020-12-31.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/2022-05-06.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2022-05-06.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/2025-12-26-json-ld-examples.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2025-12-26-json-ld-examples.mdx&astroContentModuleFlag=true")],
+["src/content/articles/2025-12-31-dtcg-examples.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2025-12-31-dtcg-examples.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/2026-01-06-code-block-line-numbering-using-counter.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2026-01-06-code-block-line-numbering-using-counter.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/2026-01-12-wrapping-cloudflare-workers-and-third-party-apis.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2026-01-12-wrapping-cloudflare-workers-and-third-party-apis.mdx&astroContentModuleFlag=true")],
-["src/content/articles/2025-12-31-dtcg-examples.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2025-12-31-dtcg-examples.mdx&astroContentModuleFlag=true")],
-["src/content/articles/2026-01-14-postcard.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2026-01-14-postcard.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/2026-01-13-behavioral-questions.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2026-01-13-behavioral-questions.mdx&astroContentModuleFlag=true")],
-["src/content/articles/appopt.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fappopt.mdx&astroContentModuleFlag=true")],
+["src/content/articles/2026-01-14-postcard.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2026-01-14-postcard.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/2026-02-26-working-remotely.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2F2026-02-26-working-remotely.mdx&astroContentModuleFlag=true")],
+["src/content/articles/appopt.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fappopt.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/appsec.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fappsec.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/asparagus-cottage-cheese-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fasparagus-cottage-cheese-sandwich.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/california-breakfast-bowl.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fcalifornia-breakfast-bowl.mdx&astroContentModuleFlag=true")],
@@ -21,8 +18,8 @@ export default new Map([
 ["src/content/articles/dbaas-planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fdbaas-planetscale.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/dbmon.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fdbmon.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/docs-planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fdocs-planetscale.mdx&astroContentModuleFlag=true")],
-["src/content/articles/flux-planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fflux-planetscale.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/feta-sausage-tomato-mustard-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Ffeta-sausage-tomato-mustard-sandwich.mdx&astroContentModuleFlag=true")],
+["src/content/articles/flux-planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fflux-planetscale.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/login-concept-planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Flogin-concept-planetscale.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/mango-lassi.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fmango-lassi.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/o11y.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fo11y.mdx&astroContentModuleFlag=true")],
@@ -30,5 +27,8 @@ export default new Map([
 ["src/content/articles/palak-paneer.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fpalak-paneer.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fplanetscale.mdx&astroContentModuleFlag=true")],
 ["src/content/articles/potato-chip-sandwich.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fpotato-chip-sandwich.mdx&astroContentModuleFlag=true")],
-["src/content/articles/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fyogurt-dip.mdx&astroContentModuleFlag=true")]]);
+["src/content/articles/yogurt-dip.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Farticles%2Fyogurt-dip.mdx&astroContentModuleFlag=true")],
+["src/content/jobs/arkin.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fjobs%2Farkin.mdx&astroContentModuleFlag=true")],
+["src/content/jobs/cisco.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fjobs%2Fcisco.mdx&astroContentModuleFlag=true")],
+["src/content/jobs/planetscale.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fjobs%2Fplanetscale.mdx&astroContentModuleFlag=true")]]);
 		

@@ -17,8 +17,8 @@ try {
 }
 
 const newBlog = blog
-  .map(({ slug, ...rest }) => ({
-    slug: `${ROUTES.INTERNAL}/` + slug,
+  .map(({ id, ...rest }) => ({
+    id: `${ROUTES.INTERNAL}/` + id,
     ...rest,
   }))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -37,7 +37,7 @@ const categories = [
       {
         newBlog.map((item) => (
           <li data-category={item.data.category || ""}>
-            <a href={item.slug}>{item.data.title}</a>{" "}
+            <a href={item.id}>{item.data.title}</a>{" "}
             <div class="meta">
               <div class="date">{formatDate(item.data.date)}</div>
               <div class="separator">○</div>

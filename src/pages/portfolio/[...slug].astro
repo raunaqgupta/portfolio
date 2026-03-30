@@ -7,7 +7,7 @@ import Listmdx from "@components/list.mdx.astro";
 import Codemdx from "@components/Code.mdx.astro";
 import Hero from "@components/hero.astro";
 
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import { SITE_URL } from "../../constants";
 import { getDescription } from "../../utils";
 
@@ -17,7 +17,7 @@ export async function getStaticPaths() {
       return data.category === "portfolio";
     });
     return projects.map((entry) => ({
-      params: { slug: entry.slug },
+      params: { slug: entry.id },
       props: { entry },
     }));
   } catch (error) {
@@ -32,11 +32,11 @@ if (!entry) {
   return Astro.redirect("/404");
 }
 
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 const description =
   entry.data.description || getDescription(undefined, entry.body);
-const canonicalUrl = `${SITE_URL}/portfolio/${entry.slug}`;
+const canonicalUrl = `${SITE_URL}/portfolio/${entry.id}`;
 ---
 
 <WideLayout

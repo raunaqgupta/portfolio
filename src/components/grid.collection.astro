@@ -17,7 +17,7 @@ const sortedCollection = [...collection].sort(
           name={item.data.organization}
           title={item.data.title}
           description={item.data.description}
-          url={item.slug}
+          url={item.id}
           caseStudyCount={
             Array.isArray(item.data.caseStudies)
               ? item.data.caseStudies.length
@@ -30,7 +30,7 @@ const sortedCollection = [...collection].sort(
           name={item.data.product}
           title={item.data.title}
           description={item.data.description}
-          url={item.slug}
+          url={item.id}
         />
       ),
     )

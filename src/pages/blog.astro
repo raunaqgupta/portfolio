@@ -17,8 +17,8 @@ try {
 }
 
 const newBlog = blog
-  .map(({ slug, ...rest }) => ({
-    slug: `${ROUTES.BLOG}/` + slug,
+  .map(({ id, ...rest }) => ({
+    id: `${ROUTES.BLOG}/` + id,
     ...rest,
   }))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -39,7 +39,7 @@ const newBlog = blog
           <li data-category={item.data.category || ""}>
             <div class="date">{formatDate(item.data.date)}</div>
             <span>
-              <a href={item.slug}>{item.data.title}</a>
+              <a href={item.id}>{item.data.title}</a>
             </span>
           </li>
         ))

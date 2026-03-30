@@ -21,8 +21,8 @@ export const allCaseStudies = await getCollection('articles', ({ data }) => {
 });
 export const referencedSlugs = frontmatter.caseStudies || [];
 export const referencedCaseStudies = allCaseStudies.filter((entry) =>
-  referencedSlugs.includes(entry.slug)
-).map(({ slug, ...rest }) => ({ slug: `/portfolio/${slug}`, ...rest }));
+  referencedSlugs.includes(entry.id)
+).map(({ id, ...rest }) => ({ id: `/portfolio/${id}`, ...rest }));
 
 I joined Cisco in 2021 to work on their ongoing efforts to build AppDynamics Cloud; a cloud-native full-stack observability platform. The project underwent an overhaul in 2023 when it was re-marketed and re-architected as Cisco Observability Platform (with the emphasis on platform). We went from designing a singular product to designing a platform experience that would deliver multiple observability products as inter-connected modules.
 

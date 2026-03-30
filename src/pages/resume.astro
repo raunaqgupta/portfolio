@@ -6,8 +6,7 @@ import LinkedInIcon from "@icons/linkedin.svg";
 import Message from "@components/message.astro";
 import Olmdx from "@components/Ol.mdx.astro";
 
-import { getCollection } from "astro:content";
-import { getEntries } from "astro:content";
+import { getCollection, getEntries, render } from "astro:content";
 import { ROUTES, SITE_URL } from "../constants";
 
 let rawJobs = [];
@@ -23,13 +22,13 @@ try {
 const jobs = await Promise.all(
   rawJobs.map(async (job) => {
     try {
-      const rendered = await job.render();
+      const rendered = await render(job);
       const caseStudies = job.data.caseStudies
         ? await getEntries(job.data.caseStudies)
         : [];
       return { ...job, Content: rendered.Content, caseStudies };
     } catch (error) {
-      console.error(`Error rendering job ${job.slug}:`, error);
+      console.error(`Error rendering job ${job.id}:`, error);
       return { ...job, Content: null, caseStudies: [] };
     }
   }),

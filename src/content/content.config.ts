@@ -14,7 +14,7 @@ const articles = defineCollection({
     description: z.string().optional(),
     organization: z.string().optional(),
     product: z.string().optional(),
-    collection: z.string(reference("articles")).optional(),
+    collection: reference("articles").optional(),
     thumbnail: z.string().url().optional(),
     hero: z.string().url().optional(),
     published: z.boolean().optional(),

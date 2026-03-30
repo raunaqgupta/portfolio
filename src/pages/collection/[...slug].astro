@@ -3,7 +3,7 @@ import WideLayout from "../../layouts/WideLayout.astro";
 import Imgmdx from "@components/img.mdx.astro";
 import Hero from "@components/hero.astro";
 
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import { SITE_URL } from "../../constants";
 import { getDescription } from "../../utils";
 
@@ -13,7 +13,7 @@ export async function getStaticPaths() {
       return data.category === "collection";
     });
     return products.map((entry) => ({
-      params: { slug: entry.slug },
+      params: { slug: entry.id },
       props: { entry },
     }));
   } catch (error) {
@@ -28,11 +28,11 @@ if (!entry) {
   return Astro.redirect("/404");
 }
 
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 const description =
   entry.data.description || getDescription(undefined, entry.body);
-const canonicalUrl = `${SITE_URL}/collection/${entry.slug}`;
+const canonicalUrl = `${SITE_URL}/collection/${entry.id}`;
 ---
 
 <WideLayout

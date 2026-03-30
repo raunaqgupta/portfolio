@@ -31,13 +31,11 @@ export default defineConfig({
       transformers: [transformerNotationHighlight()],
     },
   },
-  experimental: {
-    fonts: [
-      {
-        provider: fontProviders.google(),
-        name: "Cal Sans",
-        cssVariable: "--font-cal-sans",
-      },
-    ],
-  },
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Cal Sans",
+      cssVariable: "--font-cal-sans",
+    },
+  ],
 });

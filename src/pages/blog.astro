@@ -32,25 +32,26 @@ const newBlog = blog
   <Toolbar>
     <Input id="blog-search-input" name="search" placeholder="Search" />
   </Toolbar>
-  <div id="blog-list">
-    <Olmdx>
-      {
-        newBlog.map((item) => (
-          <li data-category={item.data.category || ""}>
+
+  <Olmdx id="blog-list">
+    {
+      newBlog.map((item) => (
+        <li data-category={item.data.category || ""}>
+          <div class="content">
             <div class="date">{formatDate(item.data.date)}</div>
             <span>
               <a href={item.id}>{item.data.title}</a>
             </span>
-          </li>
-        ))
-      }
-    </Olmdx>
-  </div>
+          </div>
+        </li>
+      ))
+    }
+  </Olmdx>
 </WideLayout>
 
-<script type="module">
-  const input = document.getElementById("blog-search-input");
-  const list = document.querySelector("#blog-list ul");
+<script>
+  const input = document.querySelector<HTMLInputElement>("#blog-search-input");
+  const list = document.querySelector("#blog-list");
 
   if (input && list) {
     const items = Array.from(list.querySelectorAll("li"));
@@ -70,7 +71,7 @@ const newBlog = blog
 </script>
 
 <style>
-  li {
+  li .content {
     display: flex;
     align-items: center;
     gap: var(--space-1);

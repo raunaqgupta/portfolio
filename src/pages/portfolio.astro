@@ -13,8 +13,8 @@ try {
   console.error("Error fetching case studies:", error);
 }
 
-const newProducts = caseStudies.map(({ slug, ...rest }) => ({
-  slug: `/portfolio/` + slug,
+const newProducts = caseStudies.map(({ id, ...rest }) => ({
+  id: `${ROUTES.PORTFOLIO}/` + id,
   ...rest,
 }));
 ---

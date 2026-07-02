@@ -1,5 +1,5 @@
 ---
-title: Secure Application on Cisco Observability Platform
+title: Cisco Secure Application on Cisco Observability Platform
 description: Launching a new vertical while defining the blueprint for how products get built on a new platform
 organization: Cisco
 product: Cisco Observability Platform
@@ -18,23 +18,31 @@ import Message from "@components/message.astro";
 import PageLink from '@components/pageLink.astro';
 import FlexColumn from '@components/flexColumn.astro';
 
-I led the design of Secure Application, a security-focused vertical on Cisco Observability Platform. It was built as one of the first 1st-party applications on the newly devised observability platform, complementing the (existing) core verticals of application performance, infrastructure monitoring, and real user monitoring.
+## Table of contents
 
-Cisco Secure Application launched in early 2024. Read more about it [here](https://blogs.cisco.com/applications/cisco-secure-application-makes-it-easier-than-ever-to-secure-your-cloud-native-applications-and-sensitive-data), and [here](https://blogs.cisco.com/applications/protect-your-cloud-environments-with-data-security-observability).
+- [Problem definition](#problem-definition-defining-the-gap)
+- [My role](#my-role)
+- [Impact](#impact)
+- [Key design decisions](#key-design-decisions)
+  - [Business risk scoring](#business-risk-scoring)
+  - [Relationship map refresh](#relationship-map-refresh)
+- [Prototype](#prototype)
+- [References](#references)
 
-Following Splunk's acquisition of Cisco, Secure Application was [re-launched](https://www.splunk.com/en_us/blog/observability/fix-faster-ship-safer-with-secure-application-on-splunk-observability-cloud.html) for Splunk Observability Cloud. As I sought new challenges, I helped transition the incoming designer to take over the project.
+## Problem definition
 
-## What is Secure Application?
+Cisco's upcoming observability platform (aptly called Cisco Observability Platform) wanted to bolster its narrative of full-stack observability to incorporate security monitoring amongst the usual suspects of application performance monitoring, infrastructure monitoring, and digital experience monitorinng.
 
-Modern applications are a complex network of services that fulfil various functions by transmitting data between them. These services may either themselves have vulnerabilities that can compromise this entire network, or might transmit sensitive data that can be intercepted.
+This would also be the first step towards a stronger narrative between Cisco's security and observability initiatives. The narrative link will also eventually help in cross-sells.
 
-Secure Application on Cisco Observability Platform is designed to monitor the security posture of such applications. It provides insights into vulnerabilities, data leaks, misconfigurations, and potential threats that could compromise the integrity of these applications. It also provides fixes and best practices to help developers and security teams fortify their applications against potential attacks.
+## My role
 
-## Process
+I was the lead designer within the core team (1 product manager, 5 engineers, 1 user researcher). I drove:
 
-I researched the existing landscape of application security tools, and through various design artifacts helped the product team to refine the roadmap. This was to ensure that the design efforts would be focused on features that are most impactful with high feasibility of delivery.
-
-I went through several rounds of wireframing, prototyping, and usability testing to validate the designs.
+1. Visioning and refinement of the core use cases.
+2. Designing the information architecutre of the application.
+3. Migration of the entire application to a new design system.
+4. Helped define behavior of the extension/module system within the platform.
 
 ## Exploring the feasible landscape
 
@@ -78,6 +86,11 @@ Appdynamics Cloud was being mutated into a platform play, and Secure Application
 ### Prototype
 
 <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="800" src="https://embed.figma.com/proto/SjHzAeMv2Ty7jQo9LKX5Pp/Cisco-Secure-Application---Mag?page-id=2995%3A49031&node-id=3590-31881&p=f&viewport=1283%2C80%2C0.13&scaling=contain&content-scaling=fixed&starting-point-node-id=3436%3A29877&embed-host=share" allowfullscreen></iframe>
+
+## References
+
+- [Cisco Secure Application launch](https://blogs.cisco.com/applications/cisco-secure-application-makes-it-easier-than-ever-to-secure-your-cloud-native-applications-and-sensitive-data)
+- [Data security module launch](https://blogs.cisco.com/applications/protect-your-cloud-environments-with-data-security-observability)
 
 
 <FlexColumn>

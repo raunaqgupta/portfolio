@@ -17,17 +17,9 @@ const newProducts = caseStudies.map(({ id, ...rest }) => ({
   id: `${ROUTES.PORTFOLIO}/` + id,
   ...rest,
 }));
-
-const description =
-  "Design technologist with 10+ years of experience shipping enterprise web applications and developer tools.";
 ---
 
-<WideLayout
-  title="Portfolio"
-  description={description}
-  canonicalUrl={`${SITE_URL}${ROUTES.PORTFOLIO}`}
->
-  <p class="intro">{description}</p>
+<WideLayout title="Portfolio" canonicalUrl={`${SITE_URL}${ROUTES.PORTFOLIO}`}>
   <Grid collection={newProducts} />
 </WideLayout>
 

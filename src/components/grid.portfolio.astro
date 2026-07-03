@@ -3,13 +3,6 @@ import ArrowRightIcon from "@icons/arrow-right.svg";
 
 const { collection } = Astro.props;
 
-const organizationSubtitles: Record<string, string> = {
-  Cisco: "Enterprise observability",
-  PlanetScale: "Developer database platform",
-};
-
-const organizationOrder = ["Cisco", "PlanetScale"];
-
 const sorted = [...collection].sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
@@ -21,14 +14,7 @@ for (const item of sorted) {
   grouped.get(org)!.push(item);
 }
 
-const groups = [...grouped.entries()].sort(([a], [b]) => {
-  const ai = organizationOrder.indexOf(a);
-  const bi = organizationOrder.indexOf(b);
-  if (ai === -1 && bi === -1) return a.localeCompare(b);
-  if (ai === -1) return 1;
-  if (bi === -1) return -1;
-  return ai - bi;
-});
+const groups = [...grouped.entries()];
 ---
 
 <div class="groups">
@@ -37,9 +23,6 @@ const groups = [...grouped.entries()].sort(([a], [b]) => {
       <section class="group">
         <aside class="meta">
           <h2>{organization}</h2>
-          {organizationSubtitles[organization] && (
-            <p>{organizationSubtitles[organization]}</p>
-          )}
         </aside>
         <div class="cards">
           {items.map((item) => (

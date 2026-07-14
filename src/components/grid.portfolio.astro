@@ -1,0 +1,180 @@
+---
+import ArrowRightIcon from "@icons/arrow-right.svg";
+
+const { collection } = Astro.props;
+
+const sorted = [...collection].sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const grouped = new Map<string, typeof sorted>();
+for (const item of sorted) {
+  const org = item.data.organization ?? "Other";
+  if (!grouped.has(org)) grouped.set(org, []);
+  grouped.get(org)!.push(item);
+}
+
+const groups = [...grouped.entries()];
+---
+
+<div class="groups">
+  {
+    groups.map(([organization, items]) => (
+      <section class="group">
+        <aside class="meta">
+          <h2>{organization}</h2>
+        </aside>
+        <div class="cards">
+          {items.map((item) => (
+            <a class="card no-decoration no-hover" href={item.id}>
+              <div
+                class="image"
+                style={`--img: url("${item.data.thumbnail}")`}
+              />
+              <div class="content">
+                <div class="text">
+                  <h3>{item.data.title}</h3>
+                  {item.data.description && <p>{item.data.description}</p>}
+                </div>
+                <ArrowRightIcon class="icon" />
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .groups {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .group {
+    display: grid;
+    grid-template-columns: minmax(190px, 220px) 1fr;
+    gap: 56px;
+    padding: 64px 0;
+    border-top: 1px solid var(--color-border-bg);
+  }
+
+  .meta {
+    align-self: start;
+    position: sticky;
+    top: 32px;
+  }
+
+  .meta h2 {
+    margin: 0 0 12px;
+    line-height: 1.1;
+  }
+
+  .meta p {
+    margin: 0;
+    color: var(--color-body-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 44px 40px;
+  }
+
+  .card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 300ms ease-out;
+  }
+
+  .card:after {
+    content: none;
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+  }
+
+  .card:hover .image {
+    filter: saturate(2);
+  }
+
+  .card:hover .icon {
+    display: block;
+  }
+
+  .image {
+    width: 100%;
+    aspect-ratio: 1.5;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    background-image: var(--img);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: var(--color-border-bg);
+  }
+
+  .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .text h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--color-body-primary);
+  }
+
+  .text p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--color-body-secondary);
+  }
+
+  .icon {
+    display: none;
+    flex: none;
+    color: var(--color-body-tertiary);
+    margin-top: 2px;
+  }
+
+  @media only screen and (max-width: 900px) {
+    .group {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 36px 0;
+    }
+
+    .meta {
+      position: static;
+    }
+
+    .cards {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    .icon {
+      display: none !important;
+    }
+  }
+</style>

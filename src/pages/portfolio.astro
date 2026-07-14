@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import Grid from "../components/grid.collection.astro";
+import Grid from "../components/grid.portfolio.astro";
 import WideLayout from "../layouts/WideLayout.astro";
 import { ROUTES, SITE_URL } from "../constants";
 
@@ -19,19 +19,16 @@ const newProducts = caseStudies.map(({ id, ...rest }) => ({
 }));
 ---
 
-<WideLayout
-  title="Portfolio"
-  description="Design technologist with 10+ years of experience shipping enterprise web applications and developer tools"
-  canonicalUrl={`${SITE_URL}${ROUTES.PORTFOLIO}`}
->
+<WideLayout title="Portfolio" canonicalUrl={`${SITE_URL}${ROUTES.PORTFOLIO}`}>
   <Grid collection={newProducts} />
 </WideLayout>
 
 <style>
-  .button-group {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: var(--space-1);
+  .intro {
+    max-width: 60ch;
+    margin: 0 0 8px;
+    color: var(--color-body-secondary);
+    font-size: 1.05rem;
+    line-height: 1.5;
   }
 </style>

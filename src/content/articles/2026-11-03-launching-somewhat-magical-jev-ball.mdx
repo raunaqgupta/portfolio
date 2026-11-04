@@ -1,16 +1,66 @@
 ---
-title: Launching Somewhat Magical Jev Ball
-date: 2026-11-03
+title: Somewhat Magical Jev Ball
+date: 2026-10-03
 category: post
 ---
 
-I built out [somewhatmagicaljevball.com](https://somewhatmagicaljevball.com) to explore using Jev for sentimental analysis. The magic 8 ball symbolism has an undertone of a personality which felt like an interesting example to simulate using an AI model.
+I built out [somewhatmagicaljevball.com](https://somewhatmagicaljevball.com) to explore using Jev for sentimental analysis. The magic 8 ball symbolism has an undertone of a personality which felt like an interesting scenario to simulate using a System 1 model.
 
 ![](https://photos.raunaqgupta.com/blog/2026-11-03-launching-somewhat-magical-jev-ball/screen.png)
 
-Here's a video reel of the various micro-interactions. The floating blurbs are prompts being entered by live users on the site. They are also supplemented with prompts from a pre-generated list.
+Here's a video reel of the various micro-interactions that include:
+
+1. Ability to drag and rotate the 3d sphere.
+2. A single-click pushes it "into" the screen
+3. A double-click makes it spin 360°.
+4. The floating blurbs are prompts being entered by live users on the site. They are also supplemented with prompts from a pre-generated list. These can be clicked to populate the input box.
 
 <video src="https://photos.raunaqgupta.com/blog/2026-11-03-launching-somewhat-magical-jev-ball/somewhat-magical-jev-ball-reel.mp4" poster="https://photos.raunaqgupta.com/blog/2026-11-03-launching-somewhat-magical-jev-ball/reel-poster.png" controls playsinline preload="metadata"></video>
+
+The "personality" that answers the question itself is dependent on the probabilities of a set of noul questions.
+
+```
+const QUESTIONS = {
+
+  // Tone of the question
+  snarky: noul("Is the tone of the question snarky?"),
+  selfDeprecating: noul("Is the tone of the question self-deprecating?"),
+  
+  // Whether the question is about a fact at all. Gates `truth`: opinions and
+  // predictions have no true answer, and Jev scores them as false.
+  fact: noul("Does the question pertain to a fact?"),
+  
+  // Whether the answer to the question is factually true
+  truth: noul("Is the answer to the question factually true?"),
+  
+  // Direction of the answer
+  favorable: noul(
+    "Does the most sensible answer to this question lean towards yes, or towards a favorable outcome for the asker?"
+  ),
+  
+  // Strength of the answer
+  certain: noul(
+    "Is the answer to this question clear-cut and close to certain, rather than merely plausible?"
+  ),
+  
+  // One signal per non-committal answer
+  hazy: noul(
+    "Is this question vague or ambiguous, so that it is too unclear to answer well?"
+  ),
+  later: noul(
+    "Is the answer to this question something that has not been settled yet, and would be easier to know at a later time?"
+  ),
+  unwelcome: noul(
+    "Would a truthful answer to this question probably be unwelcome or upsetting to the asker?"
+  ),
+  unpredictable: noul(
+    "Does the answer to this question depend on chance or unknowable factors, making it impossible to predict?"
+  ),
+  unfocused: noul(
+    "Is this text not a genuine yes/no question, for example an open-ended question, a statement, a command, or empty of meaning?"
+  ),
+};
+```
 
 "... [Fun is] the degrees to which the game recognizes and responded to the players' choices and actions." - Gabe Newell, from [this talk](https://www.youtube.com/watch?v=MGpFEv1-mAo), was a great nudge to turn a sparse page with a dark spherical object more "fun".
 

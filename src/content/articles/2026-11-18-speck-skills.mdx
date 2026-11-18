@@ -1,0 +1,24 @@
+---
+title: Speck skills for building a structured context layer
+date: 2026-11-18
+category: post
+---
+
+I've been refining a set of skills that collect concepts from [jobs-to-be-done](https://en.wikipedia.org/wiki/Jobs_to_be_done), [domain-driven design](https://en.wikipedia.org/wiki/Domain-driven_design), and ontologies to build out a structured context layer to be used with agents. The skills create and refine six kinds of interlinked notes:
+
+- **Entities**: the core nouns of a product, with their fields, relations, and invariants.
+- **Jobs**: the jobs users hire the product to do, including the situation, the outcome, and the forces acting on them.
+- **Performers**: the roles that execute those jobs, defined by what they do rather than who they are.
+- **Surfaces**: where the product is delivered, such as a web app, an API, or an MCP server.
+- **Workflows**: the concrete sequences of steps that carry out a job.
+- **Constraints**: implementation commitments, kept separate from the functional notes they apply to.
+
+Notes link to each other using wiki links, so the same context can also be opened as an [Obsidian](https://obsidian.md) vault and browsed through the graph view.
+
+![The todo-app example vault open in Obsidian, with notes grouped by kind in the file explorer and the graph view showing how they link to each other](https://cdn.raunaqgupta.com/github/raunaqgupta/speck-skills/2026-11-17-7d630417-bd51-4add-a05b-c5afbbbd891e.webp)
+
+For example, here's a [todo app modeled using these skills](https://github.com/raunaqgupta/speck-skills/tree/main/examples/todo-app).
+
+Check out the repo: [raunaqgupta/speck-skills](https://github.com/raunaqgupta/speck-skills).
+
+If you end up using it, I'd love to know your thoughts or if you are using or building something similar.

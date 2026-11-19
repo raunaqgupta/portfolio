@@ -1,47 +1,64 @@
 ---
 import Logo from "@components/logo.astro";
 import { ROUTES } from "../constants";
+import { layoutRing } from "./logoRing.layout";
 
 const { current } = Astro.props;
 
-// The path traces the circle twice, starting at 9 o'clock and running
-// clockwise. Every label sits on the second lap, so text centred on an
-// offset is never clipped at the path's start/end.
-// `turn` is a position on a single circle: 0 = 9 o'clock, 0.25 = 12 o'clock.
-const offset = (turn: number) => `${((1 + turn) / 2) * 100}%`;
-
 const links = [
-  { label: "Home", href: ROUTES.HOME, turn: 0.125 },
-  { label: "Portfolio", href: ROUTES.PORTFOLIO, turn: 0.375 },
-  { label: "Resume", href: ROUTES.RESUME, turn: 0.625 },
-  { label: "Blog", href: ROUTES.BLOG, turn: 0.875 },
+  { label: "Home", href: ROUTES.HOME },
+  { label: "Portfolio", href: ROUTES.PORTFOLIO },
+  { label: "Resume", href: ROUTES.RESUME },
+  { label: "Blog", href: ROUTES.BLOG },
 ];
-const separators = [0, 0.25, 0.5, 0.75];
-const r = 88;
-const ring = `M${100 - r},100 a${r},${r} 0 1,1 ${2 * r},0 a${r},${r} 0 1,1 ${-2 * r},0`;
+
+// Must match the CSS below and --space-0 in baseLayout. These give a close
+// first render; the script re-measures the real text and corrects the layout.
+const FONT_SIZE = 12;
+const LETTER_SPACING = 0.12 * FONT_SIZE;
+const DOT = 3;
+const GAP = 4;
+const estimatedCharWidth = 0.68 * FONT_SIZE + LETTER_SPACING;
+
+const CAP_HEIGHT = 0.72 * FONT_SIZE;
+
+const layout = layoutRing({
+  labelWidths: links.map(
+    ({ label }) => label.length * estimatedCharWidth - LETTER_SPACING,
+  ),
+  dot: DOT,
+  gap: GAP,
+  textHeight: CAP_HEIGHT,
+});
 ---
 
-<div class="logo-ring">
+<div
+  class="logo-ring"
+  style={`--ring-size: ${layout.size}px; --logo-size: ${layout.logo}px;`}
+>
   <Logo mode="3d" size="large" />
   <nav class="ring" aria-label="Site">
-    <svg viewBox="0 0 200 200">
+    <svg
+      viewBox={`0 0 ${layout.size} ${layout.size}`}
+      data-dot={DOT}
+      data-letter-spacing={LETTER_SPACING}
+    >
       <defs>
-        <path id="logo-ring-path" d={ring + ring.replace(/^M[^a]+/, " ")} />
+        <path id="logo-ring-path" d={layout.path} />
       </defs>
       {
-        separators.map((turn) => (
-          <text class="separator" aria-hidden="true">
-            <textPath href="#logo-ring-path" startOffset={offset(turn)}>
-              ·
-            </textPath>
-          </text>
+        layout.dots.map(({ x, y }) => (
+          <circle class="separator" cx={x} cy={y} r={DOT / 2} />
         ))
       }
       {
-        links.map(({ label, href, turn }) => (
+        links.map(({ label, href }, i) => (
           <a href={href} aria-current={current === href ? "page" : undefined}>
-            <text>
-              <textPath href="#logo-ring-path" startOffset={offset(turn)}>
+            <text dy={CAP_HEIGHT / 2}>
+              <textPath
+                href="#logo-ring-path"
+                startOffset={layout.labelOffsets[i]}
+              >
                 {label}
               </textPath>
             </text>
@@ -52,14 +69,63 @@ const ring = `M${100 - r},100 a${r},${r} 0 1,1 ${2 * r},0 a${r},${r} 0 1,1 ${-2 
   </nav>
 </div>
 
+<script>
+  import { layoutRing } from "./logoRing.layout";
+
+  function fit(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const texts = [...svg.querySelectorAll<SVGTextElement>("text")];
+    const style = getComputedStyle(texts[0]);
+    const letterSpacing = Number(svg.dataset.letterSpacing);
+    const gap = parseFloat(getComputedStyle(root).getPropertyValue("--gap"));
+
+    // Cap height of the label font, so the logo can sit one gap inside it.
+    const ctx = document.createElement("canvas").getContext("2d")!;
+    ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    const textHeight = ctx.measureText("H").actualBoundingBoxAscent;
+
+    const layout = layoutRing({
+      // getComputedTextLength includes the letter-spacing after the last glyph.
+      labelWidths: texts.map((t) => t.getComputedTextLength() - letterSpacing),
+      dot: Number(svg.dataset.dot),
+      gap,
+      textHeight,
+    });
+
+    root.style.setProperty("--ring-size", `${layout.size}px`);
+    root.style.setProperty("--logo-size", `${layout.logo}px`);
+    svg.setAttribute("viewBox", `0 0 ${layout.size} ${layout.size}`);
+    // Centre the capitals on the circle rather than sitting on it.
+    texts.forEach((t) => t.setAttribute("dy", String(textHeight / 2)));
+    svg.querySelector("path")!.setAttribute("d", layout.path);
+    svg.querySelectorAll("circle").forEach((circle, i) => {
+      circle.setAttribute("cx", String(layout.dots[i].x));
+      circle.setAttribute("cy", String(layout.dots[i].y));
+    });
+    svg.querySelectorAll("textPath").forEach((textPath, i) => {
+      textPath.setAttribute("startOffset", String(layout.labelOffsets[i]));
+    });
+  }
+
+  const rings = document.querySelectorAll<HTMLElement>(".logo-ring");
+  rings.forEach(fit);
+  document.fonts.ready.then(() => rings.forEach(fit));
+</script>
+
 <style>
   .logo-ring {
+    --gap: var(--space-0);
     position: relative;
     display: grid;
     place-items: center;
     flex-shrink: 0;
-    width: 200px;
-    height: 200px;
+    width: var(--ring-size);
+    height: var(--ring-size);
+  }
+
+  .logo-ring :global(.logo-3d) {
+    width: var(--logo-size);
+    height: var(--logo-size);
   }
 
   .ring {
@@ -72,6 +138,30 @@ const ring = `M${100 - r},100 a${r},${r} 0 1,1 ${2 * r},0 a${r},${r} 0 1,1 ${-2 
     width: 100%;
     height: 100%;
     overflow: visible;
+    animation: spin 20s linear infinite;
+  }
+
+  .logo-ring:hover svg,
+  .logo-ring:focus-within svg {
+    animation-play-state: paused;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media only screen and (max-width: 700px) {
+    .ring svg {
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ring svg {
+      animation: none;
+    }
   }
 
   text {
@@ -81,12 +171,11 @@ const ring = `M${100 - r},100 a${r},${r} 0 1,1 ${2 * r},0 a${r},${r} 0 1,1 ${-2 
     letter-spacing: 0.12em;
     text-transform: uppercase;
     text-anchor: middle;
-    dominant-baseline: middle;
+    dominant-baseline: alphabetic;
   }
 
   .separator {
     fill: var(--color-body-tertiary);
-    font-size: 16px;
   }
 
   a text {

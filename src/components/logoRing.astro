@@ -12,20 +12,16 @@ const links = [
   { label: "Blog", href: ROUTES.BLOG },
 ];
 
-// Must match the CSS below and --space-0 in baseLayout. These give a close
-// first render; the script re-measures the real text and corrects the layout.
+// Must match the CSS below and --space-0 in baseLayout. These estimates give
+// the first render; the script measures the real text and redoes the layout.
 const FONT_SIZE = 12;
-const LETTER_SPACING = 0.12 * FONT_SIZE;
 const DOT = 3;
 const GAP = 4;
-const estimatedCharWidth = 0.68 * FONT_SIZE + LETTER_SPACING;
-
 const CAP_HEIGHT = 0.72 * FONT_SIZE;
+const labelWidths = links.map(({ label }) => label.length * 0.68 * FONT_SIZE);
 
 const layout = layoutRing({
-  labelWidths: links.map(
-    ({ label }) => label.length * estimatedCharWidth - LETTER_SPACING,
-  ),
+  labelWidths,
   dot: DOT,
   gap: GAP,
   textHeight: CAP_HEIGHT,
@@ -38,11 +34,7 @@ const layout = layoutRing({
 >
   <Logo mode="3d" size="large" />
   <nav class="ring" aria-label="Site">
-    <svg
-      viewBox={`0 0 ${layout.size} ${layout.size}`}
-      data-dot={DOT}
-      data-letter-spacing={LETTER_SPACING}
-    >
+    <svg viewBox={`0 0 ${layout.size} ${layout.size}`} data-dot={DOT}>
       <defs>
         <path id="logo-ring-path" d={layout.path} />
       </defs>
@@ -58,6 +50,8 @@ const layout = layoutRing({
               <textPath
                 href="#logo-ring-path"
                 startOffset={layout.labelOffsets[i]}
+                textLength={labelWidths[i]}
+                lengthAdjust="spacing"
               >
                 {label}
               </textPath>
@@ -67,6 +61,7 @@ const layout = layoutRing({
       }
     </svg>
   </nav>
+  <span class="measure" aria-hidden="true"></span>
 </div>
 
 <script>
@@ -75,9 +70,17 @@ const layout = layoutRing({
   function fit(root: HTMLElement) {
     const svg = root.querySelector("svg")!;
     const texts = [...svg.querySelectorAll<SVGTextElement>("text")];
-    const style = getComputedStyle(texts[0]);
-    const letterSpacing = Number(svg.dataset.letterSpacing);
+    const textPaths = [...svg.querySelectorAll("textPath")];
+    const measure = root.querySelector<HTMLElement>(".measure")!;
+    const style = getComputedStyle(measure);
     const gap = parseFloat(getComputedStyle(root).getPropertyValue("--gap"));
+
+    // Measure each label as HTML text: SVG text measurement differs between
+    // browsers, HTML layout does not.
+    const labelWidths = textPaths.map((textPath) => {
+      measure.textContent = textPath.textContent;
+      return measure.getBoundingClientRect().width;
+    });
 
     // Cap height of the label font, so the logo can sit one gap inside it.
     const ctx = document.createElement("canvas").getContext("2d")!;
@@ -85,8 +88,7 @@ const layout = layoutRing({
     const textHeight = ctx.measureText("H").actualBoundingBoxAscent;
 
     const layout = layoutRing({
-      // getComputedTextLength includes the letter-spacing after the last glyph.
-      labelWidths: texts.map((t) => t.getComputedTextLength() - letterSpacing),
+      labelWidths,
       dot: Number(svg.dataset.dot),
       gap,
       textHeight,
@@ -102,8 +104,11 @@ const layout = layoutRing({
       circle.setAttribute("cx", String(layout.dots[i].x));
       circle.setAttribute("cy", String(layout.dots[i].y));
     });
-    svg.querySelectorAll("textPath").forEach((textPath, i) => {
+    // textLength makes each label render at exactly its slot width, so the
+    // labels can never run into the dots whatever the font.
+    textPaths.forEach((textPath, i) => {
       textPath.setAttribute("startOffset", String(layout.labelOffsets[i]));
+      textPath.setAttribute("textLength", String(labelWidths[i]));
     });
   }
 
@@ -164,12 +169,24 @@ const layout = layoutRing({
     }
   }
 
-  text {
-    fill: var(--color-body-secondary);
+  /* No letter-spacing: browsers disagree on whether the space after the last
+     letter counts towards a label's length, which shifts it off-centre. */
+  text,
+  .measure {
     font-family: sans-serif;
     font-size: 12px;
-    letter-spacing: 0.12em;
     text-transform: uppercase;
+  }
+
+  .measure {
+    position: absolute;
+    visibility: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  text {
+    fill: var(--color-body-secondary);
     text-anchor: middle;
     dominant-baseline: alphabetic;
   }

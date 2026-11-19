@@ -1,0 +1,116 @@
+---
+title: Designing the query execution plan visualization
+description: Turning database explain plans into a tree that SREs and DBAs can read at a glance
+organization: Cisco
+product: Splunk Observability Cloud
+date: 2026-11-19
+category: portfolio
+collection: o11y
+thumbnail: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/case-study/query-execution-plan.png?f=avif
+hero: https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/case-study/query-execution-plan.png?f=avif
+published: true
+---
+import PageLink from '@components/pageLink.astro';
+import FlexColumn from '@components/flexColumn.astro';
+
+This is a deep dive into one of the key design decisions in [Database Monitoring on Splunk Observability Cloud](/portfolio/dbmon): the query execution plan visualization. The component started as a single view in Database Monitoring and is now part of the Splunk UI design system.
+
+## Table of contents
+
+- [What a query execution plan is](#what-a-query-execution-plan-is)
+- [The problem](#the-problem)
+- [Who reads the plan](#who-reads-the-plan)
+- [Design goals](#design-goals)
+- [Choosing the right shape](#choosing-the-right-shape)
+- [Anatomy of a node](#anatomy-of-a-node)
+- [Micro-interactions](#micro-interactions)
+- [Scaling to large plans](#scaling-to-large-plans)
+- [Contributing to the design system](#contributing-to-the-design-system)
+- [What I learned](#what-i-learned)
+
+## What a query execution plan is
+
+When a database receives a SQL query, its optimizer decides how to run it: which indexes to use, the order in which to join tables, whether to sort in memory or on disk, and so on. The result is an execution plan, a tree of operations where each node consumes rows from its children and passes rows up to its parent. The root of the tree returns the final result.
+
+Every database engine can output this plan (for example, through `EXPLAIN`), but the output is usually plain text, JSON, or XML. Reading it requires knowing the engine's vocabulary and mentally rebuilding the tree from indentation or nesting.
+
+## The problem
+
+A slow query is often slow because of a single expensive operation in its plan: a full table scan where an index was expected, a nested loop over a large row set, or a sort that spills to disk. Finding that operation in raw explain output is slow, even for experienced database administrators. For anyone else, it is close to impossible.
+
+Database Monitoring needed to answer one question quickly: **where in this query is the time going, and why?**
+
+## Who reads the plan
+
+Two kinds of users would land on the plan view, with different levels of familiarity:
+
+1. **Site reliability engineers and application developers** arrive from an application trace in APM. They know a database call is slow but usually did not write the query and are not fluent in explain plans. They need to see the expensive part of the plan and enough context to either fix it or hand it off.
+2. **Database administrators** know explain plans well and often already use dedicated database tools. They need the details: estimated and actual rows, cost, the objects involved, and the properties of each operation.
+
+The visualization had to work for the first group without slowing down the second.
+
+## Design goals
+
+1. **Show the hot spot first.** The most expensive operations should be visible without reading the whole plan.
+2. **Preserve the structure.** Users should be able to follow how data flows from leaf operations up to the result.
+3. **Use progressive disclosure.** Show a summary on each node and the full details on demand.
+4. **Normalize across engines.** Plans from different database engines should look and behave the same, while keeping engine-specific details available.
+5. **Hold up with large plans.** Real-world queries can produce plans with dozens or hundreds of nodes.
+
+## Choosing the right shape
+
+I explored a few representations before settling on a tree:
+
+- **An indented table** is compact and familiar to DBAs, but the hierarchy is hard to follow once the plan gets deep, and it does not communicate where cost is concentrated.
+- **A flame graph style layout** shows cost proportion well, but it hides the operation sequence and reads as unfamiliar for this use case.
+- **A node-link tree** matches the way the optimizer actually builds the plan, makes the data flow explicit, and leaves room on each node to encode cost.
+
+The tree won because it matched the user's mental model of the plan as a set of operations feeding into each other, and because cost could be layered onto it with color and size without changing its structure.
+
+![Query execution plan visualization](https://r2-image.raunaqgupta.workers.dev/dbmon-for-splunk-o11y-cloud/case-study/query-execution-plan.png?f=avif)
+
+## Anatomy of a node
+
+Each node is a small card that answers three questions at a glance:
+
+1. **What is it doing?** The operation type (scan, seek, join, sort, aggregate), with a consistent label regardless of the engine's own naming.
+2. **What is it acting on?** The table or index involved, when there is one.
+3. **How expensive is it?** The node's share of the total cost, shown both as a value and as a visual indicator, so the most expensive nodes stand out when scanning the tree.
+
+Everything else, such as estimated versus actual rows, raw engine properties, and predicates, lives in a details panel that opens when a node is selected. This keeps the tree readable while still giving DBAs the depth they expect.
+
+Edges between nodes carry information too. Making them reflect the number of rows flowing between operations helps users spot where a plan suddenly explodes in row count, which is often the root cause of a slow query.
+
+## Micro-interactions
+
+Most of the effort on this component went into micro-interactions, since they decide whether a tree feels navigable or overwhelming:
+
+- **Selection and focus.** Selecting a node highlights it, opens its details, and keeps its path to the root visible, so users do not lose their place in the tree.
+- **Hover feedback.** Hovering a node emphasizes its immediate parent and children, which makes it easier to follow the data flow without clicking.
+- **Expand and collapse.** Subtrees can be collapsed to hide parts of the plan that are not relevant to the investigation.
+- **Pan, zoom, and fit.** The canvas fits the whole plan on load, then supports panning and zooming for closer inspection, with a quick way to reset back to the fitted view.
+- **Keyboard navigation.** Arrow keys move between parents, children, and siblings, so the tree is usable without a pointer and accessible to assistive technologies.
+
+Each interaction was prototyped and reviewed with engineering early, since small details like transition timing and where the viewport lands after a selection had a large effect on how the tree felt in use.
+
+## Scaling to large plans
+
+Small plans are easy to lay out. Large ones are where the design either works or falls apart. A few decisions helped:
+
+- **Open on the expensive path.** Instead of expanding everything, the initial view directs attention to the most expensive branch of the plan.
+- **Collapse low-cost subtrees.** Branches that contribute little to the total cost can be collapsed to a summary, while still showing how many operations they contain.
+- **Keep node size consistent.** Fixed node dimensions make the layout predictable and let users build a spatial memory of the plan as they navigate it.
+
+## Contributing to the design system
+
+Because the problem of visualizing a hierarchy of operations with costs is not specific to databases, I worked with the design system team to generalize the component. The database-specific parts (operation types, engine properties) became configuration, while the layout, node anatomy, and interactions became part of the shared component. It is now part of the Splunk UI design system and available to other teams.
+
+## What I learned
+
+1. **Design for the least familiar user, then layer in depth.** Getting the summary right for SREs made the component faster for DBAs too.
+2. **Micro-interactions are the product for dense visualizations.** The tree layout was settled early. Most of the quality came from how selection, hover, and navigation behaved.
+3. **Generalize once the pattern is proven.** Building the component for a specific use case first made it much easier to see which parts belonged in the design system.
+
+<FlexColumn>
+  <PageLink direction="prev" label="Case study: Database Monitoring on Splunk Observability Cloud" url="/portfolio/dbmon" />
+</FlexColumn>

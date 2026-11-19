@@ -1,0 +1,109 @@
+---
+import Logo from "@components/logo.astro";
+import { ROUTES } from "../constants";
+
+const { current } = Astro.props;
+
+// The path traces the circle twice, starting at 9 o'clock and running
+// clockwise. Every label sits on the second lap, so text centred on an
+// offset is never clipped at the path's start/end.
+// `turn` is a position on a single circle: 0 = 9 o'clock, 0.25 = 12 o'clock.
+const offset = (turn: number) => `${((1 + turn) / 2) * 100}%`;
+
+const links = [
+  { label: "Home", href: ROUTES.HOME, turn: 0.125 },
+  { label: "Portfolio", href: ROUTES.PORTFOLIO, turn: 0.375 },
+  { label: "Resume", href: ROUTES.RESUME, turn: 0.625 },
+  { label: "Blog", href: ROUTES.BLOG, turn: 0.875 },
+];
+const separators = [0, 0.25, 0.5, 0.75];
+const r = 88;
+const ring = `M${100 - r},100 a${r},${r} 0 1,1 ${2 * r},0 a${r},${r} 0 1,1 ${-2 * r},0`;
+---
+
+<div class="logo-ring">
+  <Logo mode="3d" size="large" />
+  <nav class="ring" aria-label="Site">
+    <svg viewBox="0 0 200 200">
+      <defs>
+        <path id="logo-ring-path" d={ring + ring.replace(/^M[^a]+/, " ")} />
+      </defs>
+      {
+        separators.map((turn) => (
+          <text class="separator" aria-hidden="true">
+            <textPath href="#logo-ring-path" startOffset={offset(turn)}>
+              ·
+            </textPath>
+          </text>
+        ))
+      }
+      {
+        links.map(({ label, href, turn }) => (
+          <a href={href} aria-current={current === href ? "page" : undefined}>
+            <text>
+              <textPath href="#logo-ring-path" startOffset={offset(turn)}>
+                {label}
+              </textPath>
+            </text>
+          </a>
+        ))
+      }
+    </svg>
+  </nav>
+</div>
+
+<style>
+  .logo-ring {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 200px;
+    height: 200px;
+  }
+
+  .ring {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ring svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  text {
+    fill: var(--color-body-secondary);
+    font-family: sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .separator {
+    fill: var(--color-body-tertiary);
+    font-size: 16px;
+  }
+
+  a text {
+    transition: fill 0.15s ease;
+  }
+
+  a:hover text,
+  a:focus-visible text,
+  a[aria-current="page"] text {
+    fill: var(--color-highlight);
+  }
+
+  a:focus-visible {
+    outline: none;
+  }
+
+  a:focus-visible text {
+    text-decoration: underline;
+  }
+</style>

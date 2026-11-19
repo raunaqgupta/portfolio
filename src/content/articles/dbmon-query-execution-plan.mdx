@@ -12,6 +12,7 @@ published: true
 ---
 import PageLink from '@components/pageLink.astro';
 import FlexColumn from '@components/flexColumn.astro';
+import Embed from '@components/embed.astro';
 
 This is a deep dive into one of the key design decisions in [Database Monitoring on Splunk Observability Cloud](/portfolio/dbmon): the query execution plan visualization.
 
@@ -91,6 +92,12 @@ Most of the effort on this component went into micro-interactions, since they de
 - **Keyboard navigation.** Arrow keys move between parents, children, and siblings, so the tree is usable without a pointer and accessible to assistive technologies.
 
 Each interaction was prototyped and reviewed with engineering early, since small details like transition timing and where the viewport lands after a selection had a large effect on how the tree felt in use.
+
+<Embed
+  title="Interactive query execution plan"
+  src="https://splunk-o11y-cloud.raunaqgupta.workers.dev/storybook/iframe?id=components-query-explain-plan--json-input&viewMode=story"
+  height={520}
+/>
 
 ## Scaling to large plans
 

@@ -3,13 +3,20 @@ interface Props {
   src: string;
   title: string;
   height?: number;
+  fallback?: string;
   linkLabel?: string;
 }
 
-const { src, title, height = 520, linkLabel = "Open in a new tab" } = Astro.props;
+const {
+  src,
+  title,
+  height = 520,
+  fallback,
+  linkLabel = "Open in a new tab",
+} = Astro.props;
 ---
 
-<figure class="embed">
+<figure class:list={["embed", { "has-fallback": fallback }]}>
   <iframe
     src={src}
     title={title}
@@ -17,6 +24,11 @@ const { src, title, height = 520, linkLabel = "Open in a new tab" } = Astro.prop
     loading="lazy"
     allowfullscreen
   ></iframe>
+  {
+    fallback && (
+      <img src={fallback} alt={title} decoding="async" loading="lazy" />
+    )
+  }
   <figcaption>
     <span class="caption">{title}</span>
     <a href={src} target="_blank" rel="noopener noreferrer">{linkLabel}</a>
@@ -47,5 +59,21 @@ const { src, title, height = 520, linkLabel = "Open in a new tab" } = Astro.prop
 
   figcaption a {
     white-space: nowrap;
+  }
+
+  /* Show the fallback image instead of the iframe on narrow screens.
+     The hidden element is not fetched, since both are lazy-loaded. */
+  .embed > img {
+    display: none;
+  }
+
+  @media only screen and (max-width: 700px) {
+    .has-fallback > iframe {
+      display: none;
+    }
+
+    .has-fallback > img {
+      display: block;
+    }
   }
 </style>

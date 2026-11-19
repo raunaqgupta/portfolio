@@ -98,6 +98,7 @@ Each interaction was prototyped and reviewed with engineering early, since small
 Small plans are easy to lay out. Large ones are where the design either works or falls apart. A few decisions helped:
 
 - **Open on the expensive path.** Instead of expanding everything, the initial view directs attention to the most expensive branch of the plan.
+- **Make expensive nodes easy to spot.** In very large explain plans, the costliest nodes are visually emphasized so they stand out even when the whole tree is zoomed out to fit the screen.
 - **Collapse low-cost subtrees.** Branches that contribute little to the total cost can be collapsed to a summary, while still showing how many operations they contain.
 - **Keep node size consistent.** Fixed node dimensions make the layout predictable and let users build a spatial memory of the plan as they navigate it.
 

@@ -12,11 +12,12 @@ const links = [
   { label: "Blog", href: ROUTES.BLOG },
 ];
 
-// Must match the CSS below and --space-0 in baseLayout. These estimates give
+// Must match the CSS below and --space-0/--space-1 in baseLayout. These estimates give
 // the first render; the script measures the real text and redoes the layout.
-const FONT_SIZE = 12;
-const DOT = 3;
+const FONT_SIZE = 16;
+const DOT = 4;
 const GAP = 4;
+const LOGO_GAP = 8;
 const CAP_HEIGHT = 0.72 * FONT_SIZE;
 const labelWidths = links.map(({ label }) => label.length * 0.68 * FONT_SIZE);
 
@@ -24,6 +25,7 @@ const layout = layoutRing({
   labelWidths,
   dot: DOT,
   gap: GAP,
+  logoGap: LOGO_GAP,
   textHeight: CAP_HEIGHT,
 });
 ---
@@ -73,7 +75,9 @@ const layout = layoutRing({
     const textPaths = [...svg.querySelectorAll("textPath")];
     const measure = root.querySelector<HTMLElement>(".measure")!;
     const style = getComputedStyle(measure);
-    const gap = parseFloat(getComputedStyle(root).getPropertyValue("--gap"));
+    const rootStyle = getComputedStyle(root);
+    const gap = parseFloat(rootStyle.getPropertyValue("--gap"));
+    const logoGap = parseFloat(rootStyle.getPropertyValue("--logo-gap"));
 
     // Measure each label as HTML text: SVG text measurement differs between
     // browsers, HTML layout does not.
@@ -82,7 +86,7 @@ const layout = layoutRing({
       return measure.getBoundingClientRect().width;
     });
 
-    // Cap height of the label font, so the logo can sit one gap inside it.
+    // Cap height of the label font, so the logo can sit logoGap inside it.
     const ctx = document.createElement("canvas").getContext("2d")!;
     ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
     const textHeight = ctx.measureText("H").actualBoundingBoxAscent;
@@ -91,6 +95,7 @@ const layout = layoutRing({
       labelWidths,
       dot: Number(svg.dataset.dot),
       gap,
+      logoGap,
       textHeight,
     });
 
@@ -120,6 +125,7 @@ const layout = layoutRing({
 <style>
   .logo-ring {
     --gap: var(--space-0);
+    --logo-gap: var(--space-1);
     position: relative;
     display: grid;
     place-items: center;
@@ -174,7 +180,7 @@ const layout = layoutRing({
   text,
   .measure {
     font-family: sans-serif;
-    font-size: 12px;
+    font-size: 16px;
     text-transform: uppercase;
   }
 

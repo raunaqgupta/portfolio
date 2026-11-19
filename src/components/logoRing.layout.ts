@@ -12,6 +12,8 @@ export interface RingInput {
   dot: number;
   /** Space between every link and dot. */
   gap: number;
+  /** Space between the text and the logo. */
+  logoGap: number;
   /** Height of the label text (cap height), used to size the logo. */
   textHeight: number;
 }
@@ -35,6 +37,7 @@ export function layoutRing({
   labelWidths,
   dot,
   gap,
+  logoGap,
   textHeight,
 }: RingInput): RingLayout {
   const count = labelWidths.length;
@@ -42,12 +45,12 @@ export function layoutRing({
     labelWidths.reduce((sum, w) => sum + w, 0) + count * dot + 2 * count * gap;
   const r = circumference / (2 * Math.PI);
 
-  // The ring's outer edge is the top of the text; the logo's edge sits one gap
+  // The ring's outer edge is the top of the text; the logo's edge sits logoGap
   // inside the bottom of the text.
   const outer = r + textHeight / 2;
   const size = Math.ceil(2 * outer);
   const c = size / 2;
-  const logo = 2 * (r - textHeight / 2 - gap);
+  const logo = 2 * (r - textHeight / 2 - logoGap);
 
   const arc = `a${r},${r} 0 1,1 ${2 * r},0 a${r},${r} 0 1,1 ${-2 * r},0`;
   const path = `M${c - r},${c} ${arc} ${arc}`;

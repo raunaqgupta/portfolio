@@ -1,5 +1,5 @@
 ---
-import Logo from "@components/logo.astro";
+import LogoRing from "@components/logoRing.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
 import { ROUTES, SITE_URL } from "../constants";
 
@@ -9,7 +9,7 @@ const description =
 
 <BaseLayout title="Home" description={description} canonicalUrl={SITE_URL}>
   <body>
-    <Logo mode="3d" size="large" />
+    <LogoRing current={ROUTES.HOME} />
 
     <div class="content">
       <h1>Hi, I'm Raunaq</h1>

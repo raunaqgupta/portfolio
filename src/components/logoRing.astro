@@ -1,0 +1,221 @@
+---
+import Logo from "@components/logo.astro";
+import { ROUTES } from "../constants";
+import { layoutRing } from "./logoRing.layout";
+
+const { current } = Astro.props;
+
+const links = [
+  { label: "Home", href: ROUTES.HOME },
+  { label: "Portfolio", href: ROUTES.PORTFOLIO },
+  { label: "Resume", href: ROUTES.RESUME },
+  { label: "Blog", href: ROUTES.BLOG },
+];
+
+// Must match the CSS below and --space-1/--space-2 in baseLayout. These estimates give
+// the first render; the script measures the real text and redoes the layout.
+const FONT_SIZE = 16;
+const DOT = 4;
+const GAP = 8;
+const LOGO_GAP = 16;
+const CAP_HEIGHT = 0.72 * FONT_SIZE;
+const labelWidths = links.map(({ label }) => label.length * 0.68 * FONT_SIZE);
+
+const layout = layoutRing({
+  labelWidths,
+  dot: DOT,
+  gap: GAP,
+  logoGap: LOGO_GAP,
+  textHeight: CAP_HEIGHT,
+});
+---
+
+<div
+  class="logo-ring"
+  style={`--ring-size: ${layout.size}px; --logo-size: ${layout.logo}px;`}
+>
+  <Logo mode="3d" size="large" />
+  <nav class="ring" aria-label="Site">
+    <svg viewBox={`0 0 ${layout.size} ${layout.size}`} data-dot={DOT}>
+      <defs>
+        <path id="logo-ring-path" d={layout.path} />
+      </defs>
+      {
+        layout.dots.map(({ x, y }) => (
+          <circle class="separator" cx={x} cy={y} r={DOT / 2} />
+        ))
+      }
+      {
+        links.map(({ label, href }, i) => (
+          <a href={href} aria-current={current === href ? "page" : undefined}>
+            <text dy={CAP_HEIGHT / 2}>
+              <textPath
+                href="#logo-ring-path"
+                startOffset={layout.labelOffsets[i]}
+                textLength={labelWidths[i]}
+                lengthAdjust="spacing"
+              >
+                {label}
+              </textPath>
+            </text>
+          </a>
+        ))
+      }
+    </svg>
+  </nav>
+  <span class="measure" aria-hidden="true"></span>
+</div>
+
+<script>
+  import { layoutRing } from "./logoRing.layout";
+
+  function fit(root: HTMLElement) {
+    const svg = root.querySelector("svg")!;
+    const texts = [...svg.querySelectorAll<SVGTextElement>("text")];
+    const textPaths = [...svg.querySelectorAll("textPath")];
+    const measure = root.querySelector<HTMLElement>(".measure")!;
+    const style = getComputedStyle(measure);
+    const rootStyle = getComputedStyle(root);
+    const gap = parseFloat(rootStyle.getPropertyValue("--gap"));
+    const logoGap = parseFloat(rootStyle.getPropertyValue("--logo-gap"));
+
+    // Measure each label as HTML text: SVG text measurement differs between
+    // browsers, HTML layout does not.
+    const labelWidths = textPaths.map((textPath) => {
+      measure.textContent = textPath.textContent;
+      return measure.getBoundingClientRect().width;
+    });
+
+    // Cap height of the label font, so the logo can sit logoGap inside it.
+    const ctx = document.createElement("canvas").getContext("2d")!;
+    ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    const textHeight = ctx.measureText("H").actualBoundingBoxAscent;
+
+    const layout = layoutRing({
+      labelWidths,
+      dot: Number(svg.dataset.dot),
+      gap,
+      logoGap,
+      textHeight,
+    });
+
+    root.style.setProperty("--ring-size", `${layout.size}px`);
+    root.style.setProperty("--logo-size", `${layout.logo}px`);
+    svg.setAttribute("viewBox", `0 0 ${layout.size} ${layout.size}`);
+    // Centre the capitals on the circle rather than sitting on it.
+    texts.forEach((t) => t.setAttribute("dy", String(textHeight / 2)));
+    svg.querySelector("path")!.setAttribute("d", layout.path);
+    svg.querySelectorAll("circle").forEach((circle, i) => {
+      circle.setAttribute("cx", String(layout.dots[i].x));
+      circle.setAttribute("cy", String(layout.dots[i].y));
+    });
+    // textLength makes each label render at exactly its slot width, so the
+    // labels can never run into the dots whatever the font.
+    textPaths.forEach((textPath, i) => {
+      textPath.setAttribute("startOffset", String(layout.labelOffsets[i]));
+      textPath.setAttribute("textLength", String(labelWidths[i]));
+    });
+  }
+
+  const rings = document.querySelectorAll<HTMLElement>(".logo-ring");
+  rings.forEach(fit);
+  document.fonts.ready.then(() => rings.forEach(fit));
+</script>
+
+<style>
+  .logo-ring {
+    --gap: var(--space-1);
+    --logo-gap: var(--space-2);
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: var(--ring-size);
+    height: var(--ring-size);
+  }
+
+  .logo-ring :global(.logo-3d) {
+    width: var(--logo-size);
+    height: var(--logo-size);
+  }
+
+  .ring {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ring svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    animation: spin 20s linear infinite;
+  }
+
+  .logo-ring:hover svg,
+  .logo-ring:focus-within svg {
+    animation-play-state: paused;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media only screen and (max-width: 700px) {
+    .ring svg {
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ring svg {
+      animation: none;
+    }
+  }
+
+  /* No letter-spacing: browsers disagree on whether the space after the last
+     letter counts towards a label's length, which shifts it off-centre. */
+  text,
+  .measure {
+    font-family: sans-serif;
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+
+  .measure {
+    position: absolute;
+    visibility: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  text {
+    fill: var(--color-body-secondary);
+    text-anchor: middle;
+    dominant-baseline: alphabetic;
+  }
+
+  .separator {
+    fill: var(--color-body-tertiary);
+  }
+
+  a text {
+    transition: fill 0.15s ease;
+  }
+
+  a:hover text,
+  a:focus-visible text,
+  a[aria-current="page"] text {
+    fill: var(--color-highlight);
+  }
+
+  a:focus-visible {
+    outline: none;
+  }
+
+  a:focus-visible text {
+    text-decoration: underline;
+  }
+</style>

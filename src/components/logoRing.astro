@@ -12,11 +12,11 @@ const links = [
   { label: "Blog", href: ROUTES.BLOG },
 ];
 
-// Must match the CSS below and --space-0/--space-1 in baseLayout. These estimates give
+// Must match the CSS below and --space-1 in baseLayout. These estimates give
 // the first render; the script measures the real text and redoes the layout.
 const FONT_SIZE = 16;
 const DOT = 4;
-const GAP = 4;
+const GAP = 8;
 const LOGO_GAP = 8;
 const CAP_HEIGHT = 0.72 * FONT_SIZE;
 const labelWidths = links.map(({ label }) => label.length * 0.68 * FONT_SIZE);
@@ -124,7 +124,7 @@ const layout = layoutRing({
 
 <style>
   .logo-ring {
-    --gap: var(--space-0);
+    --gap: var(--space-1);
     --logo-gap: var(--space-1);
     position: relative;
     display: grid;

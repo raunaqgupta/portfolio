@@ -13,7 +13,7 @@ published: true
 import PageLink from '@components/pageLink.astro';
 import FlexColumn from '@components/flexColumn.astro';
 
-This is a deep dive into one of the key design decisions in [Database Monitoring on Splunk Observability Cloud](/portfolio/dbmon): the query execution plan visualization. The component started as a single view in Database Monitoring and is now part of the Splunk UI design system.
+This is a deep dive into one of the key design decisions in [Database Monitoring on Splunk Observability Cloud](/portfolio/dbmon): the query execution plan visualization.
 
 ## Table of contents
 
@@ -105,7 +105,6 @@ Small plans are easy to lay out. Large ones are where the design either works or
 
 1. **Design for the least familiar user, then layer in depth.** Getting the summary right for SREs made the component faster for DBAs too.
 2. **Micro-interactions are the product for dense visualizations.** The tree layout was settled early. Most of the quality came from how selection, hover, and navigation behaved.
-3. **Generalize once the pattern is proven.** Building the component for a specific use case first made it much easier to see which parts belonged in the design system.
 
 <FlexColumn>
   <PageLink direction="prev" label="Case study: Database Monitoring on Splunk Observability Cloud" url="/portfolio/dbmon" />

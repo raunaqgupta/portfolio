@@ -57,6 +57,38 @@ const cards = caseStudies
             </a>
           ))
         }
+        <nav class="indicator" aria-label="Cards">
+          <button class="step" type="button" data-step="-1" aria-label="Previous card">
+            <svg class="chevron up" viewBox="0 0 10 10" aria-hidden="true">
+              <path d="M2 3.5l3 3 3-3" />
+            </svg>
+          </button>
+          <div class="window">
+            <span class="pointer" aria-hidden="true">
+              <svg viewBox="0 0 16 14" width="16" height="14">
+                <path d="M1.5 4.5h6v-3l7 5.5-7 5.5v-3h-6z" />
+              </svg>
+            </span>
+            <ol class="numbers">
+              <li class="dot" aria-hidden="true" />
+              {
+                Array.from({ length: cards.length + 1 }, (_, i) => (
+                  <li>
+                    <button type="button" data-goto={i} aria-label={`Card ${i + 1}`}>
+                      {i + 1}
+                    </button>
+                  </li>
+                ))
+              }
+              <li class="dot" aria-hidden="true" />
+            </ol>
+          </div>
+          <button class="step" type="button" data-step="1" aria-label="Next card">
+            <svg class="chevron down" viewBox="0 0 10 10" aria-hidden="true">
+              <path d="M2 3.5l3 3 3-3" />
+            </svg>
+          </button>
+        </nav>
       </div>
       {
         Array.from({ length: cards.length + 1 }, (_, i) => (
@@ -99,6 +131,50 @@ const cards = caseStudies
     let viewport = 0;
     let frame = 0;
 
+    const indicator = deck.querySelector<HTMLElement>(".indicator")!;
+    const numbers = [...indicator.querySelectorAll<HTMLElement>(".numbers li")];
+    const goto = [...indicator.querySelectorAll<HTMLButtonElement>("[data-goto]")];
+    const steps = [...indicator.querySelectorAll<HTMLButtonElement>("[data-step]")];
+    let current = -1;
+
+    function scrollToCard(i: number) {
+      const index = Math.min(Math.max(i, 0), cards.length - 1);
+      const y = window.scrollY + deck.getBoundingClientRect().top + index * viewport;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+
+    goto.forEach((button) =>
+      button.addEventListener("click", () => scrollToCard(Number(button.dataset.goto))),
+    );
+    steps.forEach((button) =>
+      button.addEventListener("click", () =>
+        scrollToCard(Math.max(current, 0) + Number(button.dataset.step)),
+      ),
+    );
+
+    // The number column rolls with the scroll position: the current number
+    // sits beside the pointer, its neighbours fade above and below it.
+    function renderIndicator(p: number) {
+      indicator.style.setProperty("--p", String(p));
+      numbers.forEach((item, j) => {
+        // Item 0 is the dot before the first card.
+        const distance = Math.abs(j - 1 - p);
+        item.style.opacity = String(Math.max(0, 1 - Math.max(distance - 1, 0) * 2));
+        item.classList.toggle("is-current", distance < 0.5);
+      });
+      const index = Math.round(p);
+      if (index === current) return;
+      current = index;
+      goto.forEach((button, i) => {
+        if (i === index) button.setAttribute("aria-current", "step");
+        else button.removeAttribute("aria-current");
+        // Only the numbers in view can take focus.
+        button.tabIndex = Math.abs(i - index) <= 1 ? 0 : -1;
+      });
+      steps[0].disabled = index <= 0;
+      steps[1].disabled = index >= cards.length - 1;
+    }
+
     function measure() {
       viewport = deck.querySelector<HTMLElement>(".stage")!.clientHeight;
       // offsetHeight ignores transforms, so this is the card's own height.
@@ -110,6 +186,8 @@ const cards = caseStudies
       const H = viewport;
       const top = deck.getBoundingClientRect().top;
       const p = Math.min(Math.max(-top / H, 0), cards.length - 1);
+
+      renderIndicator(p);
 
       const layout = cards.map((_, i) => {
         const d = i - p;
@@ -332,6 +410,135 @@ const cards = caseStudies
     left: 50%;
     transform-origin: center;
     will-change: transform;
+  }
+
+  /* Numeric indicator: desktop only, to the left of the case cards. */
+  .indicator {
+    display: none;
+  }
+
+  @media only screen and (min-width: 1200px) {
+    .is-stacked .indicator {
+      --row: 22px;
+      position: absolute;
+      top: 50%;
+      right: calc(50% + var(--case-w) / 2 + 72px);
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-size: 13px;
+      line-height: var(--row);
+      font-variant-numeric: tabular-nums;
+      color: var(--color-body-tertiary);
+    }
+  }
+
+  .indicator button {
+    all: unset;
+    cursor: pointer;
+    display: block;
+  }
+
+  .indicator button:focus-visible {
+    outline: 2px solid var(--color-highlight);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .step {
+    display: flex !important;
+    justify-content: center;
+    width: 12px;
+    height: 16px;
+    align-items: center;
+    color: var(--color-body-primary);
+  }
+
+  .step:disabled {
+    color: var(--color-border);
+    cursor: default;
+  }
+
+  .step:not(:disabled):hover {
+    color: var(--color-heading);
+  }
+
+  .chevron {
+    width: 10px;
+    height: 10px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .chevron.up {
+    transform: rotate(180deg);
+  }
+
+  /* Shows three rows: previous, current, next. */
+  .window {
+    position: relative;
+    height: calc(3 * var(--row));
+    overflow: hidden;
+    padding-left: 24px;
+  }
+
+  .pointer {
+    position: absolute;
+    left: 0;
+    top: var(--row);
+    height: var(--row);
+    display: flex;
+    align-items: center;
+  }
+
+  .pointer svg {
+    fill: none;
+    stroke: var(--color-heading);
+    stroke-width: 1.25;
+    stroke-linejoin: round;
+  }
+
+  .numbers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 12px;
+    text-align: center;
+    /* Item 1 (card 1) sits in the middle row when p = 0. */
+    transform: translateY(calc(var(--p, 0) * -1 * var(--row)));
+  }
+
+  .numbers li {
+    height: var(--row);
+    margin: 0;
+  }
+
+  .numbers button {
+    width: 100%;
+  }
+
+  .numbers button:hover,
+  .numbers .is-current button {
+    color: var(--color-heading);
+  }
+
+  .numbers .dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .numbers .dot::before {
+    content: "";
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background-color: var(--color-body-tertiary);
   }
 
   /* Fade the content, not the card, so cards behind never show through. */

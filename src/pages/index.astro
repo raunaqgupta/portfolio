@@ -438,6 +438,8 @@ const cards = await Promise.all(
       activeCard = card;
       await deck!.settle(card);
       restScroll = window.scrollY;
+      // The expanded card stands in for this one until it collapses back.
+      card.classList.add("is-held");
 
       // Start as an exact copy of the resting card.
       face.replaceChildren(
@@ -479,6 +481,8 @@ const cards = await Promise.all(
       expanded!.style.height = `${window.innerHeight - 2 * margin()}px`;
       await wait(time(DURATION));
 
+      // Swap back to the real card in the same frame.
+      activeCard?.classList.remove("is-held");
       expanded!.hidden = true;
       expanded!.removeAttribute("style");
       scroller.removeAttribute("style");
@@ -888,6 +892,13 @@ const cards = await Promise.all(
 
   .expanded[hidden] {
     display: none;
+  }
+
+  /* The card that's expanded stays hidden under its stand-in, so the
+     collapse doesn't land on a copy already there. (The deck sets
+     visibility inline, hence !important.) */
+  .card.is-held {
+    visibility: hidden !important;
   }
 
   .expanded.is-wide {

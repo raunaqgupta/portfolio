@@ -1,6 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import LogoRing from "@components/logoRing.astro";
+import ChevronUpIcon from "@icons/chevron-up.svg";
+import ChevronDownIcon from "@icons/chevron-down.svg";
+import ThickArrowRightIcon from "@icons/thick-arrow-right.svg";
 import BaseLayout from "../layouts/baseLayout.astro";
 import { ROUTES, SITE_URL } from "../constants";
 
@@ -59,15 +62,11 @@ const cards = caseStudies
         }
         <nav class="indicator" aria-label="Cards">
           <button class="step" type="button" data-step="-1" aria-label="Previous card">
-            <svg class="chevron up" viewBox="0 0 10 10" aria-hidden="true">
-              <path d="M2 3.5l3 3 3-3" />
-            </svg>
+            <ChevronUpIcon class="chevron" />
           </button>
           <div class="window">
             <span class="pointer" aria-hidden="true">
-              <svg viewBox="0 0 16 14" width="16" height="14">
-                <path d="M1.5 4.5h6v-3l7 5.5-7 5.5v-3h-6z" />
-              </svg>
+              <ThickArrowRightIcon />
             </span>
             <ol class="numbers">
               <li class="dot" aria-hidden="true" />
@@ -84,9 +83,7 @@ const cards = caseStudies
             </ol>
           </div>
           <button class="step" type="button" data-step="1" aria-label="Next card">
-            <svg class="chevron down" viewBox="0 0 10 10" aria-hidden="true">
-              <path d="M2 3.5l3 3 3-3" />
-            </svg>
+            <ChevronDownIcon class="chevron" />
           </button>
         </nav>
       </div>
@@ -447,36 +444,27 @@ const cards = caseStudies
     border-radius: 2px;
   }
 
-  .step {
-    display: flex !important;
+  .indicator .step {
+    display: flex;
     justify-content: center;
-    width: 12px;
+    width: 15px;
     height: 16px;
     align-items: center;
     color: var(--color-body-primary);
   }
 
-  .step:disabled {
+  .indicator .step:disabled {
     color: var(--color-border);
     cursor: default;
   }
 
-  .step:not(:disabled):hover {
+  .indicator .step:not(:disabled):hover {
     color: var(--color-heading);
   }
 
-  .chevron {
-    width: 10px;
-    height: 10px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.25;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .chevron.up {
-    transform: rotate(180deg);
+  .step :global(.chevron) {
+    width: 15px;
+    height: 15px;
   }
 
   /* Shows three rows: previous, current, next. */
@@ -494,20 +482,14 @@ const cards = caseStudies
     height: var(--row);
     display: flex;
     align-items: center;
-  }
-
-  .pointer svg {
-    fill: none;
-    stroke: var(--color-heading);
-    stroke-width: 1.25;
-    stroke-linejoin: round;
+    color: var(--color-heading);
   }
 
   .numbers {
     list-style: none;
     margin: 0;
     padding: 0;
-    width: 12px;
+    width: 15px;
     text-align: center;
     /* Item 1 (card 1) sits in the middle row when p = 0. */
     transform: translateY(calc(var(--p, 0) * -1 * var(--row)));

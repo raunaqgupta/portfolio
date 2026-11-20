@@ -112,11 +112,14 @@ const cards = caseStudies
   //   d = -0.5 outgoing: 88/832 above centre, opacity 0.75
   //   d = -1   receded: scale 0.845, opacity 0.5, its top 58/832 above the
   //            top of the card now resting in front of it
+  //   d = -2   one level further back: scaled and lifted again, opacity 0.25
+  //   d = -3   gone; at most BACK_DEPTH cards show behind the resting one
   const FRAME_H = 832;
   const IN_MID_TOP = 417 / FRAME_H;
   const OUT_MID = 88 / FRAME_H;
   const PEEK = 58 / FRAME_H;
   const BACK_SCALE = 0.845;
+  const BACK_DEPTH = 2;
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
   const ease = (t: number) => t * t * (3 - 2 * t);
@@ -139,6 +142,16 @@ const cards = caseStudies
       const y = window.scrollY + deck.getBoundingClientRect().top + index * viewport;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
+
+    // A click anywhere on a card behind the resting one (including Enter on
+    // a link inside it) scrolls that card to the front instead.
+    cards.forEach((card, i) =>
+      card.addEventListener("click", (event) => {
+        if (!card.hasAttribute("data-behind")) return;
+        event.preventDefault();
+        scrollToCard(i);
+      }),
+    );
 
     goto.forEach((button) =>
       button.addEventListener("click", () => scrollToCard(Number(button.dataset.goto))),
@@ -209,9 +222,14 @@ const cards = caseStudies
             opacity = lerp(1, 0.75, t);
           }
         } else if (d < 0) {
-          const front = heights[i + 1] ?? h;
-          const backTop = H / 2 - front / 2 - PEEK * H;
-          const back = backTop + (BACK_SCALE * h) / 2 - H / 2;
+          // Resting place k levels back: k peeks above the top of the card
+          // resting in front at that point, scaled down once per level.
+          const backAt = (k: number) => {
+            const front = heights[i + k] ?? h;
+            const s = BACK_SCALE ** k;
+            const top = H / 2 - front / 2 - k * PEEK * H;
+            return { y: top + (s * h) / 2 - H / 2, scale: s, opacity: 0.5 ** k };
+          };
           const a = -d;
           if (a <= 0.5) {
             const t = ease(a / 0.5);
@@ -219,38 +237,44 @@ const cards = caseStudies
             opacity = lerp(1, 0.75, t);
           } else if (a <= 1) {
             const t = ease((a - 0.5) / 0.5);
-            y = lerp(-OUT_MID * H, back, t);
-            scale = lerp(1, BACK_SCALE, t);
-            opacity = lerp(0.75, 0.5, t);
+            const back = backAt(1);
+            y = lerp(-OUT_MID * H, back.y, t);
+            scale = lerp(1, back.scale, t);
+            opacity = lerp(0.75, back.opacity, t);
           } else {
-            // Further back: keep receding and fade out.
-            const t = Math.min(a - 1, 1);
-            y = back - PEEK * H * t;
-            scale = lerp(BACK_SCALE, BACK_SCALE * BACK_SCALE, t);
-            opacity = lerp(0.5, 0, t);
+            const k = Math.min(Math.floor(a), BACK_DEPTH);
+            const t = ease(Math.min(a - k, 1));
+            const from = backAt(k);
+            const to = backAt(k + 1);
+            y = lerp(from.y, to.y, t);
+            scale = lerp(from.scale, to.scale, t);
+            // Past the last visible level, fade out instead.
+            opacity = lerp(from.opacity, k < BACK_DEPTH ? to.opacity : 0, t);
           }
         }
 
         return { d, y, scale, opacity, bottom: y + (scale * h) / 2 };
       });
 
-      cards.forEach((card, i) => {
+      // A card behind a shorter one would show below it: cut each card off
+      // at the visible bottom edge of the card in front, front to back.
+      let limit = Infinity;
+      for (let i = cards.length - 1; i >= 0; i--) {
+        const card = cards[i];
         const { d, y, scale, opacity, bottom } = layout[i];
-        // A card behind a shorter one would show below it: cut it off at
-        // the bottom edge of the card in front.
-        const front = layout[i + 1];
-        const overhang = front
-          ? Math.max(bottom - front.bottom + 2, 0) / scale
-          : 0;
+        const overhang = Math.max(bottom - limit + 2, 0) / scale;
+        if (opacity > 0) limit = Math.min(limit, bottom);
 
         card.style.transform = `translate(-50%, -50%) translateY(${y}px) scale(${scale})`;
         card.style.clipPath = overhang ? `inset(0 0 ${overhang}px 0)` : "";
         card.style.setProperty("--fade", String(opacity));
         card.style.visibility = opacity <= 0 ? "hidden" : "visible";
         card.style.zIndex = String(i + 1);
-        // Only the resting card takes pointer input.
-        card.inert = Math.abs(d) >= 0.5;
-      });
+        // Cards still coming in can't be used yet. Cards behind the resting
+        // one are a single target: clicking one brings it to the front.
+        card.inert = d >= 0.5 || opacity <= 0;
+        card.toggleAttribute("data-behind", d <= -0.5);
+      }
     }
 
     function schedule() {
@@ -266,6 +290,7 @@ const cards = caseStudies
         deck.classList.remove("is-stacked");
         cards.forEach((card) => {
           card.removeAttribute("style");
+          card.removeAttribute("data-behind");
           card.inert = false;
         });
       }
@@ -521,6 +546,20 @@ const cards = caseStudies
     height: 3px;
     border-radius: 50%;
     background-color: var(--color-body-tertiary);
+  }
+
+  /* A card behind the resting one acts as one button that brings it
+     forward. */
+  .is-stacked .card[data-behind] {
+    cursor: pointer;
+  }
+
+  .is-stacked .card[data-behind] * {
+    pointer-events: none;
+  }
+
+  .is-stacked .card[data-behind]:hover > * {
+    opacity: calc(var(--fade, 1) + 0.2);
   }
 
   /* Fade the content, not the card, so cards behind never show through. */

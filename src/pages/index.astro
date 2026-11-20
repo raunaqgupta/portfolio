@@ -119,11 +119,16 @@ const cards = await Promise.all(
     </main>
 
     <dialog class="case-modal" aria-labelledby="case-modal-title">
+      <div class="scrim"></div>
       <article class="panel">
         <button class="close" type="button" aria-label="Close">
           <CrossIcon />
         </button>
         <div class="body"></div>
+        <p class="end-hint" aria-hidden="true">
+          <ChevronDownIcon />
+          Keep scrolling to return to the cards
+        </p>
       </article>
     </dialog>
 
@@ -311,41 +316,200 @@ const cards = await Promise.all(
     });
     motion.addEventListener("change", apply);
     apply();
+
+    // Scroll the deck frame by frame (so the cards follow) to where a card
+    // rests. Snapping is paused meanwhile so it doesn't fight the tween.
+    function tweenScroll(to: number) {
+      const from = window.scrollY;
+      const delta = to - from;
+      if (Math.abs(delta) < 1) return Promise.resolve();
+      const duration = 200 + 300 * Math.min(Math.abs(delta) / viewport, 1);
+      const root = document.documentElement;
+      root.style.scrollSnapType = "none";
+      return new Promise<void>((resolve) => {
+        const start = performance.now();
+        const step = (now: number) => {
+          const t = Math.min((now - start) / duration, 1);
+          window.scrollTo({ top: from + delta * ease(t), behavior: "instant" });
+          if (t < 1) requestAnimationFrame(step);
+          else {
+            root.style.scrollSnapType = "";
+            resolve();
+          }
+        };
+        requestAnimationFrame(step);
+      });
+    }
+
+    return {
+      // Bring a card to rest, if it isn't already, and lay out the deck.
+      async settle(card: HTMLElement) {
+        const i = cards.indexOf(card);
+        if (i < 0 || !motion.matches) return;
+        const top =
+          window.scrollY + deck.getBoundingClientRect().top + i * viewport;
+        await tweenScroll(top);
+        render();
+      },
+    };
   }
 
-  // Clicking a case card opens its page's content in a modal. The URL
-  // follows, so the modal can be shared and the back button closes it.
-  // Modified clicks (new tab, new window) keep the plain link behaviour.
-  function initModal() {
+  type Deck = ReturnType<typeof init>;
+
+  // Clicking a case card opens its page's content in a modal: the card
+  // first comes to rest, then grows into the modal panel. Closing (Escape,
+  // the close button, a click outside, Back, or scrolling on past the end)
+  // shrinks the panel back into the card. The URL follows the modal, so it
+  // can be shared. Modified clicks (new tab, new window) keep the plain link
+  // behaviour.
+  const DURATION = 450;
+  const FADE = 200;
+  const EASING = "cubic-bezier(0.2, 0.8, 0.2, 1)";
+
+  type Rect = { left: number; top: number; width: number; height: number };
+
+  function initModal(deck: Deck | undefined) {
     const dialog = document.querySelector<HTMLDialogElement>(".case-modal");
     if (!dialog) return;
+    const panel = dialog.querySelector<HTMLElement>(".panel")!;
     const body = dialog.querySelector<HTMLElement>(".body")!;
+    const scrim = dialog.querySelector<HTMLElement>(".scrim")!;
+    const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
     const homeTitle = document.title;
     const homeUrl = location.href;
+    let activeCard: HTMLElement | null = null;
+    let busy = false;
 
-    function open(i: number, href: string) {
+    // The part of an element inside the viewport.
+    function visibleRect(el: HTMLElement): Rect {
+      const r = el.getBoundingClientRect();
+      const top = Math.max(r.top, 0);
+      const bottom = Math.min(r.bottom, window.innerHeight);
+      return { left: r.left, top, width: r.width, height: Math.max(bottom - top, 0) };
+    }
+
+    const box = (r: Rect) => ({
+      left: `${r.left}px`,
+      top: `${r.top}px`,
+      width: `${r.width}px`,
+      height: `${r.height}px`,
+    });
+
+    // A copy of the card that morphs between the card and the panel. It
+    // keeps the card's styles, so its title and image reflow as it resizes.
+    function makeGhost(card: HTMLElement, rect: Rect) {
+      const ghost = card.cloneNode(true) as HTMLElement;
+      ghost.removeAttribute("href");
+      ghost.removeAttribute("data-card");
+      ghost.removeAttribute("data-case");
+      ghost.setAttribute("aria-hidden", "true");
+      ghost.inert = true;
+      ghost.classList.add("ghost");
+      ghost.style.cssText = "";
+      Object.assign(ghost.style, box(rect));
+      dialog!.append(ghost);
+      return ghost;
+    }
+
+    async function open(card: HTMLElement, i: number, href: string) {
       const template = document.querySelector<HTMLTemplateElement>(
         `template[data-case-content="${i}"]`,
       );
-      if (!template) return false;
+      if (!template || busy) return;
+      busy = true;
+      activeCard = card;
+      await deck?.settle(card);
+
       body.replaceChildren(template.content.cloneNode(true));
-      dialog!.scrollTop = 0;
+      const animate = motion.matches;
+      if (animate) {
+        panel.style.opacity = "0";
+        scrim.style.opacity = "0";
+      }
       dialog!.showModal();
+      dialog!.scrollTop = 0;
       const title = body.querySelector("h1")?.textContent;
       if (title) document.title = `${title} | Raunaq Gupta`;
       history.pushState({ caseModal: i }, "", href);
-      return true;
+
+      if (animate) {
+        const from = card.getBoundingClientRect();
+        const to = visibleRect(panel);
+        const cardStyle = getComputedStyle(card);
+        const panelStyle = getComputedStyle(panel);
+        const ghost = makeGhost(card, from);
+        const timing = { duration: DURATION, easing: EASING, fill: "forwards" as const };
+        const move = ghost.animate(
+          [
+            { ...box(from), borderColor: cardStyle.borderTopColor, boxShadow: "none" },
+            { ...box(to), borderColor: panelStyle.borderTopColor, boxShadow: panelStyle.boxShadow },
+          ],
+          timing,
+        );
+        scrim.animate([{ opacity: 0 }, { opacity: 1 }], timing);
+        await move.finished;
+
+        // Cross-fade from the grown card to the case study.
+        scrim.style.opacity = "";
+        scrim.getAnimations().forEach((a) => a.cancel());
+        panel.style.opacity = "";
+        const reveal = panel.animate([{ opacity: 0 }, { opacity: 1 }], {
+          duration: FADE,
+          easing: "ease-out",
+        });
+        ghost
+          .animate([{ opacity: 1 }, { opacity: 0 }], { duration: FADE, fill: "forwards" })
+          .finished.then(() => ghost.remove());
+        await reveal.finished;
+      }
+      busy = false;
     }
 
-    function close() {
-      if (!dialog!.open) return;
-      dialog!.close();
+    async function close() {
+      if (!dialog!.open || busy) return;
+      busy = true;
       document.title = homeTitle;
+      const card = activeCard;
+      if (motion.matches && card?.isConnected) {
+        const from = visibleRect(panel);
+        const to = card.getBoundingClientRect();
+        const cardStyle = getComputedStyle(card);
+        const panelStyle = getComputedStyle(panel);
+        const ghost = makeGhost(card, from);
+        ghost.style.borderColor = panelStyle.borderTopColor;
+        ghost.style.boxShadow = panelStyle.boxShadow;
+
+        // Cross-fade from the case study to the card, at the panel's size.
+        const fade = { duration: FADE, easing: "ease-out", fill: "forwards" as const };
+        panel.animate([{ opacity: 1 }, { opacity: 0 }], fade);
+        await ghost.animate([{ opacity: 0 }, { opacity: 1 }], fade).finished;
+        panel.style.opacity = "0";
+        panel.getAnimations().forEach((a) => a.cancel());
+
+        const timing = { duration: DURATION, easing: EASING, fill: "forwards" as const };
+        const move = ghost.animate(
+          [
+            { ...box(from), borderColor: panelStyle.borderTopColor, boxShadow: panelStyle.boxShadow },
+            { ...box(to), borderColor: cardStyle.borderTopColor, boxShadow: "none" },
+          ],
+          timing,
+        );
+        scrim.animate([{ opacity: 1 }, { opacity: 0 }], timing);
+        await move.finished;
+        // Same task as close(): no frame shows between the two.
+        ghost.remove();
+      }
+      dialog!.close();
+      panel.style.opacity = "";
+      scrim.getAnimations().forEach((a) => a.cancel());
+      body.replaceChildren();
+      busy = false;
     }
 
     // Closing goes back through history when the modal added an entry, so
-    // the URL returns to the homepage.
+    // the URL returns to the homepage; popstate then runs close().
     function requestClose() {
+      if (busy || !dialog!.open) return;
       if (history.state?.caseModal !== undefined) history.back();
       else {
         close();
@@ -363,27 +527,78 @@ const cards = await Promise.all(
           event.altKey
         )
           return;
-        if (open(Number(card.dataset.case), card.href)) event.preventDefault();
+        event.preventDefault();
+        open(card, Number(card.dataset.case), card.href);
       }),
     );
 
     dialog.querySelector(".close")!.addEventListener("click", requestClose);
-    // Escape: let history drive the close.
+    // Escape: let history drive the (animated) close.
     dialog.addEventListener("cancel", (event) => {
       event.preventDefault();
       requestClose();
     });
-    // A click outside the panel (on the dialog's own padding) closes it.
+    // A click outside the panel closes it.
     dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) requestClose();
+      if (event.target === dialog || event.target === scrim) requestClose();
     });
     window.addEventListener("popstate", () => {
       if (history.state?.caseModal === undefined) close();
     });
+
+    // Scrolling on past the end of the modal closes it, and the deck takes
+    // the scroll from there. A fresh gesture at the end closes after a short
+    // pull; the momentum of the scroll that reached the end needs a longer
+    // one, so a flick to the bottom doesn't close it by accident.
+    const atEnd = () =>
+      dialog!.scrollTop + dialog!.clientHeight >= dialog!.scrollHeight - 2;
+    let lastWheel = 0;
+    let fresh = false;
+    let pull = 0;
+    dialog.addEventListener(
+      "wheel",
+      (event) => {
+        const now = performance.now();
+        const gap = now - lastWheel;
+        lastWheel = now;
+        if (busy || event.deltaY <= 0 || !atEnd()) {
+          fresh = false;
+          pull = 0;
+          return;
+        }
+        if (gap > 150) fresh = true;
+        pull += event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
+        if (pull > (fresh ? 120 : 600)) {
+          pull = 0;
+          requestClose();
+        }
+      },
+      { passive: true },
+    );
+
+    let touchY: number | null = null;
+    dialog.addEventListener(
+      "touchstart",
+      (event) => {
+        touchY = atEnd() ? event.touches[0].clientY : null;
+      },
+      { passive: true },
+    );
+    dialog.addEventListener(
+      "touchmove",
+      (event) => {
+        if (touchY === null || busy) return;
+        if (touchY - event.touches[0].clientY > 80) {
+          touchY = null;
+          requestClose();
+        }
+      },
+      { passive: true },
+    );
   }
 
-  document.querySelectorAll<HTMLElement>(".deck").forEach(init);
-  initModal();
+  const decks = [...document.querySelectorAll<HTMLElement>(".deck")].map(init);
+  initModal(decks[0]);
 </script>
 
 <style>
@@ -402,11 +617,18 @@ const cards = await Promise.all(
     --margin: 64px;
     --indicator-w: 15px;
     --left: calc(2 * var(--margin) + var(--indicator-w));
+  }
+
+  /* The modal holds a copy of the card while it morphs, so it needs the
+     card background too. */
+  .deck,
+  .case-modal {
     --card-bg: #fff;
   }
 
   @media (prefers-color-scheme: dark) {
-    .deck {
+    .deck,
+    .case-modal {
       --card-bg: var(--color-bg);
     }
   }
@@ -676,23 +898,49 @@ const cards = await Promise.all(
   }
 
   .case-modal::backdrop {
+    background: transparent;
+  }
+
+  /* The backdrop lives inside the dialog so it can fade with the morph. */
+  .scrim {
+    position: fixed;
+    inset: 0;
     background-color: color-mix(in srgb, var(--color-bg) 92%, transparent);
+  }
+
+  /* The card copy that morphs into and out of the panel. */
+  .case-modal :global(.ghost) {
+    position: fixed;
+    z-index: 2;
+    margin: 0;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+
+  .end-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    margin: var(--space-4) 0 0;
+    font-size: var(--typography-body-small);
+    color: var(--color-body-tertiary);
+  }
+
+  .end-hint :global(svg) {
+    width: 15px;
+    height: 15px;
   }
 
   .panel {
     position: relative;
+    z-index: 1;
     box-sizing: border-box;
     padding: 64px;
-    background-color: var(--card-bg, #fff);
+    background-color: var(--card-bg);
     border: 1px solid var(--color-heading);
     box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
     color: var(--color-body-primary);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .panel {
-      background-color: var(--color-bg);
-    }
   }
 
   .panel :global(h1) {

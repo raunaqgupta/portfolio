@@ -1,69 +1,1209 @@
 ---
+import { getCollection, render } from "astro:content";
 import LogoRing from "@components/logoRing.astro";
+import GridBackground from "@components/gridBackground.astro";
+import Prose from "@components/Prose.astro";
+import Imgmdx from "@components/img.mdx.astro";
+import Ulmdx from "@components/ul.mdx.astro";
+import Codemdx from "@components/Code.mdx.astro";
+import ChevronUpIcon from "@icons/chevron-up.svg";
+import ChevronDownIcon from "@icons/chevron-down.svg";
+import ThickArrowRightIcon from "@icons/thick-arrow-right.svg";
+import CrossIcon from "@icons/cross.svg";
+import SpeakerLoudIcon from "@icons/speaker-loud.svg";
 import BaseLayout from "../layouts/baseLayout.astro";
 import { ROUTES, SITE_URL } from "../constants";
 
+const PRONUNCIATION_URL =
+  "https://audio.raunaqgupta.com/Pronunciation%3A%20Raunaq.m4a";
+
 const description =
   "Personal website of Raunaq Gupta - Design technologist with 10+ years of experience shipping enterprise web applications and developer tools.";
+
+let caseStudies: Awaited<ReturnType<typeof getCollection<"articles">>> = [];
+try {
+  caseStudies = await getCollection("articles", ({ data }) => {
+    return data.published !== false && data.category === "portfolio";
+  });
+} catch (error) {
+  console.error("Error fetching case studies:", error);
+}
+
+const cards = await Promise.all(
+  caseStudies
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+    .map(async (entry) => ({
+      href: `${ROUTES.PORTFOLIO}/${entry.id}`,
+      title: entry.data.title,
+      image: entry.data.thumbnail ?? entry.data.hero,
+      hero: entry.data.hero ?? entry.data.thumbnail,
+      Content: (await render(entry)).Content,
+    })),
+);
 ---
 
 <BaseLayout title="Home" description={description} canonicalUrl={SITE_URL}>
   <body>
-    <LogoRing />
+    <GridBackground
+      cellSize={10.5}
+      density={0.12}
+      rate={12}
+      hold={[400, 1200]}
+    />
+    <main class="deck" style={`--count: ${cards.length + 1};`}>
+      <div class="stage">
+        <section class="card intro" data-card>
+          <LogoRing />
+          <div class="content">
+            <div class="name">
+              <button
+                class="pronounce"
+                type="button"
+                aria-label="Play pronunciation of Raunaq"
+              >
+                <SpeakerLoudIcon aria-hidden="true" />
+              </button>
+              <h1>
+                <span class="visually-hidden">Raunaq, pronounced </span>
+                <span lang="en-fonipa">/ˈrɔː.nʌk/</span>
+              </h1>
+              <audio preload="auto" src={PRONUNCIATION_URL}></audio>
+            </div>
+            <p>
+              I'm a designer with 10+ years of experience shipping enterprise
+              web applications across startups and large organizations.
+            </p>
+          </div>
+        </section>
+        {
+          cards.map((card, i) => (
+            <a
+              class="card case no-decoration no-hover"
+              href={card.href}
+              data-card
+              data-case={i}
+            >
+              <div class="title">
+                <h2>{card.title}</h2>
+                <ThickArrowRightIcon class="arrow" aria-hidden="true" />
+              </div>
+              <div class="image" style={`--img: url("${card.image}")`} />
+            </a>
+          ))
+        }
+        <nav class="indicator" aria-label="Cards">
+          <button
+            class="step"
+            type="button"
+            data-step="-1"
+            aria-label="Previous card"
+          >
+            <ChevronUpIcon class="chevron" />
+          </button>
+          <div class="window">
+            <ol class="numbers">
+              <li class="dot" aria-hidden="true">•</li>
+              {
+                Array.from({ length: cards.length + 1 }, (_, i) => (
+                  <li>
+                    <button
+                      type="button"
+                      data-goto={i}
+                      aria-label={`Card ${i + 1}`}
+                    >
+                      {i + 1}
+                    </button>
+                  </li>
+                ))
+              }
+              <li class="dot" aria-hidden="true">•</li>
+            </ol>
+          </div>
+          <button
+            class="step"
+            type="button"
+            data-step="1"
+            aria-label="Next card"
+          >
+            <ChevronDownIcon class="chevron" />
+          </button>
+        </nav>
+      </div>
+      <section
+        class="expanded"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="case-expanded-title"
+        hidden
+      >
+        <div class="face case"></div>
+        <div class="scroller"><div class="body"></div></div>
+        <button class="close" type="button" aria-label="Close">
+          <CrossIcon />
+        </button>
+      </section>
+      {
+        Array.from({ length: cards.length + 1 }, (_, i) => (
+          <div class="snap" style={`--i: ${i};`} aria-hidden="true" />
+        ))
+      }
+    </main>
 
-    <div class="content">
-      <h1>Hi, I'm Raunaq</h1>
-      <p>
-        If you are interested in hiring me, visit my <a href={ROUTES.PORTFOLIO}
-          >portfolio</a
-        >. Check out my <a href={ROUTES.BLOG}>blog</a>, and <a
-          href="https://raunaqgupta.substack.com/notes">Substack notes</a
-        > where I write about experiments in technology & design, recipes, and literature.
-        I'm machine readable at <a href="/raunaq-gupta.json"
-          >raunaq-gupta.json</a
-        >.
-      </p>
-    </div>
+
+    {
+      cards.map((card, i) => (
+        <template data-case-content={i}>
+          <h1 id="case-expanded-title">{card.title}</h1>
+          <div class="hero" style={`--img: url("${card.hero}")`} />
+          <Prose>
+            <card.Content
+              components={{ img: Imgmdx, ul: Ulmdx, code: Codemdx }}
+            />
+          </Prose>
+        </template>
+      ))
+    }
   </body>
 </BaseLayout>
 
+<script>
+  // Scroll-driven card deck. Keyframes come from three design frames
+  // (1280×832), where a card fills the viewport inside a 64px margin:
+  // a card resting, the next card halfway in, and the next card resting.
+  // The outgoing card doesn't move up; it shrinks back in place while the
+  // next one rises from the bottom and covers it.
+  //
+  // For each card, d = its index minus the scroll position (in cards):
+  //   d = 1    just below the viewport
+  //   d = 0.5  incoming: top at 438/832 of the viewport, opacity 0.75
+  //   d = 0    resting
+  //   d = -0.5 outgoing: scale 787/1073, opacity 0.5, centred in place
+  //   d = -1   gone behind the card now resting in front of it
+  const FRAME_H = 832;
+  const FRAME_MARGIN = 64;
+  const IN_MID = (438 - FRAME_MARGIN) / FRAME_H;
+  const OUT_MID_SCALE = 787 / 1073;
+  const OUT_END_SCALE = 0.6;
+
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+  const ease = (t: number) => t * t * (3 - 2 * t);
+
+  function init(deck: HTMLElement) {
+    const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+    const stage = deck.querySelector<HTMLElement>(".stage")!;
+    const cards = [...deck.querySelectorAll<HTMLElement>("[data-card]")];
+    let viewport = 0;
+    let frame = 0;
+
+    const indicator = deck.querySelector<HTMLElement>(".indicator")!;
+    const numbers = [
+      ...indicator.querySelectorAll<HTMLElement>(".numbers li"),
+    ];
+    const goto = [
+      ...indicator.querySelectorAll<HTMLButtonElement>("[data-goto]"),
+    ];
+    const steps = [
+      ...indicator.querySelectorAll<HTMLButtonElement>("[data-step]"),
+    ];
+    let current = -1;
+    let expandedState = false;
+    // Scroll distance a card stays at rest before the next one starts
+    // coming in, in viewports (--hold in the CSS).
+    let hold = 0;
+
+    // Each card takes a stretch of scroll: first `hold` at rest, then one
+    // viewport moving to the next card. Scroll (in viewports) to progress
+    // (in cards), and back.
+    function progress(scroll: number) {
+      const step = 1 + hold;
+      const k = Math.floor(scroll / step);
+      const p = k + Math.min(Math.max(scroll - k * step - hold, 0), 1);
+      return Math.min(Math.max(p, 0), cards.length - 1);
+    }
+    const scrollFor = (i: number) => i * (1 + hold);
+
+    const deckTop = () => window.scrollY + deck.getBoundingClientRect().top;
+    const scrolled = () => -deck.getBoundingClientRect().top / viewport;
+
+    function scrollToCard(i: number) {
+      const index = Math.min(Math.max(i, 0), cards.length - 1);
+      const y = deckTop() + scrollFor(index) * viewport;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+
+    goto.forEach((button) =>
+      button.addEventListener("click", () =>
+        scrollToCard(Number(button.dataset.goto)),
+      ),
+    );
+    steps.forEach((button) =>
+      button.addEventListener("click", () =>
+        scrollToCard(Math.max(current, 0) + Number(button.dataset.step)),
+      ),
+    );
+
+    // The number column rolls with the scroll position: the current number
+    // sits in the middle row, its neighbours fade above and below it.
+    function renderIndicator(p: number) {
+      indicator.style.setProperty("--p", String(p));
+      numbers.forEach((item, j) => {
+        // Item 0 is the dot before the first card.
+        const distance = Math.abs(j - 1 - p);
+        item.style.opacity = String(
+          Math.max(0, 1 - Math.max(distance - 1, 0) * 2),
+        );
+        item.classList.toggle("is-current", distance < 0.5);
+      });
+      const index = Math.round(p);
+      if (index === current) return;
+      current = index;
+      goto.forEach((button, i) => {
+        if (i === index) button.setAttribute("aria-current", "step");
+        else button.removeAttribute("aria-current");
+        // Only the numbers in view can take focus.
+        button.tabIndex = Math.abs(i - index) <= 1 ? 0 : -1;
+      });
+      steps[0].disabled = index <= 0;
+      steps[1].disabled = index >= cards.length - 1;
+    }
+
+    function render() {
+      frame = 0;
+      const H = viewport;
+      const p = progress(scrolled());
+      renderIndicator(p);
+
+      cards.forEach((card, i) => {
+        const d = i - p;
+        const margin = card.offsetTop;
+        let y = 0;
+        let scale = 1;
+        let opacity = 1;
+
+        if (d >= 1) {
+          y = H - margin;
+          opacity = 0;
+        } else if (d > 0) {
+          const mid = IN_MID * H;
+          if (d > 0.5) {
+            const t = ease((d - 0.5) / 0.5);
+            y = lerp(mid, H - margin, t);
+            opacity = lerp(0.75, 0.5, t);
+          } else {
+            const t = ease(d / 0.5);
+            y = lerp(0, mid, t);
+            opacity = lerp(1, 0.75, t);
+          }
+        } else if (d < 0) {
+          const a = -d;
+          if (a <= 0.5) {
+            const t = ease(a / 0.5);
+            scale = lerp(1, OUT_MID_SCALE, t);
+            opacity = lerp(1, 0.5, t);
+          } else {
+            const t = ease(Math.min((a - 0.5) / 0.5, 1));
+            scale = lerp(OUT_MID_SCALE, OUT_END_SCALE, t);
+            opacity = lerp(0.5, 0, t);
+          }
+        }
+
+        card.style.transform = `translateY(${y}px) scale(${scale})`;
+        card.style.setProperty("--fade", String(opacity));
+        card.style.visibility = opacity <= 0 ? "hidden" : "visible";
+        card.style.zIndex = String(i + 1);
+        // Only the resting card takes input, and none while one is expanded.
+        card.inert = expandedState || Math.abs(d) >= 0.5;
+      });
+    }
+
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(render);
+    }
+
+    function measure() {
+      viewport = stage.clientHeight;
+      hold = parseFloat(getComputedStyle(deck).getPropertyValue("--hold")) || 0;
+    }
+
+    function apply() {
+      if (motion.matches) {
+        deck.classList.add("is-stacked");
+        measure();
+        render();
+      } else {
+        deck.classList.remove("is-stacked");
+        cards.forEach((card) => {
+          card.removeAttribute("style");
+          card.inert = false;
+        });
+      }
+    }
+
+    window.addEventListener("scroll", () => motion.matches && schedule(), {
+      passive: true,
+    });
+    window.addEventListener("resize", () => {
+      if (!motion.matches) return;
+      measure();
+      schedule();
+    });
+    motion.addEventListener("change", apply);
+    apply();
+
+    // Scroll the deck frame by frame (so the cards follow) to where a card
+    // rests. Snapping is paused meanwhile so it doesn't fight the tween.
+    function tweenScroll(to: number) {
+      const from = window.scrollY;
+      const delta = to - from;
+      if (Math.abs(delta) < 1) return Promise.resolve();
+      const duration = 200 + 300 * Math.min(Math.abs(delta) / viewport, 1);
+      const root = document.documentElement;
+      root.style.scrollSnapType = "none";
+      return new Promise<void>((resolve) => {
+        const start = performance.now();
+        const step = (now: number) => {
+          const t = Math.min((now - start) / duration, 1);
+          window.scrollTo({ top: from + delta * ease(t), behavior: "instant" });
+          if (t < 1) requestAnimationFrame(step);
+          else {
+            root.style.scrollSnapType = "";
+            resolve();
+          }
+        };
+        requestAnimationFrame(step);
+      });
+    }
+
+    return {
+      // While a card is expanded, the deck holds still and nothing else in
+      // it takes input.
+      setExpanded(on: boolean) {
+        expandedState = on;
+        deck.classList.toggle("is-expanded", on);
+        indicator.inert = on;
+        if (on) cards.forEach((card) => (card.inert = true));
+        else render();
+      },
+      // Bring a card to rest, if it isn't already, and lay out the deck.
+      async settle(card: HTMLElement) {
+        const i = cards.indexOf(card);
+        if (i < 0 || !motion.matches) return;
+        // Anywhere in its rest stretch already counts as at rest.
+        const at = scrolled();
+        if (at < scrollFor(i) - 0.001 || at > scrollFor(i) + hold + 0.001)
+          await tweenScroll(deckTop() + scrollFor(i) * viewport);
+        render();
+      },
+    };
+  }
+
+  type Deck = ReturnType<typeof init>;
+
+  // Clicking a case card expands it in place to show its page's content:
+  // the card first comes to rest, then widens to the left, pushing the
+  // indicator out of view, and its face cross-fades into the case study.
+  // The card then becomes part of the page, as tall as its content, and
+  // the page itself scrolls through it; the grid stays visible around it.
+  // Scrolling on past the end (or Escape, the close button, Back) reverses
+  // this back to the slide, and the deck takes the scroll from there. The
+  // URL follows, so an expanded card can be shared. Modified clicks (new
+  // tab, new window) keep the plain link behaviour.
+  const DURATION = 450;
+  const FADE = 200;
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  function initExpand(deck: Deck | undefined) {
+    const expanded = document.querySelector<HTMLElement>(".expanded");
+    if (!expanded || !deck) return;
+    const deckEl = expanded.closest<HTMLElement>(".deck")!;
+    const face = expanded.querySelector<HTMLElement>(".face")!;
+    const scroller = expanded.querySelector<HTMLElement>(".scroller")!;
+    const body = expanded.querySelector<HTMLElement>(".body")!;
+    const closeButton = expanded.querySelector<HTMLElement>(".close")!;
+    const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+    const root = document.documentElement;
+    const homeTitle = document.title;
+    const homeUrl = location.href;
+    let activeCard: HTMLElement | null = null;
+    let open = false;
+    let busy = false;
+    // Page scroll position of the deck while the card is expanded.
+    let restScroll = 0;
+    const time = (ms: number) => (motion.matches ? ms : 0);
+    const margin = () => parseFloat(getComputedStyle(deckEl).getPropertyValue("--margin"));
+
+    // Fixed: a box over the viewport, used while morphing. Flow: part of
+    // the page, as tall as its content, scrolled with the page.
+    function toFlow() {
+      expanded!.style.top = `${restScroll + margin()}px`;
+      expanded!.classList.add("is-flow");
+      deckEl.classList.add("is-flow");
+    }
+
+    // Back to a fixed box covering exactly what's visible of the card, with
+    // the page returned to the deck, all in one frame so nothing moves.
+    function toFixed() {
+      const r = expanded!.getBoundingClientRect();
+      const top = Math.max(r.top, 0);
+      const bottom = Math.min(r.bottom, window.innerHeight);
+      // A jump, not a transition: top changes meaning between the two modes
+      // (page offset vs viewport offset).
+      expanded!.style.transition = "none";
+      expanded!.classList.remove("is-flow");
+      deckEl.classList.remove("is-flow");
+      expanded!.style.top = `${top}px`;
+      expanded!.style.bottom = "auto";
+      expanded!.style.height = `${bottom - top}px`;
+      scroller.style.transform = `translateY(${r.top - top}px)`;
+      window.scrollTo({ top: restScroll, behavior: "instant" });
+      void expanded!.offsetWidth;
+      expanded!.style.transition = "";
+    }
+
+    async function expand(card: HTMLElement, i: number, href: string) {
+      const template = document.querySelector<HTMLTemplateElement>(
+        `template[data-case-content="${i}"]`,
+      );
+      if (!template || busy || open) return;
+      busy = true;
+      activeCard = card;
+      await deck!.settle(card);
+      restScroll = window.scrollY;
+      // The expanded card stands in for this one until it collapses back.
+      card.classList.add("is-held");
+
+      // Start as an exact copy of the resting card.
+      face.replaceChildren(
+        ...[...card.children].map((child) => child.cloneNode(true)),
+      );
+      body.replaceChildren(template.content.cloneNode(true));
+      expanded!.hidden = false;
+      deck!.setExpanded(true);
+      void expanded!.offsetWidth; // apply the start state before transitioning
+
+      // Widen, then cross-fade the face into the content.
+      expanded!.classList.add("is-wide");
+      await wait(time(DURATION));
+      expanded!.classList.add("show-content");
+      await wait(time(FADE));
+      toFlow();
+
+      const title = body.querySelector("h1")?.textContent;
+      if (title) document.title = `${title} | Raunaq Gupta`;
+      history.pushState({ caseExpanded: i }, "", href);
+      closeButton.focus({ preventScroll: true });
+      open = true;
+      busy = false;
+    }
+
+    async function collapse() {
+      if (!open || busy) return;
+      busy = true;
+      document.title = homeTitle;
+      toFixed();
+
+      // Cross-fade back to the card's face, then shrink into the slide
+      // while the indicator slides back in.
+      expanded!.classList.remove("show-content");
+      await wait(time(FADE));
+      deck!.setExpanded(false);
+      expanded!.classList.remove("is-wide");
+      expanded!.style.top = `${margin()}px`;
+      expanded!.style.height = `${window.innerHeight - 2 * margin()}px`;
+      await wait(time(DURATION));
+
+      // Swap back to the real card in the same frame.
+      activeCard?.classList.remove("is-held");
+      expanded!.hidden = true;
+      expanded!.removeAttribute("style");
+      scroller.removeAttribute("style");
+      body.replaceChildren();
+      face.replaceChildren();
+      activeCard?.focus({ preventScroll: true });
+      open = false;
+      busy = false;
+    }
+
+    // Collapsing goes back through history when expanding added an entry,
+    // so the URL returns to the homepage; popstate then runs collapse().
+    function requestCollapse() {
+      if (!open || busy) return;
+      if (history.state?.caseExpanded !== undefined) history.back();
+      else {
+        collapse();
+        history.replaceState(null, "", homeUrl);
+      }
+    }
+
+    document.querySelectorAll<HTMLAnchorElement>("[data-case]").forEach((card) =>
+      card.addEventListener("click", (event) => {
+        if (
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey
+        )
+          return;
+        event.preventDefault();
+        expand(card, Number(card.dataset.case), card.href);
+      }),
+    );
+
+    closeButton.addEventListener("click", requestCollapse);
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && open) requestCollapse();
+    });
+    window.addEventListener("popstate", () => {
+      if (history.state?.caseExpanded === undefined) collapse();
+    });
+
+    // Scrolling on past the end of the page collapses the card, and the
+    // deck takes the scroll from there. A fresh gesture at the end collapses
+    // after a short pull; the momentum of the scroll that reached the end
+    // needs a longer one, so a flick to the bottom doesn't collapse it by
+    // accident.
+    const atEnd = () =>
+      window.scrollY + window.innerHeight >= root.scrollHeight - 2;
+    let lastWheel = 0;
+    let fresh = false;
+    let pull = 0;
+    window.addEventListener(
+      "wheel",
+      (event) => {
+        const now = performance.now();
+        const gap = now - lastWheel;
+        lastWheel = now;
+        if (!open || busy || event.deltaY <= 0 || !atEnd()) {
+          fresh = false;
+          pull = 0;
+          return;
+        }
+        if (gap > 150) fresh = true;
+        pull += event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
+        if (pull > (fresh ? 120 : 600)) {
+          pull = 0;
+          requestCollapse();
+        }
+      },
+      { passive: true },
+    );
+
+    let touchY: number | null = null;
+    window.addEventListener(
+      "touchstart",
+      (event) => {
+        touchY = open && atEnd() ? event.touches[0].clientY : null;
+      },
+      { passive: true },
+    );
+    window.addEventListener(
+      "touchmove",
+      (event) => {
+        if (touchY === null || !open || busy) return;
+        if (touchY - event.touches[0].clientY > 80) {
+          touchY = null;
+          requestCollapse();
+        }
+      },
+      { passive: true },
+    );
+  }
+
+  // The audio button plays the recorded pronunciation, from the start each
+  // time it's pressed. The clip is small, so it's preloaded with the page.
+  document.querySelectorAll<HTMLElement>(".intro .name").forEach((name) => {
+    const button = name.querySelector<HTMLButtonElement>(".pronounce")!;
+    const audio = name.querySelector("audio")!;
+    button.addEventListener("click", () => {
+      // Rewind only once the clip has loaded: some browsers throw when
+      // seeking before that, which would stop play() from running.
+      try {
+        if (audio.readyState > 0) audio.currentTime = 0;
+      } catch {}
+      // play() runs inside the click, so autoplay rules allow it.
+      const playing = audio.play();
+      playing?.catch((error) => {
+        button.classList.remove("is-playing");
+        console.warn("Pronunciation audio didn't play:", error);
+      });
+    });
+    audio.addEventListener("play", () => button.classList.add("is-playing"));
+    for (const end of ["pause", "ended", "error"])
+      audio.addEventListener(end, () => button.classList.remove("is-playing"));
+  });
+
+  const decks = [...document.querySelectorAll<HTMLElement>(".deck")].map(init);
+  initExpand(decks[0]);
+</script>
+
 <style>
   body {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    margin: 0;
     background-color: var(--color-bg);
     color: var(--color-body-primary);
     font-family: sans-serif;
     font-size: 1.12em;
     line-height: 28px;
-    max-width: 80ch;
-    min-height: 100vh;
-    min-height: 100dvh;
-    gap: 64px;
-    margin: auto;
   }
 
-  .logo {
-    width: 512px;
+  /* Cards fill the viewport inside a margin, leaving room on the left for
+     the numeric indicator. Phones: a smaller margin and no indicator. */
+  .deck {
+    position: relative;
+    z-index: 1;
+    --margin: 64px;
+    --indicator-w: 15px;
+    --left: calc(2 * var(--margin) + var(--indicator-w));
   }
 
-  .logo img {
-    width: 100%;
-    height: 100%;
+  .deck {
+    --card-bg: #fff;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .deck {
+      --card-bg: var(--color-bg);
+    }
   }
 
   @media only screen and (max-width: 700px) {
-    body {
-      padding: 2em;
+    .deck {
+      --margin: 24px;
+      --left: var(--margin);
+    }
+  }
+
+  /* Without the scroll effect (no JS, or reduced motion) the cards are a
+     plain column, each one viewport tall. */
+  .stage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--margin);
+    padding: var(--margin);
+    padding-left: var(--left);
+  }
+
+  .snap {
+    display: none;
+  }
+
+  .card {
+    box-sizing: border-box;
+    height: calc(100vh - 2 * var(--margin));
+    height: calc(100dvh - 2 * var(--margin));
+    background-color: var(--card-bg);
+    border: 1px solid var(--color-border);
+  }
+
+  .intro {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 64px;
+    padding: 64px;
+  }
+
+  .intro .content {
+    flex: 0 1 600px;
+  }
+
+  .intro p {
+    margin: 19px 0 0;
+    font-size: var(--typography-body);
+  }
+
+  /* Pronunciation: an audio button beside the name in IPA. */
+  .intro .name {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .pronounce {
+    all: unset;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-heading);
+    color: var(--card-bg);
+    cursor: pointer;
+    transition:
+      transform 150ms ease-out,
+      background-color 150ms;
+  }
+
+  .pronounce :global(svg) {
+    width: 24px;
+    height: 24px;
+  }
+
+  .pronounce:hover {
+    transform: scale(1.06);
+  }
+
+  .pronounce:active {
+    transform: scale(0.96);
+  }
+
+  .pronounce:focus-visible {
+    outline: 2px solid var(--color-highlight);
+    outline-offset: 3px;
+  }
+
+  /* While the recording plays. */
+  .pronounce.is-playing {
+    background-color: var(--color-highlight);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .case {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .case:after {
+    content: none;
+  }
+
+  .case .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .case h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 23px;
+    color: var(--color-body-primary);
+  }
+
+  .case :global(.arrow) {
+    flex: none;
+    width: 15px;
+    height: 15px;
+    color: var(--color-heading);
+  }
+
+  .case .image {
+    flex: 1;
+    min-height: 0;
+    border-radius: var(--border-radius);
+    background-color: var(--color-border-bg);
+    background-image: var(--img);
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+
+  .case:hover h2,
+  .case:focus-visible h2 {
+    color: var(--color-heading);
+  }
+
+  /* Scroll-driven deck, with the cards pinned in a sticky stage and moved
+     by the script. Each card takes --hold viewports of scroll at rest, then
+     one viewport moving to the next. The last card keeps its rest stretch;
+     the extra viewport is the stage itself. */
+  .deck.is-stacked {
+    --hold: 0.5;
+    --scroll: calc((var(--count) - 1) * (1 + var(--hold)) + var(--hold) + 1);
+    position: relative;
+    height: calc(var(--scroll) * 100vh);
+    height: calc(var(--scroll) * 100dvh);
+  }
+
+  .is-stacked .stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    padding: 0;
+    overflow: hidden;
+    display: block;
+  }
+
+  .is-stacked .card {
+    position: absolute;
+    top: var(--margin);
+    right: var(--margin);
+    bottom: var(--margin);
+    left: var(--left);
+    height: auto;
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  /* Fade the content, not the card, so cards behind never show through. */
+  .is-stacked .card > * {
+    opacity: var(--fade, 1);
+  }
+
+  /* Numeric indicator: left of the cards, not on phones. */
+  .indicator {
+    display: none;
+  }
+
+  @media only screen and (min-width: 701px) {
+    .is-stacked .indicator {
+      --row: 22px;
+      position: absolute;
+      top: 50%;
+      left: var(--margin);
+      width: var(--indicator-w);
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 32px;
+      align-items: center;
+      font-size: 12px;
+      line-height: 16px;
+      font-variant-numeric: tabular-nums;
+      color: color-mix(in srgb, var(--color-body-primary) 50%, transparent);
+    }
+  }
+
+  .indicator button {
+    all: unset;
+    cursor: pointer;
+    display: block;
+  }
+
+  .indicator button:focus-visible {
+    outline: 2px solid var(--color-highlight);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .indicator .step {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15px;
+    height: 15px;
+    color: var(--color-body-primary);
+  }
+
+  .indicator .step:disabled {
+    color: var(--color-border);
+    cursor: default;
+  }
+
+  .indicator .step:not(:disabled):hover {
+    color: var(--color-heading);
+  }
+
+  .step :global(.chevron) {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* Three rows: previous, current, next. Rows are 22px apart; the window
+     is trimmed to the 16px text of the first and last. */
+  .window {
+    height: calc(2 * var(--row) + 16px);
+    overflow: hidden;
+  }
+
+  .numbers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: var(--indicator-w);
+    text-align: center;
+    /* Card 1 (item 1) sits in the middle row when p = 0. */
+    transform: translateY(calc((var(--p, 0) * -1) * var(--row) - 3px));
+  }
+
+  .numbers li {
+    height: var(--row);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .numbers button {
+    width: 100%;
+  }
+
+  .numbers button:hover,
+  .numbers .is-current button {
+    color: var(--color-body-primary);
+  }
+
+  .numbers .dot {
+    color: color-mix(in srgb, var(--color-border) 60%, transparent);
+  }
+
+  /* One snap point per card, where its rest stretch begins. */
+  .is-stacked .snap {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: calc(var(--i) * (1 + var(--hold)) * 100dvh);
+    width: 1px;
+    height: 100dvh;
+    scroll-snap-align: start;
+    pointer-events: none;
+  }
+
+  :global(html):has(.deck.is-stacked) {
+    scroll-snap-type: y proximity;
+  }
+
+  /* Expanded card. While morphing it's a fixed box: first over the resting
+     card, then widened to the left over the indicator's space while the
+     indicator slides out of view. Once open it becomes part of the page
+     (is-flow), as tall as its content, and the page scrolls through it.
+     The grid shows in the margins. */
+
+  /* The page holds still while the card morphs. */
+  :global(html):has(.expanded:not([hidden]):not(.is-flow)) {
+    overflow: hidden;
+  }
+
+  .expanded {
+    --duration: 450ms;
+    --fade: 200ms;
+    position: fixed;
+    top: var(--margin);
+    right: var(--margin);
+    bottom: var(--margin);
+    left: var(--left);
+    z-index: 2;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-color: var(--card-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-body-primary);
+    transition:
+      left var(--duration) cubic-bezier(0.2, 0.8, 0.2, 1),
+      top var(--duration) cubic-bezier(0.2, 0.8, 0.2, 1),
+      height var(--duration) cubic-bezier(0.2, 0.8, 0.2, 1),
+      border-color var(--duration),
+      box-shadow var(--duration);
+  }
+
+  .expanded[hidden] {
+    display: none;
+  }
+
+  /* The card that's expanded stays hidden under its stand-in, so the
+     collapse doesn't land on a copy already there. (The deck sets
+     visibility inline, hence !important.) */
+  .card.is-held {
+    visibility: hidden !important;
+  }
+
+  .expanded.is-wide {
+    left: var(--margin);
+    border-color: var(--color-heading);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  /* Part of the page: positioned where the fixed box was (top is set by the
+     script), at least a viewport tall so the page doesn't shorten under the
+     current scroll position. */
+  .expanded.is-flow {
+    position: absolute;
+    bottom: auto;
+    min-height: calc(100dvh - 2 * var(--margin));
+    overflow: visible;
+    transition: none;
+  }
+
+  /* Leaves the bottom margin below the card at the end of the page. */
+  .expanded.is-flow::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 1px;
+    height: var(--margin);
+  }
+
+  /* The deck steps out of the layout, so the page ends with the card. */
+  .deck.is-flow .stage {
+    display: none;
+  }
+
+  .deck.is-stacked.is-flow {
+    height: auto;
+  }
+
+  :global(html):has(.expanded.is-flow) {
+    scroll-snap-type: none;
+  }
+
+  .indicator {
+    transition:
+      transform 450ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 450ms;
+  }
+
+  .deck.is-expanded .indicator {
+    transform: translate(calc(-1 * (var(--margin) + 100%)), -50%);
+    opacity: 0;
+  }
+
+  /* The card's face (title + image) and the case study cross-fade. */
+  .expanded .face,
+  .expanded .scroller,
+  .expanded .close {
+    transition: opacity var(--fade) ease-out;
+  }
+
+  .expanded .face {
+    position: absolute;
+    inset: 0;
+  }
+
+  .expanded.is-flow .face {
+    display: none;
+  }
+
+  .expanded .scroller,
+  .expanded .close {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .expanded.show-content .face {
+    opacity: 0;
+  }
+
+  .expanded.show-content .scroller,
+  .expanded.show-content .close {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* No scrolling of its own: clipped by the box while morphing, in the
+     page's flow once open. */
+  .scroller {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    padding: 64px;
+  }
+
+  .expanded.is-flow .scroller {
+    position: relative;
+  }
+
+  .expanded .body :global(h1) {
+    margin: 0 0 var(--space-3);
+  }
+
+  .expanded .body :global(.hero) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    margin-bottom: var(--space-4);
+    border-radius: var(--border-radius);
+    background-color: var(--color-border-bg);
+    background-image: var(--img);
+    background-size: cover;
+    background-position: center top;
+  }
+
+  /* Pinned to the card's top-right corner on screen, so it stays at hand
+     while the page scrolls. */
+  .close {
+    all: unset;
+    position: fixed;
+    top: calc(var(--margin) + var(--space-3));
+    right: calc(var(--margin) + var(--space-3));
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--border-radius);
+    color: var(--color-body-secondary);
+    background-color: var(--card-bg);
+    cursor: pointer;
+  }
+
+  .close:hover {
+    color: var(--color-heading);
+    background-color: var(--color-bg-1);
+  }
+
+  .close:focus-visible {
+    outline: 2px solid var(--color-highlight);
+  }
+
+  .close :global(svg) {
+    width: 15px;
+    height: 15px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .expanded {
+      --duration: 0ms;
+      --fade: 0ms;
     }
 
-    .logo {
-      max-width: 128px;
+    .indicator {
+      transition: none;
+    }
+  }
+
+  @media only screen and (max-width: 700px) {
+    .intro {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: var(--space-3);
+      padding: 24px;
+    }
+
+    .intro .content {
+      flex: none;
+    }
+
+    .intro h1 {
+      font-size: 2.56rem;
+    }
+
+    .intro .name {
+      gap: var(--space-2);
+    }
+
+    .case .image {
+      background-position: center;
+    }
+
+    .case h2 {
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .scroller {
+      padding: 56px 24px 24px;
     }
   }
 </style>

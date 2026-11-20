@@ -67,7 +67,7 @@ const cards = await Promise.all(
                 <span class="visually-hidden">Raunaq, pronounced </span>
                 <span lang="en-fonipa">/ˈrɔː.nʌk/</span>
               </h1>
-              <audio preload="none" src={PRONUNCIATION_URL}></audio>
+              <audio preload="auto" src={PRONUNCIATION_URL}></audio>
             </div>
             <p>
               I'm a designer with 10+ years of experience shipping enterprise
@@ -611,13 +611,22 @@ const cards = await Promise.all(
   }
 
   // The audio button plays the recorded pronunciation, from the start each
-  // time it's pressed.
+  // time it's pressed. The clip is small, so it's preloaded with the page.
   document.querySelectorAll<HTMLElement>(".intro .name").forEach((name) => {
     const button = name.querySelector<HTMLButtonElement>(".pronounce")!;
     const audio = name.querySelector("audio")!;
     button.addEventListener("click", () => {
-      audio.currentTime = 0;
-      audio.play().catch(() => button.classList.remove("is-playing"));
+      // Rewind only once the clip has loaded: some browsers throw when
+      // seeking before that, which would stop play() from running.
+      try {
+        if (audio.readyState > 0) audio.currentTime = 0;
+      } catch {}
+      // play() runs inside the click, so autoplay rules allow it.
+      const playing = audio.play();
+      playing?.catch((error) => {
+        button.classList.remove("is-playing");
+        console.warn("Pronunciation audio didn't play:", error);
+      });
     });
     audio.addEventListener("play", () => button.classList.add("is-playing"));
     for (const end of ["pause", "ended", "error"])

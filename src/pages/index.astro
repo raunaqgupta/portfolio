@@ -40,7 +40,12 @@ const cards = await Promise.all(
 
 <BaseLayout title="Home" description={description} canonicalUrl={SITE_URL}>
   <body>
-    <GridBackground density={0.12} rate={12} />
+    <GridBackground
+      cellSize={10.5}
+      density={0.12}
+      rate={12}
+      hold={[400, 1200]}
+    />
     <main class="deck" style={`--count: ${cards.length + 1};`}>
       <div class="stage">
         <section class="card intro" data-card>

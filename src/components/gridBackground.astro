@@ -113,6 +113,7 @@ const config = {
 
     let width = 0;
     let height = 0;
+    let dpr = 1;
     let cols = 0;
     let rows = 0;
     let lineColor = "";
@@ -131,34 +132,38 @@ const config = {
       fillColor = getComputedStyle(fillProbe).color;
     }
 
+    // Edges are snapped to whole device pixels, so lines stay crisp even
+    // when the cell size isn't a whole number of pixels.
+    const snap = (v: number) => Math.round(v * dpr);
+
     // The lines are drawn once into an offscreen canvas and copied each frame.
-    function drawGrid(dpr: number) {
+    // Everything is drawn in device pixels.
+    function drawGrid() {
       grid = document.createElement("canvas");
       grid.width = canvas.width;
       grid.height = canvas.height;
       const g = grid.getContext("2d")!;
-      g.scale(dpr, dpr);
       g.fillStyle = lineColor;
+      const line = Math.max(1, Math.round(lineWidth * dpr));
       // Each cell's line sits on its right and bottom edge.
-      for (let x = cellSize - lineWidth; x < width; x += cellSize)
-        g.fillRect(x, 0, lineWidth, height);
-      for (let y = cellSize - lineWidth; y < height; y += cellSize)
-        g.fillRect(0, y, width, lineWidth);
+      for (let i = 1; i <= cols; i++)
+        g.fillRect(snap(i * cellSize) - line, 0, line, grid.height);
+      for (let j = 1; j <= rows; j++)
+        g.fillRect(0, snap(j * cellSize) - line, grid.width, line);
     }
 
     function resize() {
-      const dpr = window.devicePixelRatio || 1;
+      dpr = window.devicePixelRatio || 1;
       width = host.clientWidth;
       height = host.clientHeight;
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       cols = Math.ceil(width / cellSize);
       rows = Math.ceil(height / cellSize);
       for (const [key, cell] of active)
         if (cell.x >= cols || cell.y >= rows) active.delete(key);
       readColors();
-      drawGrid(dpr);
+      drawGrid();
       draw(performance.now());
     }
 
@@ -177,8 +182,9 @@ const config = {
     }
 
     function draw(now: number) {
-      ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = fillColor;
+      const line = Math.max(1, Math.round(lineWidth * dpr));
       for (const [key, cell] of active) {
         const t = now - cell.start;
         let alpha: number;
@@ -192,15 +198,17 @@ const config = {
         }
         ctx.globalAlpha = alpha * config.fillOpacity;
         // Fill the cell inside its lines.
+        const left = snap(cell.x * cellSize);
+        const top = snap(cell.y * cellSize);
         ctx.fillRect(
-          cell.x * cellSize,
-          cell.y * cellSize,
-          cellSize - lineWidth,
-          cellSize - lineWidth,
+          left,
+          top,
+          snap((cell.x + 1) * cellSize) - line - left,
+          snap((cell.y + 1) * cellSize) - line - top,
         );
       }
       ctx.globalAlpha = 1;
-      if (grid) ctx.drawImage(grid, 0, 0, width, height);
+      if (grid) ctx.drawImage(grid, 0, 0);
     }
 
     function tick(now: number) {

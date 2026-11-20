@@ -196,11 +196,27 @@ const cards = await Promise.all(
     ];
     let current = -1;
     let expandedState = false;
+    // Scroll distance a card stays at rest before the next one starts
+    // coming in, in viewports (--hold in the CSS).
+    let hold = 0;
+
+    // Each card takes a stretch of scroll: first `hold` at rest, then one
+    // viewport moving to the next card. Scroll (in viewports) to progress
+    // (in cards), and back.
+    function progress(scroll: number) {
+      const step = 1 + hold;
+      const k = Math.floor(scroll / step);
+      const p = k + Math.min(Math.max(scroll - k * step - hold, 0), 1);
+      return Math.min(Math.max(p, 0), cards.length - 1);
+    }
+    const scrollFor = (i: number) => i * (1 + hold);
+
+    const deckTop = () => window.scrollY + deck.getBoundingClientRect().top;
+    const scrolled = () => -deck.getBoundingClientRect().top / viewport;
 
     function scrollToCard(i: number) {
       const index = Math.min(Math.max(i, 0), cards.length - 1);
-      const y =
-        window.scrollY + deck.getBoundingClientRect().top + index * viewport;
+      const y = deckTop() + scrollFor(index) * viewport;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
 
@@ -243,10 +259,7 @@ const cards = await Promise.all(
     function render() {
       frame = 0;
       const H = viewport;
-      const p = Math.min(
-        Math.max(-deck.getBoundingClientRect().top / H, 0),
-        cards.length - 1,
-      );
+      const p = progress(scrolled());
       renderIndicator(p);
 
       cards.forEach((card, i) => {
@@ -298,6 +311,7 @@ const cards = await Promise.all(
 
     function measure() {
       viewport = stage.clientHeight;
+      hold = parseFloat(getComputedStyle(deck).getPropertyValue("--hold")) || 0;
     }
 
     function apply() {
@@ -363,9 +377,10 @@ const cards = await Promise.all(
       async settle(card: HTMLElement) {
         const i = cards.indexOf(card);
         if (i < 0 || !motion.matches) return;
-        const top =
-          window.scrollY + deck.getBoundingClientRect().top + i * viewport;
-        await tweenScroll(top);
+        // Anywhere in its rest stretch already counts as at rest.
+        const at = scrolled();
+        if (at < scrollFor(i) - 0.001 || at > scrollFor(i) + hold + 0.001)
+          await tweenScroll(deckTop() + scrollFor(i) * viewport);
         render();
       },
     };
@@ -715,12 +730,16 @@ const cards = await Promise.all(
     color: var(--color-heading);
   }
 
-  /* Scroll-driven deck: one viewport of scroll per card, with the cards
-     pinned in a sticky stage and moved by the script. */
+  /* Scroll-driven deck, with the cards pinned in a sticky stage and moved
+     by the script. Each card takes --hold viewports of scroll at rest, then
+     one viewport moving to the next. The last card keeps its rest stretch;
+     the extra viewport is the stage itself. */
   .deck.is-stacked {
+    --hold: 0.5;
+    --scroll: calc((var(--count) - 1) * (1 + var(--hold)) + var(--hold) + 1);
     position: relative;
-    height: calc(var(--count) * 100vh);
-    height: calc(var(--count) * 100dvh);
+    height: calc(var(--scroll) * 100vh);
+    height: calc(var(--scroll) * 100dvh);
   }
 
   .is-stacked .stage {
@@ -846,12 +865,12 @@ const cards = await Promise.all(
     color: color-mix(in srgb, var(--color-border) 60%, transparent);
   }
 
-  /* One snap point per card, at the scroll position where it rests. */
+  /* One snap point per card, where its rest stretch begins. */
   .is-stacked .snap {
     display: block;
     position: absolute;
     left: 0;
-    top: calc(var(--i) * 100dvh);
+    top: calc(var(--i) * (1 + var(--hold)) * 100dvh);
     width: 1px;
     height: 100dvh;
     scroll-snap-align: start;

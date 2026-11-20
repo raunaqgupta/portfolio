@@ -125,10 +125,6 @@ const cards = await Promise.all(
           <CrossIcon />
         </button>
         <div class="body"></div>
-        <p class="end-hint" aria-hidden="true">
-          <ChevronDownIcon />
-          Keep scrolling to return to the cards
-        </p>
       </article>
     </dialog>
 
@@ -666,13 +662,13 @@ const cards = await Promise.all(
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 64px;
     padding: 64px;
   }
 
   .intro .content {
-    flex: 1;
-    max-width: 60ch;
+    flex: 0 1 60ch;
   }
 
   .intro p {
@@ -917,20 +913,6 @@ const cards = await Promise.all(
     pointer-events: none;
   }
 
-  .end-hint {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-1);
-    margin: var(--space-4) 0 0;
-    font-size: var(--typography-body-small);
-    color: var(--color-body-tertiary);
-  }
-
-  .end-hint :global(svg) {
-    width: 15px;
-    height: 15px;
-  }
 
   .panel {
     position: relative;

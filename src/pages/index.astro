@@ -420,6 +420,9 @@ const cards = await Promise.all(
       const r = expanded!.getBoundingClientRect();
       const top = Math.max(r.top, 0);
       const bottom = Math.min(r.bottom, window.innerHeight);
+      // A jump, not a transition: top changes meaning between the two modes
+      // (page offset vs viewport offset).
+      expanded!.style.transition = "none";
       expanded!.classList.remove("is-flow");
       deckEl.classList.remove("is-flow");
       expanded!.style.top = `${top}px`;
@@ -427,6 +430,8 @@ const cards = await Promise.all(
       expanded!.style.height = `${bottom - top}px`;
       scroller.style.transform = `translateY(${r.top - top}px)`;
       window.scrollTo({ top: restScroll, behavior: "instant" });
+      void expanded!.offsetWidth;
+      expanded!.style.transition = "";
     }
 
     async function expand(card: HTMLElement, i: number, href: string) {

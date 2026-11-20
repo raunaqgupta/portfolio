@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import LogoRing from "@components/logoRing.astro";
+import GridBackground from "@components/gridBackground.astro";
 import Prose from "@components/Prose.astro";
 import Imgmdx from "@components/img.mdx.astro";
 import Ulmdx from "@components/ul.mdx.astro";
@@ -39,6 +40,7 @@ const cards = await Promise.all(
 
 <BaseLayout title="Home" description={description} canonicalUrl={SITE_URL}>
   <body>
+    <GridBackground />
     <main class="deck" style={`--count: ${cards.length + 1};`}>
       <div class="stage">
         <section class="card intro" data-card>
@@ -610,6 +612,8 @@ const cards = await Promise.all(
   /* Cards fill the viewport inside a margin, leaving room on the left for
      the numeric indicator. Phones: a smaller margin and no indicator. */
   .deck {
+    position: relative;
+    z-index: 1;
     --margin: 64px;
     --indicator-w: 15px;
     --left: calc(2 * var(--margin) + var(--indicator-w));

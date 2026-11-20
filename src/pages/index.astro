@@ -1,9 +1,14 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import LogoRing from "@components/logoRing.astro";
+import Prose from "@components/Prose.astro";
+import Imgmdx from "@components/img.mdx.astro";
+import Ulmdx from "@components/ul.mdx.astro";
+import Codemdx from "@components/Code.mdx.astro";
 import ChevronUpIcon from "@icons/chevron-up.svg";
 import ChevronDownIcon from "@icons/chevron-down.svg";
 import ThickArrowRightIcon from "@icons/thick-arrow-right.svg";
+import CrossIcon from "@icons/cross.svg";
 import BaseLayout from "../layouts/baseLayout.astro";
 import { ROUTES, SITE_URL } from "../constants";
 
@@ -19,13 +24,17 @@ try {
   console.error("Error fetching case studies:", error);
 }
 
-const cards = caseStudies
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .map(({ id, data }) => ({
-    href: `${ROUTES.PORTFOLIO}/${id}`,
-    title: data.title,
-    image: data.thumbnail ?? data.hero,
-  }));
+const cards = await Promise.all(
+  caseStudies
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+    .map(async (entry) => ({
+      href: `${ROUTES.PORTFOLIO}/${entry.id}`,
+      title: entry.data.title,
+      image: entry.data.thumbnail ?? entry.data.hero,
+      hero: entry.data.hero ?? entry.data.thumbnail,
+      Content: (await render(entry)).Content,
+    })),
+);
 ---
 
 <BaseLayout title="Home" description={description} canonicalUrl={SITE_URL}>
@@ -49,99 +58,143 @@ const cards = caseStudies
           </div>
         </section>
         {
-          cards.map((card) => (
+          cards.map((card, i) => (
             <a
               class="card case no-decoration no-hover"
               href={card.href}
               data-card
+              data-case={i}
             >
-              <h2>{card.title}</h2>
+              <div class="title">
+                <h2>{card.title}</h2>
+                <ThickArrowRightIcon class="arrow" aria-hidden="true" />
+              </div>
               <div class="image" style={`--img: url("${card.image}")`} />
             </a>
           ))
         }
         <nav class="indicator" aria-label="Cards">
-          <button class="step" type="button" data-step="-1" aria-label="Previous card">
+          <button
+            class="step"
+            type="button"
+            data-step="-1"
+            aria-label="Previous card"
+          >
             <ChevronUpIcon class="chevron" />
           </button>
           <div class="window">
-            <span class="pointer" aria-hidden="true">
-              <ThickArrowRightIcon />
-            </span>
             <ol class="numbers">
-              <li class="dot" aria-hidden="true" />
+              <li class="dot" aria-hidden="true">•</li>
               {
                 Array.from({ length: cards.length + 1 }, (_, i) => (
                   <li>
-                    <button type="button" data-goto={i} aria-label={`Card ${i + 1}`}>
+                    <button
+                      type="button"
+                      data-goto={i}
+                      aria-label={`Card ${i + 1}`}
+                    >
                       {i + 1}
                     </button>
                   </li>
                 ))
               }
-              <li class="dot" aria-hidden="true" />
+              <li class="dot" aria-hidden="true">•</li>
             </ol>
           </div>
-          <button class="step" type="button" data-step="1" aria-label="Next card">
+          <button
+            class="step"
+            type="button"
+            data-step="1"
+            aria-label="Next card"
+          >
             <ChevronDownIcon class="chevron" />
           </button>
         </nav>
       </div>
       {
         Array.from({ length: cards.length + 1 }, (_, i) => (
-          <div
-            class="snap"
-            style={`--i: ${i};`}
-            aria-hidden="true"
-          />
+          <div class="snap" style={`--i: ${i};`} aria-hidden="true" />
         ))
       }
     </main>
+
+    <dialog class="case-modal" aria-labelledby="case-modal-title">
+      <article class="panel">
+        <button class="close" type="button" aria-label="Close">
+          <CrossIcon />
+        </button>
+        <div class="body"></div>
+      </article>
+    </dialog>
+
+    {
+      cards.map((card, i) => (
+        <template data-case-content={i}>
+          <h1 id="case-modal-title">{card.title}</h1>
+          <div class="hero" style={`--img: url("${card.hero}")`} />
+          <Prose>
+            <card.Content
+              components={{ img: Imgmdx, ul: Ulmdx, code: Codemdx }}
+            />
+          </Prose>
+        </template>
+      ))
+    }
   </body>
 </BaseLayout>
 
 <script>
   // Scroll-driven card deck. Keyframes come from three design frames
-  // (1280×832): a card resting in the centre, the next card halfway in, and
-  // the next card resting while the previous one recedes behind it.
+  // (1280×832), where a card fills the viewport inside a 64px margin:
+  // a card resting, the next card halfway in, and the next card resting.
+  // The outgoing card doesn't move up; it shrinks back in place while the
+  // next one rises from the bottom and covers it.
   //
   // For each card, d = its index minus the scroll position (in cards):
   //   d = 1    just below the viewport
-  //   d = 0.5  incoming: top at 417/832 of the viewport, opacity 0.75
-  //   d = 0    resting in the centre
-  //   d = -0.5 outgoing: 88/832 above centre, opacity 0.75
-  //   d = -1   receded: scale 0.845, opacity 0.5, its top 58/832 above the
-  //            top of the card now resting in front of it
+  //   d = 0.5  incoming: top at 438/832 of the viewport, opacity 0.75
+  //   d = 0    resting
+  //   d = -0.5 outgoing: scale 787/1073, opacity 0.5, centred in place
+  //   d = -1   gone behind the card now resting in front of it
   const FRAME_H = 832;
-  const IN_MID_TOP = 417 / FRAME_H;
-  const OUT_MID = 88 / FRAME_H;
-  const PEEK = 58 / FRAME_H;
-  const BACK_SCALE = 0.845;
+  const FRAME_MARGIN = 64;
+  const IN_MID = (438 - FRAME_MARGIN) / FRAME_H;
+  const OUT_MID_SCALE = 787 / 1073;
+  const OUT_END_SCALE = 0.6;
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
   const ease = (t: number) => t * t * (3 - 2 * t);
 
   function init(deck: HTMLElement) {
     const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+    const stage = deck.querySelector<HTMLElement>(".stage")!;
     const cards = [...deck.querySelectorAll<HTMLElement>("[data-card]")];
-    let heights: number[] = [];
     let viewport = 0;
     let frame = 0;
 
     const indicator = deck.querySelector<HTMLElement>(".indicator")!;
-    const numbers = [...indicator.querySelectorAll<HTMLElement>(".numbers li")];
-    const goto = [...indicator.querySelectorAll<HTMLButtonElement>("[data-goto]")];
-    const steps = [...indicator.querySelectorAll<HTMLButtonElement>("[data-step]")];
+    const numbers = [
+      ...indicator.querySelectorAll<HTMLElement>(".numbers li"),
+    ];
+    const goto = [
+      ...indicator.querySelectorAll<HTMLButtonElement>("[data-goto]"),
+    ];
+    const steps = [
+      ...indicator.querySelectorAll<HTMLButtonElement>("[data-step]"),
+    ];
     let current = -1;
 
     function scrollToCard(i: number) {
       const index = Math.min(Math.max(i, 0), cards.length - 1);
-      const y = window.scrollY + deck.getBoundingClientRect().top + index * viewport;
+      const y =
+        window.scrollY + deck.getBoundingClientRect().top + index * viewport;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
 
     goto.forEach((button) =>
-      button.addEventListener("click", () => scrollToCard(Number(button.dataset.goto))),
+      button.addEventListener("click", () =>
+        scrollToCard(Number(button.dataset.goto)),
+      ),
     );
     steps.forEach((button) =>
       button.addEventListener("click", () =>
@@ -150,13 +203,15 @@ const cards = caseStudies
     );
 
     // The number column rolls with the scroll position: the current number
-    // sits beside the pointer, its neighbours fade above and below it.
+    // sits in the middle row, its neighbours fade above and below it.
     function renderIndicator(p: number) {
       indicator.style.setProperty("--p", String(p));
       numbers.forEach((item, j) => {
         // Item 0 is the dot before the first card.
         const distance = Math.abs(j - 1 - p);
-        item.style.opacity = String(Math.max(0, 1 - Math.max(distance - 1, 0) * 2));
+        item.style.opacity = String(
+          Math.max(0, 1 - Math.max(distance - 1, 0) * 2),
+        );
         item.classList.toggle("is-current", distance < 0.5);
       });
       const index = Math.round(p);
@@ -172,44 +227,30 @@ const cards = caseStudies
       steps[1].disabled = index >= cards.length - 1;
     }
 
-    // The intro card takes the height of the case cards.
-    function sizeIntro() {
-      const caseCard = cards[1];
-      if (!caseCard) return;
-      deck.style.setProperty("--card-h", `${caseCard.offsetHeight}px`);
-    }
-
-    function measure() {
-      sizeIntro();
-      viewport = deck.querySelector<HTMLElement>(".stage")!.clientHeight;
-      // offsetHeight ignores transforms, so this is the card's own height.
-      heights = cards.map((card) => card.offsetHeight);
-    }
-
     function render() {
       frame = 0;
       const H = viewport;
-      const top = deck.getBoundingClientRect().top;
-      const p = Math.min(Math.max(-top / H, 0), cards.length - 1);
-
+      const p = Math.min(
+        Math.max(-deck.getBoundingClientRect().top / H, 0),
+        cards.length - 1,
+      );
       renderIndicator(p);
 
-      const layout = cards.map((_, i) => {
+      cards.forEach((card, i) => {
         const d = i - p;
-        const h = heights[i];
+        const margin = card.offsetTop;
         let y = 0;
         let scale = 1;
         let opacity = 1;
 
         if (d >= 1) {
-          y = H / 2 + h / 2;
+          y = H - margin;
           opacity = 0;
         } else if (d > 0) {
-          const start = H / 2 + h / 2;
-          const mid = IN_MID_TOP * H + h / 2 - H / 2;
+          const mid = IN_MID * H;
           if (d > 0.5) {
             const t = ease((d - 0.5) / 0.5);
-            y = lerp(mid, start, t);
+            y = lerp(mid, H - margin, t);
             opacity = lerp(0.75, 0.5, t);
           } else {
             const t = ease(d / 0.5);
@@ -217,42 +258,19 @@ const cards = caseStudies
             opacity = lerp(1, 0.75, t);
           }
         } else if (d < 0) {
-          const front = heights[i + 1] ?? h;
-          const backTop = H / 2 - front / 2 - PEEK * H;
-          const back = backTop + (BACK_SCALE * h) / 2 - H / 2;
           const a = -d;
           if (a <= 0.5) {
             const t = ease(a / 0.5);
-            y = lerp(0, -OUT_MID * H, t);
-            opacity = lerp(1, 0.75, t);
-          } else if (a <= 1) {
-            const t = ease((a - 0.5) / 0.5);
-            y = lerp(-OUT_MID * H, back, t);
-            scale = lerp(1, BACK_SCALE, t);
-            opacity = lerp(0.75, 0.5, t);
+            scale = lerp(1, OUT_MID_SCALE, t);
+            opacity = lerp(1, 0.5, t);
           } else {
-            // Further back: keep receding and fade out.
-            const t = Math.min(a - 1, 1);
-            y = back - PEEK * H * t;
-            scale = lerp(BACK_SCALE, BACK_SCALE * BACK_SCALE, t);
+            const t = ease(Math.min((a - 0.5) / 0.5, 1));
+            scale = lerp(OUT_MID_SCALE, OUT_END_SCALE, t);
             opacity = lerp(0.5, 0, t);
           }
         }
 
-        return { d, y, scale, opacity, bottom: y + (scale * h) / 2 };
-      });
-
-      cards.forEach((card, i) => {
-        const { d, y, scale, opacity, bottom } = layout[i];
-        // A card behind a shorter one would show below it: cut it off at
-        // the bottom edge of the card in front.
-        const front = layout[i + 1];
-        const overhang = front
-          ? Math.max(bottom - front.bottom + 2, 0) / scale
-          : 0;
-
-        card.style.transform = `translate(-50%, -50%) translateY(${y}px) scale(${scale})`;
-        card.style.clipPath = overhang ? `inset(0 0 ${overhang}px 0)` : "";
+        card.style.transform = `translateY(${y}px) scale(${scale})`;
         card.style.setProperty("--fade", String(opacity));
         card.style.visibility = opacity <= 0 ? "hidden" : "visible";
         card.style.zIndex = String(i + 1);
@@ -263,6 +281,10 @@ const cards = caseStudies
 
     function schedule() {
       if (!frame) frame = requestAnimationFrame(render);
+    }
+
+    function measure() {
+      viewport = stage.clientHeight;
     }
 
     function apply() {
@@ -276,7 +298,6 @@ const cards = caseStudies
           card.removeAttribute("style");
           card.inert = false;
         });
-        sizeIntro();
       }
     }
 
@@ -284,7 +305,7 @@ const cards = caseStudies
       passive: true,
     });
     window.addEventListener("resize", () => {
-      if (!motion.matches) return sizeIntro();
+      if (!motion.matches) return;
       measure();
       schedule();
     });
@@ -292,7 +313,77 @@ const cards = caseStudies
     apply();
   }
 
+  // Clicking a case card opens its page's content in a modal. The URL
+  // follows, so the modal can be shared and the back button closes it.
+  // Modified clicks (new tab, new window) keep the plain link behaviour.
+  function initModal() {
+    const dialog = document.querySelector<HTMLDialogElement>(".case-modal");
+    if (!dialog) return;
+    const body = dialog.querySelector<HTMLElement>(".body")!;
+    const homeTitle = document.title;
+    const homeUrl = location.href;
+
+    function open(i: number, href: string) {
+      const template = document.querySelector<HTMLTemplateElement>(
+        `template[data-case-content="${i}"]`,
+      );
+      if (!template) return false;
+      body.replaceChildren(template.content.cloneNode(true));
+      dialog!.scrollTop = 0;
+      dialog!.showModal();
+      const title = body.querySelector("h1")?.textContent;
+      if (title) document.title = `${title} | Raunaq Gupta`;
+      history.pushState({ caseModal: i }, "", href);
+      return true;
+    }
+
+    function close() {
+      if (!dialog!.open) return;
+      dialog!.close();
+      document.title = homeTitle;
+    }
+
+    // Closing goes back through history when the modal added an entry, so
+    // the URL returns to the homepage.
+    function requestClose() {
+      if (history.state?.caseModal !== undefined) history.back();
+      else {
+        close();
+        history.replaceState(null, "", homeUrl);
+      }
+    }
+
+    document.querySelectorAll<HTMLAnchorElement>("[data-case]").forEach((card) =>
+      card.addEventListener("click", (event) => {
+        if (
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey
+        )
+          return;
+        if (open(Number(card.dataset.case), card.href)) event.preventDefault();
+      }),
+    );
+
+    dialog.querySelector(".close")!.addEventListener("click", requestClose);
+    // Escape: let history drive the close.
+    dialog.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      requestClose();
+    });
+    // A click outside the panel (on the dialog's own padding) closes it.
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) requestClose();
+    });
+    window.addEventListener("popstate", () => {
+      if (history.state?.caseModal === undefined) close();
+    });
+  }
+
   document.querySelectorAll<HTMLElement>(".deck").forEach(init);
+  initModal();
 </script>
 
 <style>
@@ -305,19 +396,36 @@ const cards = caseStudies
     line-height: 28px;
   }
 
-  /* Without the scroll effect (no JS, or reduced motion) the cards are a
-     plain column. */
+  /* Cards fill the viewport inside a margin, leaving room on the left for
+     the numeric indicator. Phones: a smaller margin and no indicator. */
   .deck {
-    --gutter: 16px;
-    --case-w: min(961px, calc(100vw - 2 * var(--gutter)));
+    --margin: 64px;
+    --indicator-w: 15px;
+    --left: calc(2 * var(--margin) + var(--indicator-w));
+    --card-bg: #fff;
   }
 
+  @media (prefers-color-scheme: dark) {
+    .deck {
+      --card-bg: var(--color-bg);
+    }
+  }
+
+  @media only screen and (max-width: 700px) {
+    .deck {
+      --margin: 24px;
+      --left: var(--margin);
+    }
+  }
+
+  /* Without the scroll effect (no JS, or reduced motion) the cards are a
+     plain column, each one viewport tall. */
   .stage {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 64px;
-    padding: 64px var(--gutter);
+    gap: var(--margin);
+    padding: var(--margin);
+    padding-left: var(--left);
   }
 
   .snap {
@@ -326,38 +434,34 @@ const cards = caseStudies
 
   .card {
     box-sizing: border-box;
-    background-color: var(--color-bg);
+    height: calc(100vh - 2 * var(--margin));
+    height: calc(100dvh - 2 * var(--margin));
+    background-color: var(--card-bg);
     border: 1px solid var(--color-border);
   }
 
-  /* Same size as the case cards: their width, and the height the script
-     measures from the first one (it depends on the title). Where the intro
-     content needs more room, the card grows. */
   .intro {
-    width: var(--case-w);
-    min-height: var(--card-h, 400px);
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
     gap: 64px;
-    padding: 48px 64px;
+    padding: 64px;
   }
 
   .intro .content {
     flex: 1;
-    max-width: 52ch;
+    max-width: 60ch;
   }
 
   .intro p {
     margin-bottom: 0;
+    font-size: var(--typography-body);
   }
 
   .case {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    width: var(--case-w);
+    gap: var(--space-2);
     padding: var(--space-3);
     color: inherit;
     text-decoration: none;
@@ -367,16 +471,31 @@ const cards = caseStudies
     content: none;
   }
 
+  .case .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
   .case h2 {
     margin: 0;
     font-size: 1.15rem;
-    line-height: 1.4;
+    line-height: 23px;
     color: var(--color-body-primary);
   }
 
+  .case :global(.arrow) {
+    flex: none;
+    width: 15px;
+    height: 15px;
+    color: var(--color-heading);
+  }
+
   .case .image {
-    width: 100%;
-    aspect-ratio: 911 / 499;
+    flex: 1;
+    min-height: 0;
+    border-radius: var(--border-radius);
     background-color: var(--color-border-bg);
     background-image: var(--img);
     background-size: cover;
@@ -390,15 +509,8 @@ const cards = caseStudies
   }
 
   /* Scroll-driven deck: one viewport of scroll per card, with the cards
-     pinned in a sticky stage and positioned by the script. */
+     pinned in a sticky stage and moved by the script. */
   .deck.is-stacked {
-    --peek: calc(58 / 832 * 100dvh);
-    /* Keep a case card (image + title row) inside the viewport. */
-    --case-w: min(
-      961px,
-      calc(100vw - 2 * var(--gutter)),
-      calc((100dvh - 4 * var(--peek) - 72px) * 911 / 499 + 48px)
-    );
     position: relative;
     height: calc(var(--count) * 100vh);
     height: calc(var(--count) * 100dvh);
@@ -416,32 +528,41 @@ const cards = caseStudies
 
   .is-stacked .card {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: var(--margin);
+    right: var(--margin);
+    bottom: var(--margin);
+    left: var(--left);
+    height: auto;
     transform-origin: center;
     will-change: transform;
   }
 
-  /* Numeric indicator: desktop only, to the left of the case cards. */
+  /* Fade the content, not the card, so cards behind never show through. */
+  .is-stacked .card > * {
+    opacity: var(--fade, 1);
+  }
+
+  /* Numeric indicator: left of the cards, not on phones. */
   .indicator {
     display: none;
   }
 
-  @media only screen and (min-width: 1200px) {
+  @media only screen and (min-width: 701px) {
     .is-stacked .indicator {
       --row: 22px;
       position: absolute;
       top: 50%;
-      right: calc(50% + var(--case-w) / 2 + 72px);
+      left: var(--margin);
+      width: var(--indicator-w);
       transform: translateY(-50%);
       z-index: 100;
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
-      font-size: 13px;
-      line-height: var(--row);
+      align-items: center;
+      font-size: 12px;
+      line-height: 16px;
       font-variant-numeric: tabular-nums;
-      color: var(--color-body-tertiary);
+      color: color-mix(in srgb, var(--color-body-primary) 50%, transparent);
     }
   }
 
@@ -460,9 +581,9 @@ const cards = caseStudies
   .indicator .step {
     display: flex;
     justify-content: center;
-    width: 15px;
-    height: 16px;
     align-items: center;
+    width: 15px;
+    height: 15px;
     color: var(--color-body-primary);
   }
 
@@ -480,37 +601,29 @@ const cards = caseStudies
     height: 15px;
   }
 
-  /* Shows three rows: previous, current, next. */
+  /* Three rows: previous, current, next. Rows are 22px apart; the window
+     is trimmed to the 16px text of the first and last. */
   .window {
-    position: relative;
-    height: calc(3 * var(--row));
+    height: calc(2 * var(--row) + 16px);
     overflow: hidden;
-    padding-left: 24px;
-  }
-
-  .pointer {
-    position: absolute;
-    left: 0;
-    top: var(--row);
-    height: var(--row);
-    display: flex;
-    align-items: center;
-    color: var(--color-heading);
   }
 
   .numbers {
     list-style: none;
     margin: 0;
     padding: 0;
-    width: 15px;
+    width: var(--indicator-w);
     text-align: center;
-    /* Item 1 (card 1) sits in the middle row when p = 0. */
-    transform: translateY(calc(var(--p, 0) * -1 * var(--row)));
+    /* Card 1 (item 1) sits in the middle row when p = 0. */
+    transform: translateY(calc((var(--p, 0) * -1) * var(--row) - 3px));
   }
 
   .numbers li {
     height: var(--row);
     margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .numbers button {
@@ -519,26 +632,11 @@ const cards = caseStudies
 
   .numbers button:hover,
   .numbers .is-current button {
-    color: var(--color-heading);
+    color: var(--color-body-primary);
   }
 
   .numbers .dot {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .numbers .dot::before {
-    content: "";
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background-color: var(--color-body-tertiary);
-  }
-
-  /* Fade the content, not the card, so cards behind never show through. */
-  .is-stacked .card > * {
-    opacity: var(--fade, 1);
+    color: color-mix(in srgb, var(--color-border) 60%, transparent);
   }
 
   /* One snap point per card, at the scroll position where it rests. */
@@ -557,21 +655,124 @@ const cards = caseStudies
     scroll-snap-type: y proximity;
   }
 
+  /* Case study modal: the dialog is a full-viewport scroller holding one
+     panel; clicks on its padding close it. */
+  :global(html):has(.case-modal[open]) {
+    overflow: hidden;
+  }
+
+  .case-modal {
+    box-sizing: border-box;
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 64px;
+    border: none;
+    background: transparent;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .case-modal::backdrop {
+    background-color: color-mix(in srgb, var(--color-bg) 92%, transparent);
+  }
+
+  .panel {
+    position: relative;
+    box-sizing: border-box;
+    max-width: 1152px;
+    margin: 0 auto;
+    padding: 64px;
+    background-color: var(--card-bg, #fff);
+    border: 1px solid var(--color-heading);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+    color: var(--color-body-primary);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .panel {
+      background-color: var(--color-bg);
+    }
+  }
+
+  .panel :global(h1) {
+    margin: 0 0 var(--space-3);
+  }
+
+  .panel :global(.hero) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    margin-bottom: var(--space-4);
+    border-radius: var(--border-radius);
+    background-color: var(--color-border-bg);
+    background-image: var(--img);
+    background-size: cover;
+    background-position: center top;
+  }
+
+  .close {
+    all: unset;
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--border-radius);
+    color: var(--color-body-secondary);
+    cursor: pointer;
+  }
+
+  .close:hover {
+    color: var(--color-heading);
+    background-color: var(--color-bg-1);
+  }
+
+  .close:focus-visible {
+    outline: 2px solid var(--color-highlight);
+  }
+
+  .close :global(svg) {
+    width: 15px;
+    height: 15px;
+  }
+
   @media only screen and (max-width: 700px) {
     .intro {
       flex-direction: column;
       align-items: flex-start;
-      gap: 32px;
-      padding: 32px 24px;
+      justify-content: center;
+      gap: var(--space-3);
+      padding: 24px;
     }
 
-    .case {
-      gap: var(--space-2);
-      padding: var(--space-2);
+    .intro .content {
+      flex: none;
+    }
+
+    .intro h1 {
+      font-size: 2.56rem;
+    }
+
+    .case .image {
+      background-position: center;
     }
 
     .case h2 {
       font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .case-modal {
+      padding: 24px 16px;
+    }
+
+    .panel {
+      padding: 56px 24px 24px;
     }
   }
 </style>

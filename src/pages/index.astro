@@ -172,7 +172,15 @@ const cards = caseStudies
       steps[1].disabled = index >= cards.length - 1;
     }
 
+    // The intro card takes the height of the case cards.
+    function sizeIntro() {
+      const caseCard = cards[1];
+      if (!caseCard) return;
+      deck.style.setProperty("--card-h", `${caseCard.offsetHeight}px`);
+    }
+
     function measure() {
+      sizeIntro();
       viewport = deck.querySelector<HTMLElement>(".stage")!.clientHeight;
       // offsetHeight ignores transforms, so this is the card's own height.
       heights = cards.map((card) => card.offsetHeight);
@@ -268,6 +276,7 @@ const cards = caseStudies
           card.removeAttribute("style");
           card.inert = false;
         });
+        sizeIntro();
       }
     }
 
@@ -275,7 +284,7 @@ const cards = caseStudies
       passive: true,
     });
     window.addEventListener("resize", () => {
-      if (!motion.matches) return;
+      if (!motion.matches) return sizeIntro();
       measure();
       schedule();
     });
@@ -301,7 +310,6 @@ const cards = caseStudies
   .deck {
     --gutter: 16px;
     --case-w: min(961px, calc(100vw - 2 * var(--gutter)));
-    --intro-w: min(800px, calc(100vw - 2 * var(--gutter)));
   }
 
   .stage {
@@ -322,18 +330,23 @@ const cards = caseStudies
     border: 1px solid var(--color-border);
   }
 
+  /* Same size as the case cards: their width, and the height the script
+     measures from the first one (it depends on the title). Where the intro
+     content needs more room, the card grows. */
   .intro {
-    width: var(--intro-w);
-    min-height: 400px;
+    width: var(--case-w);
+    min-height: var(--card-h, 400px);
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 64px;
     padding: 48px 64px;
   }
 
   .intro .content {
     flex: 1;
+    max-width: 52ch;
   }
 
   .intro p {
@@ -550,7 +563,6 @@ const cards = caseStudies
       align-items: flex-start;
       gap: 32px;
       padding: 32px 24px;
-      min-height: 0;
     }
 
     .case {

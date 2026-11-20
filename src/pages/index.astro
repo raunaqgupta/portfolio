@@ -117,20 +117,20 @@ const cards = await Promise.all(
             <ChevronDownIcon class="chevron" />
           </button>
         </nav>
-        <section
-          class="expanded"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="case-expanded-title"
-          hidden
-        >
-          <div class="face case"></div>
-          <div class="scroller"><div class="body"></div></div>
-          <button class="close" type="button" aria-label="Close">
-            <CrossIcon />
-          </button>
-        </section>
       </div>
+      <section
+        class="expanded"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="case-expanded-title"
+        hidden
+      >
+        <div class="face case"></div>
+        <div class="scroller"><div class="body"></div></div>
+        <button class="close" type="button" aria-label="Close">
+          <CrossIcon />
+        </button>
+      </section>
       {
         Array.from({ length: cards.length + 1 }, (_, i) => (
           <div class="snap" style={`--i: ${i};`} aria-hidden="true" />
@@ -375,12 +375,13 @@ const cards = await Promise.all(
 
   // Clicking a case card expands it in place to show its page's content:
   // the card first comes to rest, then widens to the left, pushing the
-  // indicator out of view, and its face cross-fades into the case study,
-  // which scrolls inside the card. The grid stays visible around it.
-  // Closing (scrolling on past the end, Escape, the close button, Back)
-  // reverses this back to the slide. The URL follows, so an expanded card
-  // can be shared. Modified clicks (new tab, new window) keep the plain
-  // link behaviour.
+  // indicator out of view, and its face cross-fades into the case study.
+  // The card then becomes part of the page, as tall as its content, and
+  // the page itself scrolls through it; the grid stays visible around it.
+  // Scrolling on past the end (or Escape, the close button, Back) reverses
+  // this back to the slide, and the deck takes the scroll from there. The
+  // URL follows, so an expanded card can be shared. Modified clicks (new
+  // tab, new window) keep the plain link behaviour.
   const DURATION = 450;
   const FADE = 200;
   const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -388,17 +389,45 @@ const cards = await Promise.all(
   function initExpand(deck: Deck | undefined) {
     const expanded = document.querySelector<HTMLElement>(".expanded");
     if (!expanded || !deck) return;
+    const deckEl = expanded.closest<HTMLElement>(".deck")!;
     const face = expanded.querySelector<HTMLElement>(".face")!;
     const scroller = expanded.querySelector<HTMLElement>(".scroller")!;
     const body = expanded.querySelector<HTMLElement>(".body")!;
     const closeButton = expanded.querySelector<HTMLElement>(".close")!;
     const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+    const root = document.documentElement;
     const homeTitle = document.title;
     const homeUrl = location.href;
     let activeCard: HTMLElement | null = null;
     let open = false;
     let busy = false;
+    // Page scroll position of the deck while the card is expanded.
+    let restScroll = 0;
     const time = (ms: number) => (motion.matches ? ms : 0);
+    const margin = () => parseFloat(getComputedStyle(deckEl).getPropertyValue("--margin"));
+
+    // Fixed: a box over the viewport, used while morphing. Flow: part of
+    // the page, as tall as its content, scrolled with the page.
+    function toFlow() {
+      expanded!.style.top = `${restScroll + margin()}px`;
+      expanded!.classList.add("is-flow");
+      deckEl.classList.add("is-flow");
+    }
+
+    // Back to a fixed box covering exactly what's visible of the card, with
+    // the page returned to the deck, all in one frame so nothing moves.
+    function toFixed() {
+      const r = expanded!.getBoundingClientRect();
+      const top = Math.max(r.top, 0);
+      const bottom = Math.min(r.bottom, window.innerHeight);
+      expanded!.classList.remove("is-flow");
+      deckEl.classList.remove("is-flow");
+      expanded!.style.top = `${top}px`;
+      expanded!.style.bottom = "auto";
+      expanded!.style.height = `${bottom - top}px`;
+      scroller.style.transform = `translateY(${r.top - top}px)`;
+      window.scrollTo({ top: restScroll, behavior: "instant" });
+    }
 
     async function expand(card: HTMLElement, i: number, href: string) {
       const template = document.querySelector<HTMLTemplateElement>(
@@ -408,23 +437,23 @@ const cards = await Promise.all(
       busy = true;
       activeCard = card;
       await deck!.settle(card);
+      restScroll = window.scrollY;
 
       // Start as an exact copy of the resting card.
       face.replaceChildren(
         ...[...card.children].map((child) => child.cloneNode(true)),
       );
       body.replaceChildren(template.content.cloneNode(true));
-      scroller.scrollTop = 0;
       expanded!.hidden = false;
       deck!.setExpanded(true);
       void expanded!.offsetWidth; // apply the start state before transitioning
 
-      // Widen (CSS transition on the deck's is-expanded class), then
-      // cross-fade the face into the content.
+      // Widen, then cross-fade the face into the content.
       expanded!.classList.add("is-wide");
       await wait(time(DURATION));
       expanded!.classList.add("show-content");
       await wait(time(FADE));
+      toFlow();
 
       const title = body.querySelector("h1")?.textContent;
       if (title) document.title = `${title} | Raunaq Gupta`;
@@ -438,13 +467,21 @@ const cards = await Promise.all(
       if (!open || busy) return;
       busy = true;
       document.title = homeTitle;
+      toFixed();
+
+      // Cross-fade back to the card's face, then shrink into the slide
+      // while the indicator slides back in.
       expanded!.classList.remove("show-content");
       await wait(time(FADE));
-      // Narrow while the indicator slides back in.
       deck!.setExpanded(false);
       expanded!.classList.remove("is-wide");
+      expanded!.style.top = `${margin()}px`;
+      expanded!.style.height = `${window.innerHeight - 2 * margin()}px`;
       await wait(time(DURATION));
+
       expanded!.hidden = true;
+      expanded!.removeAttribute("style");
+      scroller.removeAttribute("style");
       body.replaceChildren();
       face.replaceChildren();
       activeCard?.focus({ preventScroll: true });
@@ -486,17 +523,17 @@ const cards = await Promise.all(
       if (history.state?.caseExpanded === undefined) collapse();
     });
 
-    // Scrolling on past the end of the content collapses the card, and the
+    // Scrolling on past the end of the page collapses the card, and the
     // deck takes the scroll from there. A fresh gesture at the end collapses
     // after a short pull; the momentum of the scroll that reached the end
     // needs a longer one, so a flick to the bottom doesn't collapse it by
     // accident.
     const atEnd = () =>
-      scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2;
+      window.scrollY + window.innerHeight >= root.scrollHeight - 2;
     let lastWheel = 0;
     let fresh = false;
     let pull = 0;
-    scroller.addEventListener(
+    window.addEventListener(
       "wheel",
       (event) => {
         const now = performance.now();
@@ -518,14 +555,14 @@ const cards = await Promise.all(
     );
 
     let touchY: number | null = null;
-    scroller.addEventListener(
+    window.addEventListener(
       "touchstart",
       (event) => {
-        touchY = atEnd() ? event.touches[0].clientY : null;
+        touchY = open && atEnd() ? event.touches[0].clientY : null;
       },
       { passive: true },
     );
-    scroller.addEventListener(
+    window.addEventListener(
       "touchmove",
       (event) => {
         if (touchY === null || !open || busy) return;
@@ -816,12 +853,14 @@ const cards = await Promise.all(
     scroll-snap-type: y proximity;
   }
 
-  /* Expanded card: covers the resting card, then widens to the left over
-     the indicator's space while the indicator slides out of view. Its
-     content scrolls inside it; the grid shows in the margins. */
-  /* The page holds still for as long as the expanded card is showing,
-     animations included. */
-  :global(html):has(.expanded:not([hidden])) {
+  /* Expanded card. While morphing it's a fixed box: first over the resting
+     card, then widened to the left over the indicator's space while the
+     indicator slides out of view. Once open it becomes part of the page
+     (is-flow), as tall as its content, and the page scrolls through it.
+     The grid shows in the margins. */
+
+  /* The page holds still while the card morphs. */
+  :global(html):has(.expanded:not([hidden]):not(.is-flow)) {
     overflow: hidden;
   }
 
@@ -833,13 +872,16 @@ const cards = await Promise.all(
     right: var(--margin);
     bottom: var(--margin);
     left: var(--left);
-    z-index: 50;
+    z-index: 2;
     box-sizing: border-box;
+    overflow: hidden;
     background-color: var(--card-bg);
     border: 1px solid var(--color-border);
     color: var(--color-body-primary);
     transition:
       left var(--duration) cubic-bezier(0.2, 0.8, 0.2, 1),
+      top var(--duration) cubic-bezier(0.2, 0.8, 0.2, 1),
+      height var(--duration) cubic-bezier(0.2, 0.8, 0.2, 1),
       border-color var(--duration),
       box-shadow var(--duration);
   }
@@ -852,6 +894,40 @@ const cards = await Promise.all(
     left: var(--margin);
     border-color: var(--color-heading);
     box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  /* Part of the page: positioned where the fixed box was (top is set by the
+     script), at least a viewport tall so the page doesn't shorten under the
+     current scroll position. */
+  .expanded.is-flow {
+    position: absolute;
+    bottom: auto;
+    min-height: calc(100dvh - 2 * var(--margin));
+    overflow: visible;
+    transition: none;
+  }
+
+  /* Leaves the bottom margin below the card at the end of the page. */
+  .expanded.is-flow::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 1px;
+    height: var(--margin);
+  }
+
+  /* The deck steps out of the layout, so the page ends with the card. */
+  .deck.is-flow .stage {
+    display: none;
+  }
+
+  .deck.is-stacked.is-flow {
+    height: auto;
+  }
+
+  :global(html):has(.expanded.is-flow) {
+    scroll-snap-type: none;
   }
 
   .indicator {
@@ -877,6 +953,10 @@ const cards = await Promise.all(
     inset: 0;
   }
 
+  .expanded.is-flow .face {
+    display: none;
+  }
+
   .expanded .scroller,
   .expanded .close {
     opacity: 0;
@@ -893,12 +973,18 @@ const cards = await Promise.all(
     pointer-events: auto;
   }
 
+  /* No scrolling of its own: clipped by the box while morphing, in the
+     page's flow once open. */
   .scroller {
     position: absolute;
-    inset: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    top: 0;
+    right: 0;
+    left: 0;
     padding: 64px;
+  }
+
+  .expanded.is-flow .scroller {
+    position: relative;
   }
 
   .expanded .body :global(h1) {
@@ -916,11 +1002,13 @@ const cards = await Promise.all(
     background-position: center top;
   }
 
+  /* Pinned to the card's top-right corner on screen, so it stays at hand
+     while the page scrolls. */
   .close {
     all: unset;
-    position: absolute;
-    top: var(--space-3);
-    right: var(--space-3);
+    position: fixed;
+    top: calc(var(--margin) + var(--space-3));
+    right: calc(var(--margin) + var(--space-3));
     z-index: 1;
     display: flex;
     align-items: center;

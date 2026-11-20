@@ -1,0 +1,79 @@
+---
+interface Props {
+  src: string;
+  title: string;
+  height?: number;
+  fallback?: string;
+  linkLabel?: string;
+}
+
+const {
+  src,
+  title,
+  height = 520,
+  fallback,
+  linkLabel = "Open in a new tab",
+} = Astro.props;
+---
+
+<figure class:list={["embed", { "has-fallback": fallback }]}>
+  <iframe
+    src={src}
+    title={title}
+    height={height}
+    loading="lazy"
+    allowfullscreen
+  ></iframe>
+  {
+    fallback && (
+      <img src={fallback} alt={title} decoding="async" loading="lazy" />
+    )
+  }
+  <figcaption>
+    <span class="caption">{title}</span>
+    <a href={src} target="_blank" rel="noopener noreferrer">{linkLabel}</a>
+  </figcaption>
+</figure>
+
+<style>
+  .embed {
+    margin: var(--space-4) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  iframe {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background: var(--color-bg);
+  }
+
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-2);
+    color: var(--color-body-secondary);
+  }
+
+  figcaption a {
+    white-space: nowrap;
+  }
+
+  /* Show the fallback image instead of the iframe on narrow screens.
+     The hidden element is not fetched, since both are lazy-loaded. */
+  .embed > img {
+    display: none;
+  }
+
+  @media only screen and (max-width: 700px) {
+    .has-fallback > iframe {
+      display: none;
+    }
+
+    .has-fallback > img {
+      display: block;
+    }
+  }
+</style>

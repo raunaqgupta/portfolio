@@ -80,7 +80,7 @@ const dots = layout.dotPositions.map(layout.pointAt);
 <script>
   import { labelOffset, layoutRing, type RingLayout } from "./logoRing.layout";
 
-  // One lap every 20 seconds, as the circle used to spin.
+  // One lap every 20 seconds, as the old circular nav did.
   const LAP_SECONDS = 20;
 
   const motion = matchMedia(
@@ -147,7 +147,7 @@ const dots = layout.dotPositions.map(layout.pointAt);
     place(ring);
   }
 
-  // Move the labels and dots `shift` px along the ellipse.
+  // Move the labels and dots `shift` px along the path.
   function place({ root, layout, shift }: Ring) {
     if (!layout) return;
     const svg = root.querySelector<SVGSVGElement>(".ring svg")!;

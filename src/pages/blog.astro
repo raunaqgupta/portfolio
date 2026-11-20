@@ -4,13 +4,25 @@ import WideLayout from "@layouts/WideLayout.astro";
 import Olmdx from "@components/Ol.mdx.astro";
 import Input from "@components/input.astro";
 import { getCollection } from "astro:content";
-import { ROUTES, SITE_URL } from "../constants";
+import { CATEGORIES, ROUTES, SITE_URL } from "../constants";
 import { formatDate } from "../utils";
+
+const HIDDEN_CATEGORIES: string[] = [
+  CATEGORIES.PORTFOLIO,
+  CATEGORIES.RECIPE,
+  CATEGORIES.POEM,
+  CATEGORIES.AUDIO,
+  CATEGORIES.COLLECTION,
+  CATEGORIES.MICRO,
+];
 
 let blog = [];
 try {
   blog = await getCollection("articles", ({ data }) => {
-    return data.internal !== true && data.category !== "portfolio";
+    return (
+      data.internal !== true &&
+      !HIDDEN_CATEGORIES.includes(data.category ?? "")
+    );
   });
 } catch (error) {
   console.error("Error fetching blog posts:", error);

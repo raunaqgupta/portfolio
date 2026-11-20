@@ -1,16 +1,12 @@
 ---
 import Logo from "@components/logo.astro";
-import { ROUTES } from "../constants";
 import { layoutRing } from "./logoRing.layout";
 
-const { current } = Astro.props;
-
-const links = [
-  { label: "Home", href: ROUTES.HOME },
-  { label: "Portfolio", href: ROUTES.PORTFOLIO },
-  { label: "Resume", href: ROUTES.RESUME },
-  { label: "Blog", href: ROUTES.BLOG },
-];
+// Decorative: the logo inside already carries the name as its alt text.
+// The ring's size follows from its text length, so the name goes round twice
+// to keep the logo a usable size.
+const NAME = ["Raunaq", "Gupta"];
+const labels = [...NAME, ...NAME];
 
 // Must match the CSS below and --space-1/--space-2 in baseLayout. These estimates give
 // the first render; the script measures the real text and redoes the layout.
@@ -19,7 +15,7 @@ const DOT = 4;
 const GAP = 8;
 const LOGO_GAP = 16;
 const CAP_HEIGHT = 0.72 * FONT_SIZE;
-const labelWidths = links.map(({ label }) => label.length * 0.68 * FONT_SIZE);
+const labelWidths = labels.map((label) => label.length * 0.68 * FONT_SIZE);
 
 const layout = layoutRing({
   labelWidths,
@@ -35,7 +31,7 @@ const layout = layoutRing({
   style={`--ring-size: ${layout.size}px; --logo-size: ${layout.logo}px;`}
 >
   <Logo mode="3d" size="large" />
-  <nav class="ring" aria-label="Site">
+  <div class="ring" aria-hidden="true">
     <svg viewBox={`0 0 ${layout.size} ${layout.size}`} data-dot={DOT}>
       <defs>
         <path id="logo-ring-path" d={layout.path} />
@@ -46,23 +42,21 @@ const layout = layoutRing({
         ))
       }
       {
-        links.map(({ label, href }, i) => (
-          <a href={href} aria-current={current === href ? "page" : undefined}>
-            <text dy={CAP_HEIGHT / 2}>
-              <textPath
-                href="#logo-ring-path"
-                startOffset={layout.labelOffsets[i]}
-                textLength={labelWidths[i]}
-                lengthAdjust="spacing"
-              >
-                {label}
-              </textPath>
-            </text>
-          </a>
+        labels.map((label, i) => (
+          <text dy={CAP_HEIGHT / 2}>
+            <textPath
+              href="#logo-ring-path"
+              startOffset={layout.labelOffsets[i]}
+              textLength={labelWidths[i]}
+              lengthAdjust="spacing"
+            >
+              {label}
+            </textPath>
+          </text>
         ))
       }
     </svg>
-  </nav>
+  </div>
   <span class="measure" aria-hidden="true"></span>
 </div>
 
@@ -199,23 +193,5 @@ const layout = layoutRing({
 
   .separator {
     fill: var(--color-body-tertiary);
-  }
-
-  a text {
-    transition: fill 0.15s ease;
-  }
-
-  a:hover text,
-  a:focus-visible text,
-  a[aria-current="page"] text {
-    fill: var(--color-highlight);
-  }
-
-  a:focus-visible {
-    outline: none;
-  }
-
-  a:focus-visible text {
-    text-decoration: underline;
   }
 </style>

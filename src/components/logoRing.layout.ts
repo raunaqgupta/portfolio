@@ -1,16 +1,16 @@
-// Geometry for the circular nav around the homepage logo.
+// Geometry for the ring of text around the homepage logo.
 //
-// Items (links and dots) are packed end to end around the circle with a fixed
+// Items (labels and dots) are packed end to end around the circle with a fixed
 // gap between each, so the circumference is exactly
 //   sum(item widths) + items × gap
 // and the radius follows from that. All units are CSS pixels.
 
 export interface RingInput {
-  /** Rendered width of each link label, in order. */
+  /** Rendered width of each label, in order. */
   labelWidths: number[];
   /** Diameter of each separator dot. */
   dot: number;
-  /** Space between every link and dot. */
+  /** Space between every label and dot. */
   gap: number;
   /** Space between the text and the logo. */
   logoGap: number;

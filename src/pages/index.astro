@@ -40,7 +40,7 @@ const cards = await Promise.all(
 
 <BaseLayout title="Home" description={description} canonicalUrl={SITE_URL}>
   <body>
-    <GridBackground />
+    <GridBackground density={0.12} rate={12} />
     <main class="deck" style={`--count: ${cards.length + 1};`}>
       <div class="stage">
         <section class="card intro" data-card>

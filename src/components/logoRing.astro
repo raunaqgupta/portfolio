@@ -1,7 +1,7 @@
 ---
 import Logo from "@components/logo.astro";
 import { ROUTES } from "../constants";
-import { layoutRing } from "./logoRing.layout";
+import { labelOffset, layoutRing } from "./logoRing.layout";
 
 const { current } = Astro.props;
 
@@ -18,6 +18,9 @@ const FONT_SIZE = 16;
 const DOT = 4;
 const GAP = 8;
 const LOGO_GAP = 16;
+// The signature artwork is 1020 × 390.
+const LOGO_WIDTH = 200;
+const LOGO_HEIGHT = (LOGO_WIDTH * 390) / 1020;
 const CAP_HEIGHT = 0.72 * FONT_SIZE;
 const labelWidths = links.map(({ label }) => label.length * 0.68 * FONT_SIZE);
 
@@ -27,21 +30,26 @@ const layout = layoutRing({
   gap: GAP,
   logoGap: LOGO_GAP,
   textHeight: CAP_HEIGHT,
+  logoWidth: LOGO_WIDTH,
+  logoHeight: LOGO_HEIGHT,
 });
+const dots = layout.dotPositions.map(layout.pointAt);
 ---
 
 <div
   class="logo-ring"
-  style={`--ring-size: ${layout.size}px; --logo-size: ${layout.logo}px;`}
+  style={`--ring-width: ${layout.width}px; --ring-ratio: ${layout.width} / ${layout.height}; --logo-width: ${(layout.logoWidth / layout.width) * 100}%;`}
+  data-logo-width={LOGO_WIDTH}
+  data-logo-height={LOGO_HEIGHT}
 >
-  <Logo mode="3d" size="large" />
+  <Logo size="ring" />
   <nav class="ring" aria-label="Site">
-    <svg viewBox={`0 0 ${layout.size} ${layout.size}`} data-dot={DOT}>
+    <svg viewBox={`0 0 ${layout.width} ${layout.height}`} data-dot={DOT}>
       <defs>
         <path id="logo-ring-path" d={layout.path} />
       </defs>
       {
-        layout.dots.map(({ x, y }) => (
+        dots.map(({ x, y }) => (
           <circle class="separator" cx={x} cy={y} r={DOT / 2} />
         ))
       }
@@ -51,7 +59,10 @@ const layout = layoutRing({
             <text dy={CAP_HEIGHT / 2}>
               <textPath
                 href="#logo-ring-path"
-                startOffset={layout.labelOffsets[i]}
+                startOffset={labelOffset(
+                  layout.labelPositions[i],
+                  layout.perimeter,
+                )}
                 textLength={labelWidths[i]}
                 lengthAdjust="spacing"
               >
@@ -67,10 +78,26 @@ const layout = layoutRing({
 </div>
 
 <script>
-  import { layoutRing } from "./logoRing.layout";
+  import { labelOffset, layoutRing, type RingLayout } from "./logoRing.layout";
 
-  function fit(root: HTMLElement) {
-    const svg = root.querySelector("svg")!;
+  // One lap every 20 seconds, as the circle used to spin.
+  const LAP_SECONDS = 20;
+
+  const motion = matchMedia(
+    "(prefers-reduced-motion: no-preference) and (min-width: 701px)",
+  );
+
+  interface Ring {
+    root: HTMLElement;
+    layout?: RingLayout;
+    /** Distance the labels have travelled along the path. */
+    shift: number;
+    paused: boolean;
+  }
+
+  function fit(ring: Ring) {
+    const { root } = ring;
+    const svg = root.querySelector<SVGSVGElement>(".ring svg")!;
     const texts = [...svg.querySelectorAll<SVGTextElement>("text")];
     const textPaths = [...svg.querySelectorAll("textPath")];
     const measure = root.querySelector<HTMLElement>(".measure")!;
@@ -86,7 +113,7 @@ const layout = layoutRing({
       return measure.getBoundingClientRect().width;
     });
 
-    // Cap height of the label font, so the logo can sit logoGap inside it.
+    // Cap height of the label font, so the signature can sit logoGap inside it.
     const ctx = document.createElement("canvas").getContext("2d")!;
     ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
     const textHeight = ctx.measureText("H").actualBoundingBoxAscent;
@@ -97,29 +124,76 @@ const layout = layoutRing({
       gap,
       logoGap,
       textHeight,
+      logoWidth: Number(root.dataset.logoWidth),
+      logoHeight: Number(root.dataset.logoHeight),
     });
+    ring.layout = layout;
 
-    root.style.setProperty("--ring-size", `${layout.size}px`);
-    root.style.setProperty("--logo-size", `${layout.logo}px`);
-    svg.setAttribute("viewBox", `0 0 ${layout.size} ${layout.size}`);
-    // Centre the capitals on the circle rather than sitting on it.
+    root.style.setProperty("--ring-width", `${layout.width}px`);
+    root.style.setProperty("--ring-ratio", `${layout.width} / ${layout.height}`);
+    root.style.setProperty(
+      "--logo-width",
+      `${(layout.logoWidth / layout.width) * 100}%`,
+    );
+    svg.setAttribute("viewBox", `0 0 ${layout.width} ${layout.height}`);
+    // Centre the capitals on the path rather than sitting on it.
     texts.forEach((t) => t.setAttribute("dy", String(textHeight / 2)));
     svg.querySelector("path")!.setAttribute("d", layout.path);
-    svg.querySelectorAll("circle").forEach((circle, i) => {
-      circle.setAttribute("cx", String(layout.dots[i].x));
-      circle.setAttribute("cy", String(layout.dots[i].y));
-    });
     // textLength makes each label render at exactly its slot width, so the
     // labels can never run into the dots whatever the font.
     textPaths.forEach((textPath, i) => {
-      textPath.setAttribute("startOffset", String(layout.labelOffsets[i]));
       textPath.setAttribute("textLength", String(labelWidths[i]));
+    });
+    place(ring);
+  }
+
+  // Move the labels and dots `shift` px along the ellipse.
+  function place({ root, layout, shift }: Ring) {
+    if (!layout) return;
+    const svg = root.querySelector<SVGSVGElement>(".ring svg")!;
+    svg.querySelectorAll("textPath").forEach((textPath, i) => {
+      const s = layout.labelPositions[i] + shift;
+      textPath.setAttribute("startOffset", String(labelOffset(s, layout.perimeter)));
+    });
+    svg.querySelectorAll("circle").forEach((circle, i) => {
+      const { x, y } = layout.pointAt(layout.dotPositions[i] + shift);
+      circle.setAttribute("cx", String(x));
+      circle.setAttribute("cy", String(y));
     });
   }
 
-  const rings = document.querySelectorAll<HTMLElement>(".logo-ring");
+  const rings: Ring[] = [
+    ...document.querySelectorAll<HTMLElement>(".logo-ring"),
+  ].map((root) => {
+    const ring: Ring = { root, shift: 0, paused: false };
+    const pause = () => (ring.paused = true);
+    const resume = () => (ring.paused = root.matches(":hover, :focus-within"));
+    root.addEventListener("pointerenter", pause);
+    root.addEventListener("pointerleave", resume);
+    root.addEventListener("focusin", pause);
+    root.addEventListener("focusout", () => requestAnimationFrame(resume));
+    return ring;
+  });
+
   rings.forEach(fit);
   document.fonts.ready.then(() => rings.forEach(fit));
+
+  let last: number | undefined;
+  function tick(now: number) {
+    const dt = last === undefined ? 0 : (now - last) / 1000;
+    last = now;
+    if (motion.matches) {
+      rings.forEach((ring) => {
+        if (ring.paused || !ring.layout) return;
+        ring.shift =
+          (ring.shift + (ring.layout.perimeter * dt) / LAP_SECONDS) %
+          ring.layout.perimeter;
+        place(ring);
+      });
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 </script>
 
 <style>
@@ -130,13 +204,22 @@ const layout = layoutRing({
     display: grid;
     place-items: center;
     flex-shrink: 0;
-    width: var(--ring-size);
-    height: var(--ring-size);
+    width: var(--ring-width);
+    max-width: 100%;
+    aspect-ratio: var(--ring-ratio);
   }
 
-  .logo-ring :global(.logo-3d) {
-    width: var(--logo-size);
-    height: var(--logo-size);
+  /* Scales with the ring, so a narrow screen shrinks both together. */
+  .logo-ring :global(.signature.ring) {
+    width: 100%;
+  }
+
+  .logo-ring :global(.logo-container) {
+    width: var(--logo-width);
+  }
+
+  .logo-ring :global(.logo-link) {
+    width: 100%;
   }
 
   .ring {
@@ -149,30 +232,6 @@ const layout = layoutRing({
     width: 100%;
     height: 100%;
     overflow: visible;
-    animation: spin 20s linear infinite;
-  }
-
-  .logo-ring:hover svg,
-  .logo-ring:focus-within svg {
-    animation-play-state: paused;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @media only screen and (max-width: 700px) {
-    .ring svg {
-      animation: none;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ring svg {
-      animation: none;
-    }
   }
 
   /* No letter-spacing: browsers disagree on whether the space after the last

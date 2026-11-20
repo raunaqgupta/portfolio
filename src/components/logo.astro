@@ -1,27 +1,12 @@
 ---
-const { mode = "2d", size = "small" } = Astro.props;
-import Logo from "../assets/logo.svg";
-import Logo3DDark from "@assets/logo.3d.dark.png";
-import Logo3DLight from "@assets/logo.3d.light.png";
+import Signature from "../assets/signature.svg";
+
+const { size = "small" } = Astro.props;
 ---
 
 <div class="logo-container">
-  <a class="no-decoration no-hover logo-link" href="/">
-    {
-      mode === "2d" ? (
-        <Logo class:list={[size]} />
-      ) : (
-        <div class:list={["logo-3d", size]}>
-          <picture>
-            <source
-              srcset={Logo3DLight.src}
-              media="(prefers-color-scheme: dark)"
-            />
-            <img src={Logo3DDark.src} alt="Raunaq Gupta" />
-          </picture>
-        </div>
-      )
-    }
+  <a class="no-decoration no-hover logo-link" href="/" aria-label="Raunaq Gupta">
+    <Signature class:list={["signature", size]} aria-hidden="true" />
   </a>
 </div>
 
@@ -34,24 +19,25 @@ import Logo3DLight from "@assets/logo.3d.light.png";
   .logo-container .logo-link {
     display: inline-flex;
     text-decoration: none;
+    color: var(--color-heading);
   }
 
   .logo-container .logo-link:after {
     content: none;
   }
 
+  /* The signature is 1020 × 390; sizes keep that aspect ratio. */
+  .signature {
+    display: block;
+    aspect-ratio: 1020 / 390;
+    height: auto;
+  }
+
   .small {
-    height: 42px;
-    width: 42px;
+    width: 96px;
   }
 
   .large {
-    height: 128px;
-    width: 128px;
-  }
-
-  .logo-3d img {
-    width: 100%;
-    height: 100%;
+    width: 240px;
   }
 </style>

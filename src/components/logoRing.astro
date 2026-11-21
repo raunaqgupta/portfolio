@@ -3,10 +3,9 @@ import Logo from "@components/logo.astro";
 import { layoutRing } from "./logoRing.layout";
 
 // Decorative: the logo inside already carries the name as its alt text.
-// The ring's size follows from its text length, so the name goes round twice
-// to keep the logo a usable size.
-const NAME = ["Raunaq", "Gupta"];
-const labels = [...NAME, ...NAME];
+// The ring's size follows from its text length, so the name goes round in
+// both English and Hindi to keep the logo a usable size.
+const labels = ["Raunaq", "Gupta", "रौनक", "गुप्ता"];
 
 // Must match the CSS below and --space-1/--space-2 in baseLayout. These estimates give
 // the first render; the script measures the real text and redoes the layout.

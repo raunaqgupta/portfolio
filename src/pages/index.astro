@@ -1,7 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
 import LogoRing from "@components/logoRing.astro";
-import GridBackground from "@components/gridBackground.astro";
 import Prose from "@components/Prose.astro";
 import Imgmdx from "@components/img.mdx.astro";
 import Ulmdx from "@components/ul.mdx.astro";
@@ -10,12 +9,8 @@ import ChevronUpIcon from "@icons/chevron-up.svg";
 import ChevronDownIcon from "@icons/chevron-down.svg";
 import ThickArrowRightIcon from "@icons/thick-arrow-right.svg";
 import CrossIcon from "@icons/cross.svg";
-import SpeakerLoudIcon from "@icons/speaker-loud.svg";
 import BaseLayout from "../layouts/baseLayout.astro";
 import { ROUTES, SITE_URL } from "../constants";
-
-const PRONUNCIATION_URL =
-  "https://audio.raunaqgupta.com/Pronunciation%3A%20Raunaq.m4a";
 
 const description =
   "Personal website of Raunaq Gupta - Design technologist with 10+ years of experience shipping enterprise web applications and developer tools.";
@@ -44,34 +39,21 @@ const cards = await Promise.all(
 
 <BaseLayout title="Home" description={description} canonicalUrl={SITE_URL}>
   <body>
-    <GridBackground
-      cellSize={10.5}
-      density={0.12}
-      rate={12}
-      hold={[400, 1200]}
-    />
     <main class="deck" style={`--count: ${cards.length + 1};`}>
       <div class="stage">
         <section class="card intro" data-card>
           <LogoRing />
           <div class="content">
-            <div class="name">
-              <button
-                class="pronounce"
-                type="button"
-                aria-label="Play pronunciation of Raunaq"
-              >
-                <SpeakerLoudIcon aria-hidden="true" />
-              </button>
-              <h1>
-                <span class="visually-hidden">Raunaq, pronounced </span>
-                <span lang="en-fonipa">/ˈrɔː.nʌk/</span>
-              </h1>
-              <audio preload="auto" src={PRONUNCIATION_URL}></audio>
-            </div>
+            <h1>Hi, I'm Raunaq</h1>
             <p>
-              I'm a designer with 10+ years of experience shipping enterprise
-              web applications across startups and large organizations.
+              If you are interested in hiring me, visit my <a
+                href={ROUTES.PORTFOLIO}>portfolio</a
+              >. Check out my <a href={ROUTES.BLOG}>blog</a>, and <a
+                href="https://raunaqgupta.substack.com/notes">Substack notes</a
+              > where I write about experiments in technology & design, recipes,
+              and literature. I'm machine readable at <a
+                href="/raunaq-gupta.json">raunaq-gupta.json</a
+              >.
             </p>
           </div>
         </section>
@@ -610,29 +592,6 @@ const cards = await Promise.all(
     );
   }
 
-  // The audio button plays the recorded pronunciation, from the start each
-  // time it's pressed. The clip is small, so it's preloaded with the page.
-  document.querySelectorAll<HTMLElement>(".intro .name").forEach((name) => {
-    const button = name.querySelector<HTMLButtonElement>(".pronounce")!;
-    const audio = name.querySelector("audio")!;
-    button.addEventListener("click", () => {
-      // Rewind only once the clip has loaded: some browsers throw when
-      // seeking before that, which would stop play() from running.
-      try {
-        if (audio.readyState > 0) audio.currentTime = 0;
-      } catch {}
-      // play() runs inside the click, so autoplay rules allow it.
-      const playing = audio.play();
-      playing?.catch((error) => {
-        button.classList.remove("is-playing");
-        console.warn("Pronunciation audio didn't play:", error);
-      });
-    });
-    audio.addEventListener("play", () => button.classList.add("is-playing"));
-    for (const end of ["pause", "ended", "error"])
-      audio.addEventListener(end, () => button.classList.remove("is-playing"));
-  });
-
   const decks = [...document.querySelectorAll<HTMLElement>(".deck")].map(init);
   initExpand(decks[0]);
 </script>
@@ -650,8 +609,6 @@ const cards = await Promise.all(
   /* Cards fill the viewport inside a margin, leaving room on the left for
      the numeric indicator. Phones: a smaller margin and no indicator. */
   .deck {
-    position: relative;
-    z-index: 1;
     --margin: 64px;
     --indicator-w: 15px;
     --left: calc(2 * var(--margin) + var(--indicator-w));
@@ -706,69 +663,12 @@ const cards = await Promise.all(
   }
 
   .intro .content {
-    flex: 0 1 600px;
+    flex: 0 1 60ch;
   }
 
   .intro p {
-    margin: 19px 0 0;
+    margin-bottom: 0;
     font-size: var(--typography-body);
-  }
-
-  /* Pronunciation: an audio button beside the name in IPA. */
-  .intro .name {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-  }
-
-  .pronounce {
-    all: unset;
-    flex: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--color-heading);
-    color: var(--card-bg);
-    cursor: pointer;
-    transition:
-      transform 150ms ease-out,
-      background-color 150ms;
-  }
-
-  .pronounce :global(svg) {
-    width: 24px;
-    height: 24px;
-  }
-
-  .pronounce:hover {
-    transform: scale(1.06);
-  }
-
-  .pronounce:active {
-    transform: scale(0.96);
-  }
-
-  .pronounce:focus-visible {
-    outline: 2px solid var(--color-highlight);
-    outline-offset: 3px;
-  }
-
-  /* While the recording plays. */
-  .pronounce.is-playing {
-    background-color: var(--color-highlight);
-  }
-
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
 
   .case {
@@ -1187,10 +1087,6 @@ const cards = await Promise.all(
 
     .intro h1 {
       font-size: 2.56rem;
-    }
-
-    .intro .name {
-      gap: var(--space-2);
     }
 
     .case .image {

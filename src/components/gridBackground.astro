@@ -25,6 +25,9 @@ interface Props {
   fadeOut?: number;
   /** Seed for the random cell picks; leave out for a different run each load. */
   seed?: number;
+  /** Concave warp: 0 is flat; higher values shrink the cells at the centre
+   *  and stretch them towards the edges, as if looking into a bowl. */
+  curve?: number;
   /** Fixed behind the whole viewport (default), or fill the positioned parent. */
   fixed?: boolean;
   class?: string;
@@ -42,6 +45,7 @@ const {
   hold = [1200, 3600],
   fadeOut = 1400,
   seed,
+  curve = 0,
   fixed = true,
   class: className,
 } = Astro.props;
@@ -56,6 +60,7 @@ const config = {
   hold,
   fadeOut,
   seed: seed ?? null,
+  curve,
 };
 ---
 
@@ -81,6 +86,7 @@ const config = {
     hold: [number, number];
     fadeOut: number;
     seed: number | null;
+    curve: number;
   };
 
   type Cell = { x: number; y: number; start: number; hold: number };
@@ -109,13 +115,17 @@ const config = {
     const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
     const dark = window.matchMedia("(prefers-color-scheme: dark)");
     const rand = random(config.seed);
-    const { cellSize, lineWidth } = config;
+    const { cellSize, lineWidth, curve } = config;
 
     let width = 0;
     let height = 0;
     let dpr = 1;
     let cols = 0;
     let rows = 0;
+    // Where the first grid line sits. Flat grids start at 0; curved grids
+    // put a line crossing at the centre so the warp is symmetric.
+    let originX = 0;
+    let originY = 0;
     let lineColor = "";
     let fillColor = "";
     let grid: HTMLCanvasElement | null = null;
@@ -136,6 +146,21 @@ const config = {
     // when the cell size isn't a whole number of pixels.
     const snap = (v: number) => Math.round(v * dpr);
 
+    // Concave warp, in device pixels: points move away from the centre in
+    // proportion to the square of their distance from it, so the cells
+    // shrink at the centre, grow at the edges and the lines bow inwards.
+    function warp(x: number, y: number): [number, number] {
+      const cx = width / 2;
+      const cy = height / 2;
+      const dx = x - cx;
+      const dy = y - cy;
+      const scale = 1 + (curve * (dx * dx + dy * dy)) / (cx * cx + cy * cy);
+      return [(cx + dx * scale) * dpr, (cy + dy * scale) * dpr];
+    }
+
+    const lineX = (i: number) => originX + i * cellSize;
+    const lineY = (j: number) => originY + j * cellSize;
+
     // The lines are drawn once into an offscreen canvas and copied each frame.
     // Everything is drawn in device pixels.
     function drawGrid() {
@@ -145,6 +170,21 @@ const config = {
       const g = grid.getContext("2d")!;
       g.fillStyle = lineColor;
       const line = Math.max(1, Math.round(lineWidth * dpr));
+      if (curve) {
+        // Curved lines, one segment per cell, which is short enough to
+        // look smooth at these sizes.
+        g.strokeStyle = lineColor;
+        g.lineWidth = line;
+        g.beginPath();
+        for (let i = 0; i <= cols; i++)
+          for (let j = 0; j <= rows; j++)
+            g[j ? "lineTo" : "moveTo"](...warp(lineX(i), lineY(j)));
+        for (let j = 0; j <= rows; j++)
+          for (let i = 0; i <= cols; i++)
+            g[i ? "lineTo" : "moveTo"](...warp(lineX(i), lineY(j)));
+        g.stroke();
+        return;
+      }
       // Each cell's line sits on its right and bottom edge.
       for (let i = 1; i <= cols; i++)
         g.fillRect(snap(i * cellSize) - line, 0, line, grid.height);
@@ -158,8 +198,10 @@ const config = {
       height = host.clientHeight;
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
-      cols = Math.ceil(width / cellSize);
-      rows = Math.ceil(height / cellSize);
+      originX = curve ? width / 2 - Math.ceil(width / 2 / cellSize) * cellSize : 0;
+      originY = curve ? height / 2 - Math.ceil(height / 2 / cellSize) * cellSize : 0;
+      cols = Math.ceil((width - originX) / cellSize);
+      rows = Math.ceil((height - originY) / cellSize);
       for (const [key, cell] of active)
         if (cell.x >= cols || cell.y >= rows) active.delete(key);
       readColors();
@@ -197,6 +239,18 @@ const config = {
           continue;
         }
         ctx.globalAlpha = alpha * config.fillOpacity;
+        if (curve) {
+          // Fill the warped cell; the lines are drawn over its edges.
+          const x0 = lineX(cell.x);
+          const y0 = lineY(cell.y);
+          ctx.beginPath();
+          ctx.moveTo(...warp(x0, y0));
+          ctx.lineTo(...warp(x0 + cellSize, y0));
+          ctx.lineTo(...warp(x0 + cellSize, y0 + cellSize));
+          ctx.lineTo(...warp(x0, y0 + cellSize));
+          ctx.fill();
+          continue;
+        }
         // Fill the cell inside its lines.
         const left = snap(cell.x * cellSize);
         const top = snap(cell.y * cellSize);

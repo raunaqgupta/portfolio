@@ -5,7 +5,12 @@ import { layoutRing } from "./logoRing.layout";
 // Decorative: the logo inside already carries the name as its alt text.
 // The ring's size follows from its text length, so the name goes round in
 // both English and Hindi to keep the logo a usable size.
-const labels = ["Raunaq", "Gupta", "रौनक", "गुप्ता"];
+const labels = [
+  { text: "Raunaq", lang: "en" },
+  { text: "Gupta", lang: "en" },
+  { text: "रौनक", lang: "hi" },
+  { text: "गुप्ता", lang: "hi" },
+];
 
 // Must match the CSS below and --space-1/--space-2 in baseLayout. These estimates give
 // the first render; the script measures the real text and redoes the layout.
@@ -14,7 +19,12 @@ const DOT = 4;
 const GAP = 8;
 const LOGO_GAP = 16;
 const CAP_HEIGHT = 0.72 * FONT_SIZE;
-const labelWidths = labels.map((label) => label.length * 0.68 * FONT_SIZE);
+// Devanagari is drawn larger so its headline matches the Latin cap height.
+const HI_SCALE = 1.2;
+const labelWidths = labels.map(
+  ({ text, lang }) =>
+    text.length * 0.68 * FONT_SIZE * (lang === "hi" ? HI_SCALE : 1),
+);
 
 const layout = layoutRing({
   labelWidths,
@@ -27,7 +37,7 @@ const layout = layoutRing({
 
 <div
   class="logo-ring"
-  style={`--ring-size: ${layout.size}px; --logo-size: ${layout.logo}px;`}
+  style={`--ring-size: ${layout.size}px; --logo-size: ${layout.logo}px; --hi-scale: ${HI_SCALE};`}
 >
   <Logo mode="3d" size="large" />
   <div class="ring" aria-hidden="true">
@@ -41,15 +51,15 @@ const layout = layoutRing({
         ))
       }
       {
-        labels.map((label, i) => (
-          <text dy={CAP_HEIGHT / 2}>
+        labels.map(({ text, lang }, i) => (
+          <text lang={lang} dy={CAP_HEIGHT / 2}>
             <textPath
               href="#logo-ring-path"
               startOffset={layout.labelOffsets[i]}
               textLength={labelWidths[i]}
               lengthAdjust="spacing"
             >
-              {label}
+              {text}
             </textPath>
           </text>
         ))
@@ -72,17 +82,26 @@ const layout = layoutRing({
     const gap = parseFloat(rootStyle.getPropertyValue("--gap"));
     const logoGap = parseFloat(rootStyle.getPropertyValue("--logo-gap"));
 
-    // Measure each label as HTML text: SVG text measurement differs between
-    // browsers, HTML layout does not.
-    const labelWidths = textPaths.map((textPath) => {
-      measure.textContent = textPath.textContent;
-      return measure.getBoundingClientRect().width;
-    });
-
     // Cap height of the label font, so the logo can sit logoGap inside it.
     const ctx = document.createElement("canvas").getContext("2d")!;
     ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
     const textHeight = ctx.measureText("H").actualBoundingBoxAscent;
+
+    // Scale Devanagari so its headline (the top of क) sits at the Latin cap
+    // height. The fallback font differs by device, so measure it here.
+    const headline = ctx.measureText("क").actualBoundingBoxAscent;
+    if (headline > 0) {
+      root.style.setProperty("--hi-scale", String(textHeight / headline));
+    }
+
+    // Measure each label as HTML text: SVG text measurement differs between
+    // browsers, HTML layout does not.
+    const labelWidths = textPaths.map((textPath) => {
+      measure.lang = textPath.parentElement!.getAttribute("lang") ?? "";
+      measure.textContent = textPath.textContent;
+      return measure.getBoundingClientRect().width;
+    });
+    measure.lang = "";
 
     const layout = layoutRing({
       labelWidths,
@@ -169,6 +188,11 @@ const layout = layoutRing({
     font-family: sans-serif;
     font-size: 16px;
     text-transform: uppercase;
+  }
+
+  text:lang(hi),
+  .measure:lang(hi) {
+    font-size: calc(16px * var(--hi-scale));
   }
 
   .measure {

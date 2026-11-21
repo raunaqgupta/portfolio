@@ -1,0 +1,288 @@
+---
+// An animated grid: random cells fill in, hold, and empty again.
+// Drawn on a canvas that sits behind the page. With reduced motion, the
+// grid is drawn without the animation.
+interface Props {
+  /** Cell size in px, lines included. */
+  cellSize?: number;
+  /** Grid line width in px. */
+  lineWidth?: number;
+  /** Line colour: any CSS colour, including var(--token). */
+  lineColor?: string;
+  /** Fill colour of animated cells: any CSS colour. Defaults to the line colour. */
+  fillColor?: string;
+  /** Opacity a cell reaches when fully filled (0–1). */
+  fillOpacity?: number;
+  /** Most cells filled at once, as a share of all cells (0–1). */
+  density?: number;
+  /** New cells that start filling per second. */
+  rate?: number;
+  /** Time for a cell to fill, in ms. */
+  fadeIn?: number;
+  /** Time a cell stays filled, in ms: a random value in [min, max]. */
+  hold?: [number, number];
+  /** Time for a cell to empty, in ms. */
+  fadeOut?: number;
+  /** Seed for the random cell picks; leave out for a different run each load. */
+  seed?: number;
+  /** Fixed behind the whole viewport (default), or fill the positioned parent. */
+  fixed?: boolean;
+  class?: string;
+}
+
+const {
+  cellSize = 42,
+  lineWidth = 1,
+  lineColor = "var(--grid-line)",
+  fillColor,
+  fillOpacity = 1,
+  density = 0.04,
+  rate = 3,
+  fadeIn = 900,
+  hold = [1200, 3600],
+  fadeOut = 1400,
+  seed,
+  fixed = true,
+  class: className,
+} = Astro.props;
+
+const config = {
+  cellSize,
+  lineWidth,
+  fillOpacity,
+  density,
+  rate,
+  fadeIn,
+  hold,
+  fadeOut,
+  seed: seed ?? null,
+};
+---
+
+<div
+  class:list={["grid-background", { fixed }, className]}
+  style={`--grid-line-color: ${lineColor}; --grid-fill-color: ${fillColor ?? lineColor};`}
+  data-config={JSON.stringify(config)}
+  aria-hidden="true"
+>
+  <canvas></canvas>
+  <span class="probe line"></span>
+  <span class="probe fill"></span>
+</div>
+
+<script>
+  type Config = {
+    cellSize: number;
+    lineWidth: number;
+    fillOpacity: number;
+    density: number;
+    rate: number;
+    fadeIn: number;
+    hold: [number, number];
+    fadeOut: number;
+    seed: number | null;
+  };
+
+  type Cell = { x: number; y: number; start: number; hold: number };
+
+  // Small seeded PRNG (mulberry32), so a seed gives a repeatable pattern.
+  function random(seed: number | null) {
+    if (seed === null) return Math.random;
+    let a = seed >>> 0;
+    return () => {
+      a = (a + 0x6d2b79f5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  const smooth = (t: number) => t * t * (3 - 2 * t);
+
+  function init(host: HTMLElement) {
+    const config: Config = JSON.parse(host.dataset.config!);
+    const canvas = host.querySelector("canvas")!;
+    const ctx = canvas.getContext("2d")!;
+    const lineProbe = host.querySelector<HTMLElement>(".probe.line")!;
+    const fillProbe = host.querySelector<HTMLElement>(".probe.fill")!;
+    const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+    const dark = window.matchMedia("(prefers-color-scheme: dark)");
+    const rand = random(config.seed);
+    const { cellSize, lineWidth } = config;
+
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let cols = 0;
+    let rows = 0;
+    let lineColor = "";
+    let fillColor = "";
+    let grid: HTMLCanvasElement | null = null;
+    const active = new Map<number, Cell>();
+    let spawnDebt = 0;
+    let last = 0;
+    let frame = 0;
+
+    const lifetime = (cell: Cell) => config.fadeIn + cell.hold + config.fadeOut;
+
+    // Colours come from CSS, so tokens and dark mode work.
+    function readColors() {
+      lineColor = getComputedStyle(lineProbe).color;
+      fillColor = getComputedStyle(fillProbe).color;
+    }
+
+    // Edges are snapped to whole device pixels, so lines stay crisp even
+    // when the cell size isn't a whole number of pixels.
+    const snap = (v: number) => Math.round(v * dpr);
+
+    // The lines are drawn once into an offscreen canvas and copied each frame.
+    // Everything is drawn in device pixels.
+    function drawGrid() {
+      grid = document.createElement("canvas");
+      grid.width = canvas.width;
+      grid.height = canvas.height;
+      const g = grid.getContext("2d")!;
+      g.fillStyle = lineColor;
+      const line = Math.max(1, Math.round(lineWidth * dpr));
+      // Each cell's line sits on its right and bottom edge.
+      for (let i = 1; i <= cols; i++)
+        g.fillRect(snap(i * cellSize) - line, 0, line, grid.height);
+      for (let j = 1; j <= rows; j++)
+        g.fillRect(0, snap(j * cellSize) - line, grid.width, line);
+    }
+
+    function resize() {
+      dpr = window.devicePixelRatio || 1;
+      width = host.clientWidth;
+      height = host.clientHeight;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      cols = Math.ceil(width / cellSize);
+      rows = Math.ceil(height / cellSize);
+      for (const [key, cell] of active)
+        if (cell.x >= cols || cell.y >= rows) active.delete(key);
+      readColors();
+      drawGrid();
+      draw(performance.now());
+    }
+
+    function spawn(now: number) {
+      const max = Math.floor(cols * rows * config.density);
+      // A few tries to find an empty cell; skip this one if none turns up.
+      for (let tries = 0; tries < 8 && active.size < max; tries++) {
+        const x = Math.floor(rand() * cols);
+        const y = Math.floor(rand() * rows);
+        const key = y * cols + x;
+        if (active.has(key)) continue;
+        const [min, maxHold] = config.hold;
+        active.set(key, { x, y, start: now, hold: min + rand() * (maxHold - min) });
+        return;
+      }
+    }
+
+    function draw(now: number) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = fillColor;
+      const line = Math.max(1, Math.round(lineWidth * dpr));
+      for (const [key, cell] of active) {
+        const t = now - cell.start;
+        let alpha: number;
+        if (t < config.fadeIn) alpha = smooth(t / config.fadeIn);
+        else if (t < config.fadeIn + cell.hold) alpha = 1;
+        else if (t < lifetime(cell))
+          alpha = 1 - smooth((t - config.fadeIn - cell.hold) / config.fadeOut);
+        else {
+          active.delete(key);
+          continue;
+        }
+        ctx.globalAlpha = alpha * config.fillOpacity;
+        // Fill the cell inside its lines.
+        const left = snap(cell.x * cellSize);
+        const top = snap(cell.y * cellSize);
+        ctx.fillRect(
+          left,
+          top,
+          snap((cell.x + 1) * cellSize) - line - left,
+          snap((cell.y + 1) * cellSize) - line - top,
+        );
+      }
+      ctx.globalAlpha = 1;
+      if (grid) ctx.drawImage(grid, 0, 0);
+    }
+
+    function tick(now: number) {
+      // Cap the step so a background tab doesn't spawn a burst on return.
+      const dt = Math.min(now - (last || now), 100);
+      last = now;
+      spawnDebt += (dt / 1000) * config.rate;
+      while (spawnDebt >= 1) {
+        spawn(now);
+        spawnDebt -= 1;
+      }
+      draw(now);
+      frame = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      cancelAnimationFrame(frame);
+      last = 0;
+      if (motion.matches) frame = requestAnimationFrame(tick);
+      else {
+        active.clear();
+        draw(performance.now());
+      }
+    }
+
+    new ResizeObserver(resize).observe(host);
+    dark.addEventListener("change", resize);
+    motion.addEventListener("change", start);
+    resize();
+    start();
+  }
+
+  document.querySelectorAll<HTMLElement>(".grid-background").forEach(init);
+</script>
+
+<style>
+  .grid-background {
+    --grid-line: #eee;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .grid-background.fixed {
+    position: fixed;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .grid-background {
+      --grid-line: #262b31;
+    }
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Resolve the colour props (tokens included) to colours the canvas can use. */
+  .probe {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .probe.line {
+    color: var(--grid-line-color);
+  }
+
+  .probe.fill {
+    color: var(--grid-fill-color);
+  }
+</style>

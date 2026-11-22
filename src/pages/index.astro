@@ -1,9 +1,13 @@
 ---
 import LogoRing from "@components/logoRing.astro";
 import GridBackground from "@components/gridBackground.astro";
+import BowlCard from "@components/bowlCard.astro";
 import SpeakerLoudIcon from "@icons/speaker-loud.svg";
 import BaseLayout from "../layouts/baseLayout.astro";
-import { SITE_URL } from "../constants";
+import { ROUTES, SITE_URL } from "../constants";
+
+// The grid's warp; the cards bend with it as they scroll.
+const CURVE = 0.5;
 
 const PRONUNCIATION_URL =
   "https://audio.raunaqgupta.com/Pronunciation%3A%20Raunaq.m4a";
@@ -19,31 +23,48 @@ const description =
       density={0.12}
       rate={12}
       hold={[400, 1200]}
-      curve={0.5}
+      curve={CURVE}
     />
-    <LogoRing />
+    <main>
+      <BowlCard curve={CURVE} class="card intro">
+        <div class="intro-inner">
+          <LogoRing />
 
-    <div class="content">
-      <div class="name">
-        <button
-          class="pronounce"
-          type="button"
-          aria-label="Play pronunciation of Raunaq"
-        >
-          <SpeakerLoudIcon aria-hidden="true" />
-        </button>
-        <h1>
-          <span class="visually-hidden">Raunaq, pronounced </span>
-          <span lang="en-fonipa">/ˈrɔː.nʌk/</span>
-        </h1>
-        <audio preload="auto" src={PRONUNCIATION_URL}></audio>
-      </div>
-      <p>
-        I'm a product, and design specialist with over 10 years of experience shipping enterprise web
-        applications across startups and large organizations.
-      </p>
-      <p>Reach out at <a href="mailto:mail@raunaqgupta.com">mail@raunaqgupta.com</a> to discuss opportunities.</p>
-    </div>
+          <div class="content">
+            <div class="name">
+              <button
+                class="pronounce"
+                type="button"
+                aria-label="Play pronunciation of Raunaq"
+              >
+                <SpeakerLoudIcon aria-hidden="true" />
+              </button>
+              <h1>
+                <span class="visually-hidden">Raunaq, pronounced </span>
+                <span lang="en-fonipa">/ˈrɔː.nʌk/</span>
+              </h1>
+              <audio preload="auto" src={PRONUNCIATION_URL}></audio>
+            </div>
+            <p>
+              I'm a product, and design specialist with over 10 years of experience shipping enterprise web
+              applications across startups and large organizations.
+            </p>
+            <p>Reach out at <a href="mailto:mail@raunaqgupta.com">mail@raunaqgupta.com</a> to discuss opportunities.</p>
+          </div>
+        </div>
+      </BowlCard>
+
+      <BowlCard curve={CURVE} class="card more">
+        <nav class="more-inner" aria-label="Sections">
+          <h2>More</h2>
+          <ul>
+            <li><a href={ROUTES.PORTFOLIO}>Portfolio</a></li>
+            <li><a href={ROUTES.BLOG}>Blog</a></li>
+            <li><a href={ROUTES.RESUME}>Resume</a></li>
+          </ul>
+        </nav>
+      </BowlCard>
+    </main>
   </body>
 </BaseLayout>
 
@@ -74,27 +95,59 @@ const description =
 
 <style>
   body {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    margin: 0;
     background-color: var(--color-bg);
     color: var(--color-body-primary);
     font-family: sans-serif;
     font-size: 1.12em;
     line-height: 28px;
-    max-width: 80ch;
-    min-height: 100vh;
-    min-height: 100dvh;
-    gap: 64px;
-    margin: auto;
   }
 
   /* Above the grid background. */
-  body > :global(.logo-ring),
-  .content {
+  main {
     position: relative;
     z-index: 1;
+  }
+
+  /* Each card fills the viewport; its content sits in the middle. */
+  main > :global(.card) {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .intro-inner,
+  .more-inner {
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 80ch;
+    margin: auto;
+  }
+
+  .intro-inner {
+    flex-direction: row;
+    gap: 64px;
+  }
+
+  .more-inner {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .more-inner h2 {
+    margin: 0;
+  }
+
+  .more-inner ul {
+    list-style: none;
+    padding: 0;
+    margin: 19px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
   }
 
   .content {
@@ -164,8 +217,12 @@ const description =
   }
 
   @media only screen and (max-width: 700px) {
-    body {
+    .intro-inner,
+    .more-inner {
       padding: 2em;
+    }
+
+    .intro-inner {
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;

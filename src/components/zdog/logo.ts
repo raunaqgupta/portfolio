@@ -23,7 +23,7 @@ export interface LogoColors {
   mark: string;
 }
 
-export interface LogoModel {
+interface LogoModel {
   /** Rotate this to turn the shapes on the sphere. */
   surface: Zdog.Anchor;
   setColors(colors: LogoColors): void;

@@ -7,7 +7,7 @@
 
 import type { PathCommand, VectorOptions } from "zdog";
 
-export interface Glyph {
+interface Glyph {
   /** Width of the glyph box, in cap heights. */
   width: number;
   path: PathCommand[];

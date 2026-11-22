@@ -1,7 +1,6 @@
 // The ring of text around the homepage logo, as Zdog shapes so it can tilt
-// round the logo in 3D. Geometry comes from layoutRing, the same packing the
-// SVG textPath version used; here the label widths are known exactly because
-// the letters are our own glyphs.
+// round the logo in 3D. Geometry comes from layoutRing; the label widths are
+// known exactly because the letters are our own glyphs.
 
 import Zdog from "zdog";
 import { glyphPath, GLYPHS, TRACKING, wordWidth } from "./glyphs";
@@ -27,7 +26,7 @@ export function measureRing(options: RingOptions): RingLayout {
   });
 }
 
-export interface RingModel {
+interface RingModel {
   /** Spin this about z to turn the text round the ring. */
   anchor: Zdog.Anchor;
   setColors(colors: { text: string; dot: string }): void;

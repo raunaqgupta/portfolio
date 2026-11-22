@@ -1,26 +1,17 @@
 ---
-const { mode = "2d", size = "small" } = Astro.props;
-import Logo from "../assets/logo.svg";
-
-const SIZES = { small: 42, large: 128 };
-const px = SIZES[size as keyof typeof SIZES];
+// The logo as a 3D sphere, drawn with Zdog (zdog/logo.ts).
+const { size = "small" } = Astro.props;
+const px = { small: 42, large: 128 }[size as "small" | "large"];
 ---
 
 <div class="logo-container">
   <a class="no-decoration no-hover logo-link" href="/">
-    {
-      mode === "2d" ? (
-        <Logo class:list={[size]} />
-      ) : (
-        <canvas
-          class:list={["logo-3d", size]}
-          width={px}
-          height={px}
-          role="img"
-          aria-label="Raunaq Gupta"
-        />
-      )
-    }
+    <canvas
+      class:list={["logo-3d", size]}
+      width={px}
+      height={px}
+      role="img"
+      aria-label="Raunaq Gupta"></canvas>
   </a>
 </div>
 

@@ -25,9 +25,7 @@ export interface RingLayout {
   r: number;
   /** Diameter of the logo inside the ring. */
   logo: number;
-  /** Circle path traced twice, starting at 9 o'clock, clockwise. */
-  path: string;
-  /** startOffset (px along the path) for the centre of each label. */
+  /** Arc length, clockwise from 9 o'clock, of the centre of each label. */
   labelOffsets: number[];
   /** Centre of each dot; dot i follows label i. */
   dots: { x: number; y: number }[];
@@ -52,22 +50,18 @@ export function layoutRing({
   const c = size / 2;
   const logo = 2 * (r - textHeight / 2 - logoGap);
 
-  const arc = `a${r},${r} 0 1,1 ${2 * r},0 a${r},${r} 0 1,1 ${-2 * r},0`;
-  const path = `M${c - r},${c} ${arc} ${arc}`;
-
   // Walk clockwise from 9 o'clock. The first label is centred at 1/8 turn
-  // (upper left). Positions are measured on the path's second lap so a label
-  // centred near the start is never clipped.
+  // (upper left).
   const labelOffsets: number[] = [];
   const dots: { x: number; y: number }[] = [];
   let s = circumference / 8 - labelWidths[0] / 2;
   labelWidths.forEach((w) => {
-    labelOffsets.push(circumference + ((s + w / 2) % circumference));
+    labelOffsets.push(s + w / 2);
     s += w + gap;
     const theta = (s + dot / 2) / r;
     dots.push({ x: c - r * Math.cos(theta), y: c - r * Math.sin(theta) });
     s += dot + gap;
   });
 
-  return { size, r, logo, path, labelOffsets, dots };
+  return { size, r, logo, labelOffsets, dots };
 }

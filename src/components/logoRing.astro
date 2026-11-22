@@ -1,191 +1,167 @@
 ---
-import Logo from "@components/logo.astro";
-import { layoutRing } from "./logoRing.layout";
+import { measureRing } from "./zdog/ring";
 
-// Decorative: the logo inside already carries the name as its alt text.
-// The ring's size follows from its text length, so the name goes round twice
-// to keep the logo a usable size.
+// The logo and the ring of text round it, drawn as one Zdog scene: the name
+// is set in a small stroke font (zdog/glyphs.ts) so it can turn in 3D with
+// the logo. The ring's size follows from its text length, so the name goes
+// round twice to keep the logo a usable size.
 const NAME = ["Raunaq", "Gupta"];
-const labels = [...NAME, ...NAME];
 
-// Must match the CSS below and --space-1/--space-2 in baseLayout. These estimates give
-// the first render; the script measures the real text and redoes the layout.
-const FONT_SIZE = 16;
-const DOT = 4;
-const GAP = 8;
-const LOGO_GAP = 16;
-const CAP_HEIGHT = 0.72 * FONT_SIZE;
-const labelWidths = labels.map((label) => label.length * 0.68 * FONT_SIZE);
+// --space-1/--space-2 in baseLayout.
+const RING = {
+  labels: [...NAME, ...NAME],
+  capHeight: 11.5,
+  weight: 1.6,
+  dot: 4,
+  gap: 8,
+  logoGap: 16,
+};
 
-const layout = layoutRing({
-  labelWidths,
-  dot: DOT,
-  gap: GAP,
-  logoGap: LOGO_GAP,
-  textHeight: CAP_HEIGHT,
-});
+const { size } = measureRing(RING);
 ---
 
-<div
-  class="logo-ring"
-  style={`--ring-size: ${layout.size}px; --logo-size: ${layout.logo}px;`}
->
-  <Logo mode="3d" size="large" />
-  <div class="ring" aria-hidden="true">
-    <svg viewBox={`0 0 ${layout.size} ${layout.size}`} data-dot={DOT}>
-      <defs>
-        <path id="logo-ring-path" d={layout.path} />
-      </defs>
-      {
-        layout.dots.map(({ x, y }) => (
-          <circle class="separator" cx={x} cy={y} r={DOT / 2} />
-        ))
-      }
-      {
-        labels.map((label, i) => (
-          <text dy={CAP_HEIGHT / 2}>
-            <textPath
-              href="#logo-ring-path"
-              startOffset={layout.labelOffsets[i]}
-              textLength={labelWidths[i]}
-              lengthAdjust="spacing"
-            >
-              {label}
-            </textPath>
-          </text>
-        ))
-      }
-    </svg>
-  </div>
-  <span class="measure" aria-hidden="true"></span>
+<div class="logo-ring" style={`--ring-size: ${size}px;`}>
+  <canvas
+    width={size}
+    height={size}
+    role="img"
+    aria-label="Raunaq Gupta"
+    data-ring={JSON.stringify(RING)}></canvas>
 </div>
 
 <script>
-  import { layoutRing } from "./logoRing.layout";
+  import Zdog from "zdog";
+  import { addLogo, themeColors, onSchemeChange } from "./zdog/logo";
+  import { addRing, measureRing, type RingOptions } from "./zdog/ring";
 
-  function fit(root: HTMLElement) {
-    const svg = root.querySelector("svg")!;
-    const texts = [...svg.querySelectorAll<SVGTextElement>("text")];
-    const textPaths = [...svg.querySelectorAll("textPath")];
-    const measure = root.querySelector<HTMLElement>(".measure")!;
-    const style = getComputedStyle(measure);
-    const rootStyle = getComputedStyle(root);
-    const gap = parseFloat(rootStyle.getPropertyValue("--gap"));
-    const logoGap = parseFloat(rootStyle.getPropertyValue("--logo-gap"));
+  // One turn of the ring every 20s, as the CSS spin it replaces.
+  const SPIN = Zdog.TAU / 20000;
+  // How long the model takes to settle back after a drag, in ms.
+  const SETTLE = 900;
 
-    // Measure each label as HTML text: SVG text measurement differs between
-    // browsers, HTML layout does not.
-    const labelWidths = textPaths.map((textPath) => {
-      measure.textContent = textPath.textContent;
-      return measure.getBoundingClientRect().width;
+  function mount(canvas: HTMLCanvasElement) {
+    const options: RingOptions = JSON.parse(canvas.dataset.ring!);
+    const layout = measureRing(options);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    let dragging = false;
+    let hovering = false;
+    let settleFrom: Zdog.Vector | null = null;
+    let settleStart = 0;
+
+    // Dragging turns the ring; the sphere's surface follows it below.
+    const illo = new Zdog.Illustration({ element: canvas });
+    const model = new Zdog.Anchor({ addTo: illo });
+    // setDragRotate binds the drag listeners; it's missing from the types.
+    (illo as unknown as { setDragRotate(item: Zdog.Anchor): void }).setDragRotate(model);
+    illo.onDragStart = () => {
+      dragging = true;
+      settleFrom = null;
+      start();
+    };
+    illo.onDragEnd = () => {
+      dragging = false;
+      settleFrom = model.rotate.copy();
+      settleStart = performance.now();
+    };
+
+    const logo = addLogo(illo, layout.logo / 2);
+    const ring = addRing(model, options, layout);
+
+    const paint = () => {
+      const theme = themeColors(canvas);
+      const style = getComputedStyle(canvas);
+      logo.setColors(theme);
+      ring.setColors({
+        text: style.getPropertyValue("--color-body-secondary").trim(),
+        dot: style.getPropertyValue("--color-body-tertiary").trim(),
+      });
+    };
+    paint();
+
+    let frame = 0;
+    let last = 0;
+    let visible = true;
+
+    const animating = () =>
+      visible && (dragging || settleFrom || !reduceMotion.matches);
+
+    function tick(now: number) {
+      const dt = last ? Math.min(now - last, 100) : 0;
+      last = now;
+
+      if (!reduceMotion.matches) {
+        if (!hovering && !dragging) ring.anchor.rotate.z += SPIN * dt;
+      }
+
+      // Ease back to facing front after a drag, so the logo reads again.
+      if (settleFrom) {
+        const t = Math.min((now - settleStart) / SETTLE, 1);
+        const k = 1 - Zdog.easeInOut(t, 3);
+        model.rotate.set({
+          x: settleFrom.x * k,
+          y: settleFrom.y * k,
+          z: settleFrom.z * k,
+        });
+        if (t === 1) settleFrom = null;
+      }
+
+      // The surface turns with the ring, plus a slow sway of its own.
+      const sway = reduceMotion.matches ? 0 : now / 1000;
+      logo.surface.rotate.set({
+        x: model.rotate.x + Math.sin(sway * 0.7) * 0.12,
+        y: model.rotate.y + Math.sin(sway * 0.5) * 0.3,
+        z: model.rotate.z,
+      });
+
+      illo.updateRenderGraph();
+      frame = animating() ? requestAnimationFrame(tick) : 0;
+      if (!frame) last = 0;
+    }
+
+    function start() {
+      if (!frame) frame = requestAnimationFrame(tick);
+    }
+
+    canvas.addEventListener("pointerenter", () => (hovering = true));
+    canvas.addEventListener("pointerleave", () => (hovering = false));
+    reduceMotion.addEventListener("change", start);
+    onSchemeChange(() => {
+      paint();
+      start();
     });
 
-    // Cap height of the label font, so the logo can sit logoGap inside it.
-    const ctx = document.createElement("canvas").getContext("2d")!;
-    ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
-    const textHeight = ctx.measureText("H").actualBoundingBoxAscent;
+    // Stop drawing while the ring is off screen.
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) start();
+    }).observe(canvas);
 
-    const layout = layoutRing({
-      labelWidths,
-      dot: Number(svg.dataset.dot),
-      gap,
-      logoGap,
-      textHeight,
-    });
-
-    root.style.setProperty("--ring-size", `${layout.size}px`);
-    root.style.setProperty("--logo-size", `${layout.logo}px`);
-    svg.setAttribute("viewBox", `0 0 ${layout.size} ${layout.size}`);
-    // Centre the capitals on the circle rather than sitting on it.
-    texts.forEach((t) => t.setAttribute("dy", String(textHeight / 2)));
-    svg.querySelector("path")!.setAttribute("d", layout.path);
-    svg.querySelectorAll("circle").forEach((circle, i) => {
-      circle.setAttribute("cx", String(layout.dots[i].x));
-      circle.setAttribute("cy", String(layout.dots[i].y));
-    });
-    // textLength makes each label render at exactly its slot width, so the
-    // labels can never run into the dots whatever the font.
-    textPaths.forEach((textPath, i) => {
-      textPath.setAttribute("startOffset", String(layout.labelOffsets[i]));
-      textPath.setAttribute("textLength", String(labelWidths[i]));
-    });
+    // Draw once now, whatever the motion setting.
+    tick(performance.now());
   }
 
-  const rings = document.querySelectorAll<HTMLElement>(".logo-ring");
-  rings.forEach(fit);
-  document.fonts.ready.then(() => rings.forEach(fit));
+  document
+    .querySelectorAll<HTMLCanvasElement>(".logo-ring canvas")
+    .forEach(mount);
 </script>
 
 <style>
   .logo-ring {
-    --gap: var(--space-1);
-    --logo-gap: var(--space-2);
-    position: relative;
-    display: grid;
-    place-items: center;
     flex-shrink: 0;
     width: var(--ring-size);
     height: var(--ring-size);
   }
 
-  .logo-ring :global(.logo-3d) {
-    width: var(--logo-size);
-    height: var(--logo-size);
-  }
-
-  .ring {
-    position: absolute;
-    inset: 0;
-  }
-
-  .ring svg {
+  canvas {
     display: block;
     width: 100%;
     height: 100%;
-    overflow: visible;
-    animation: spin 20s linear infinite;
+    cursor: grab;
+    touch-action: pan-y;
   }
 
-  .logo-ring:hover svg,
-  .logo-ring:focus-within svg {
-    animation-play-state: paused;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ring svg {
-      animation: none;
-    }
-  }
-
-  /* No letter-spacing: browsers disagree on whether the space after the last
-     letter counts towards a label's length, which shifts it off-centre. */
-  text,
-  .measure {
-    font-family: sans-serif;
-    font-size: 16px;
-    text-transform: uppercase;
-  }
-
-  .measure {
-    position: absolute;
-    visibility: hidden;
-    white-space: nowrap;
-    pointer-events: none;
-  }
-
-  text {
-    fill: var(--color-body-secondary);
-    text-anchor: middle;
-    dominant-baseline: alphabetic;
-  }
-
-  .separator {
-    fill: var(--color-body-tertiary);
+  canvas:active {
+    cursor: grabbing;
   }
 </style>

@@ -1,8 +1,9 @@
 ---
 const { mode = "2d", size = "small" } = Astro.props;
 import Logo from "../assets/logo.svg";
-import Logo3DDark from "@assets/logo.3d.dark.png";
-import Logo3DLight from "@assets/logo.3d.light.png";
+
+const SIZES = { small: 42, large: 128 };
+const px = SIZES[size as keyof typeof SIZES];
 ---
 
 <div class="logo-container">
@@ -11,19 +12,50 @@ import Logo3DLight from "@assets/logo.3d.light.png";
       mode === "2d" ? (
         <Logo class:list={[size]} />
       ) : (
-        <div class:list={["logo-3d", size]}>
-          <picture>
-            <source
-              srcset={Logo3DLight.src}
-              media="(prefers-color-scheme: dark)"
-            />
-            <img src={Logo3DDark.src} alt="Raunaq Gupta" />
-          </picture>
-        </div>
+        <canvas
+          class:list={["logo-3d", size]}
+          width={px}
+          height={px}
+          role="img"
+          aria-label="Raunaq Gupta"
+        />
       )
     }
   </a>
 </div>
+
+<script>
+  import Zdog from "zdog";
+  import { addLogo, themeColors, onSchemeChange } from "./zdog/logo";
+
+  // The 3D logo, drawn with Zdog. It sits in a link, so it isn't draggable;
+  // it just turns a little towards the pointer while hovered.
+  document.querySelectorAll<HTMLCanvasElement>("canvas.logo-3d").forEach((canvas) => {
+    const illo = new Zdog.Illustration({ element: canvas });
+    const logo = addLogo(illo, illo.width / 2);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const paint = () => {
+      logo.setColors(themeColors(canvas));
+      illo.updateRenderGraph();
+    };
+    paint();
+    onSchemeChange(paint);
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (reduceMotion.matches) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+      logo.surface.rotate.set({ x: -y * 0.6, y: -x * 0.6 });
+      illo.updateRenderGraph();
+    });
+    canvas.addEventListener("pointerleave", () => {
+      logo.surface.rotate.set({});
+      illo.updateRenderGraph();
+    });
+  });
+</script>
 
 <style>
   .logo-container {
@@ -50,8 +82,7 @@ import Logo3DLight from "@assets/logo.3d.light.png";
     width: 128px;
   }
 
-  .logo-3d img {
-    width: 100%;
-    height: 100%;
+  .logo-3d {
+    display: block;
   }
 </style>

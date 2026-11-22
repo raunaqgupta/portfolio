@@ -103,10 +103,13 @@ const description =
     line-height: 28px;
   }
 
-  /* Above the grid background. */
+  /* Above the grid background. Clipped, because the bent cards reach past
+     the viewport's sides and would otherwise make the page scroll sideways.
+     Clip, unlike hidden, doesn't make main a scroll container. */
   main {
     position: relative;
     z-index: 1;
+    overflow: clip;
   }
 
   /* Each card fills the viewport; its content sits in the middle. */

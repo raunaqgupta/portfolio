@@ -1,10 +1,6 @@
 // The logo as a Zdog model: a sphere with the triangle and circle from
-// logo.svg wrapped onto its front.
-//
-// Zdog has no lighting, so the sphere is shaded with stacked dots that stay
-// fixed to the viewer (a darker base, a lighter body nudged towards the
-// light, and a soft highlight), while the shapes on its surface turn with
-// the model.
+// logo.svg wrapped onto its front. The sphere is a flat disc of colour, as
+// in logo.svg; only the shapes on its surface turn with the model.
 
 import Zdog from "zdog";
 
@@ -16,9 +12,6 @@ const TRIANGLE = [
   { x: -0.5238, y: 0.442 },
 ];
 const DOT = { x: 0.2643, y: 0.2633, r: 0.2598 };
-
-/** Number of dots used to shade the sphere. */
-const SHADE_STEPS = 14;
 
 /** Lift the decals just off the surface so they never sink into it. */
 const LIFT = 1.002;
@@ -69,35 +62,11 @@ function circleOnSphere(radius: number) {
   });
 }
 
-function mix(color: string, target: string, amount: number) {
-  const parse = (c: string) => {
-    const ctx = document.createElement("canvas").getContext("2d")!;
-    ctx.fillStyle = c;
-    const hex = ctx.fillStyle; // normalised to #rrggbb for opaque colours
-    return [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
-  };
-  const a = parse(color);
-  const b = parse(target);
-  const out = a.map((v, i) => Math.round(v + (b[i] - v) * amount));
-  return `rgb(${out.join(",")})`;
-}
-
 export function addLogo(addTo: Zdog.Anchor, radius: number): LogoModel {
-  // A Group draws its children in the order added, so the shading and the
-  // shapes stack correctly whatever their depth.
+  // A Group draws its children in the order added, so the shapes always sit
+  // on top of the sphere whatever their depth.
   const ball = new Zdog.Group({ addTo });
-
-  // Shading: dots shrinking towards the light (up and left), each a little
-  // lighter, so together they read as a radial gradient with a darker rim
-  // bottom right.
-  const shades = Array.from({ length: SHADE_STEPS }, (_, i) => {
-    const t = i / (SHADE_STEPS - 1);
-    return new Zdog.Shape({
-      addTo: ball,
-      stroke: radius * (2 - t * 1.1),
-      translate: { x: -radius * 0.3 * t, y: -radius * 0.36 * t, z: radius * t },
-    });
-  });
+  const sphere = new Zdog.Shape({ addTo: ball, stroke: radius * 2 });
 
   const surface = new Zdog.Anchor({ addTo: ball });
   const marks = [
@@ -119,16 +88,8 @@ export function addLogo(addTo: Zdog.Anchor, radius: number): LogoModel {
 
   return {
     surface,
-    setColors({ sphere, mark }) {
-      // Darkest at the rim, the theme colour through the middle, a touch
-      // lighter at the highlight.
-      shades.forEach((shade, i) => {
-        const t = i / (SHADE_STEPS - 1);
-        shade.color =
-          t < 0.6
-            ? mix(sphere, "#000", 0.18 * (1 - t / 0.6))
-            : mix(sphere, "#fff", 0.1 * ((t - 0.6) / 0.4));
-      });
+    setColors({ sphere: color, mark }) {
+      sphere.color = color;
       marks.forEach((m) => (m.color = mark));
     },
   };

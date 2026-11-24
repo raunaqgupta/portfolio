@@ -128,19 +128,20 @@ const slides = groups.flatMap((group, g) =>
       );
     }
 
-    // Each name is as large as fits between the side margins, up to a share
-    // of the viewport's height, so short names grow and long ones still fit.
+    // All the names share one size: the largest at which the longest name
+    // fits between the side margins, up to a share of the viewport's height.
     function sizeWordmarks() {
       const share = parseFloat(getComputedStyle(stage).getPropertyValue("--wordmark-max")) || 1;
       // The margin is a clamp(), so read it resolved, from the left offset.
       const margin = wordmarks[0] ? parseFloat(getComputedStyle(wordmarks[0]).left) : 0;
-      const maxHeight = stage.clientHeight * share;
       const room = stage.clientWidth - 2 * margin;
+      let size = stage.clientHeight * share;
       for (const mark of wordmarks) {
         mark.style.fontSize = "100px";
         const width = mark.scrollWidth;
-        if (width) mark.style.fontSize = `${Math.min((room / width) * 100, maxHeight)}px`;
+        if (width) size = Math.min(size, (room / width) * 100);
       }
+      for (const mark of wordmarks) mark.style.fontSize = `${size}px`;
     }
 
     const schedule = () => {

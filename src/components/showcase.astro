@@ -1,8 +1,11 @@
 ---
-// One organisation's case studies as a row of cards. The section pins to the
-// viewport while vertical scrolling moves the row sideways, one card at a
-// time; after the last card the page scrolls on. The pinned panel is a
-// BowlCard, so it bends with the grid as it arrives and leaves.
+// Case studies from one or more organisations as a single row of cards. The
+// section pins to the viewport while vertical scrolling moves the row
+// sideways, one card at a time; after the last card the page scrolls on.
+// The organisation of the centred card is named in outline at the bottom
+// left, and changes as the row crosses from one organisation to the next.
+// The pinned panel is a BowlCard, so it bends with the grid as it arrives
+// and leaves.
 //
 // Without JavaScript the row is a plain horizontal scroller.
 import { getEntry } from "astro:content";
@@ -10,42 +13,55 @@ import BowlCard from "./bowlCard.astro";
 import { ROUTES } from "../constants";
 
 interface Props {
-  /** Id of a "collection" article whose caseStudies are shown. */
-  collection: string;
+  /** Ids of "collection" articles, in order; each one's caseStudies are shown. */
+  collections: string[];
   /** The grid background's curve. */
   curve?: number;
+  /** Accessible name for the section. */
+  label?: string;
 }
 
-const { collection, curve } = Astro.props;
-const entry = await getEntry("articles", collection);
-if (!entry) throw new Error(`Showcase: no collection "${collection}"`);
+const { collections, curve, label = "Work" } = Astro.props;
 
-const studies = (
-  await Promise.all((entry.data.caseStudies ?? []).map((ref) => getEntry(ref)))
-).filter((study) => study && study.data.published !== false);
+const groups = await Promise.all(
+  collections.map(async (id) => {
+    const entry = await getEntry("articles", id);
+    if (!entry) throw new Error(`Showcase: no collection "${id}"`);
+    const studies = (
+      await Promise.all((entry.data.caseStudies ?? []).map((ref) => getEntry(ref)))
+    ).filter((study) => study && study.data.published !== false);
+    return { name: entry.data.organization ?? entry.data.title, studies: studies.map((s) => s!) };
+  }),
+);
 
-const name = entry.data.organization ?? entry.data.title;
-const headingId = `showcase-${collection}`;
+const slides = groups.flatMap((group, g) =>
+  group.studies.map((study) => ({ group: g, name: group.name, study })),
+);
 ---
 
-<section
-  class="showcase"
-  aria-labelledby={headingId}
-  style={`--count: ${studies.length};`}
->
+<section class="showcase" aria-label={label} style={`--count: ${slides.length};`}>
   <div class="showcase-pin">
     <BowlCard curve={curve} class="showcase-panel">
       <div class="showcase-stage">
-        <h2 class="wordmark" id={headingId}>{name}</h2>
+        {
+          groups.map((group, g) => (
+            <p class:list={["wordmark", { "is-current": g === 0 }]} data-group={g} aria-hidden="true">
+              {group.name}
+            </p>
+          ))
+        }
         <ol class="track">
           {
-            studies.map((study) => (
-              <li class="slide">
-                <a class="slide-link" href={`${ROUTES.PORTFOLIO}/${study!.id}`}>
-                  <h3 class="slide-title">{study!.data.title}</h3>
+            slides.map(({ group, name, study }) => (
+              <li class="slide" data-group={group}>
+                <a class="slide-link" href={`${ROUTES.PORTFOLIO}/${study.id}`}>
+                  <h3 class="slide-title">
+                    <span class="visually-hidden">{name}: </span>
+                    {study.data.title}
+                  </h3>
                   <span class="slide-frame">
                     <img
-                      src={study!.data.hero ?? study!.data.thumbnail}
+                      src={study.data.hero ?? study.data.thumbnail}
                       alt=""
                       loading="lazy"
                       decoding="async"
@@ -74,6 +90,8 @@ const headingId = `showcase-${collection}`;
 
   function init(section: HTMLElement) {
     const slides = [...section.querySelectorAll<HTMLElement>(".slide")];
+    const wordmarks = [...section.querySelectorAll<HTMLElement>(".wordmark")];
+    const stage = section.querySelector<HTMLElement>(".showcase-stage")!;
     const count = slides.length;
     section.classList.add("is-enhanced");
     let frame = 0;
@@ -103,6 +121,26 @@ const headingId = `showcase-${collection}`;
         slide.style.setProperty("--title-opacity", String(clamp(1 - Math.abs(d) * 2, 0, 1)));
         slide.classList.toggle("is-current", Math.abs(d) < 0.5);
       });
+      // Name the organisation of the card nearest the centre.
+      const group = slides[Math.round(p)]?.dataset.group;
+      wordmarks.forEach((mark) =>
+        mark.classList.toggle("is-current", mark.dataset.group === group),
+      );
+    }
+
+    // Each name is as large as fits between the side margins, up to a share
+    // of the viewport's height, so short names grow and long ones still fit.
+    function sizeWordmarks() {
+      const share = parseFloat(getComputedStyle(stage).getPropertyValue("--wordmark-max")) || 1;
+      // The margin is a clamp(), so read it resolved, from the left offset.
+      const margin = wordmarks[0] ? parseFloat(getComputedStyle(wordmarks[0]).left) : 0;
+      const maxHeight = stage.clientHeight * share;
+      const room = stage.clientWidth - 2 * margin;
+      for (const mark of wordmarks) {
+        mark.style.fontSize = "100px";
+        const width = mark.scrollWidth;
+        if (width) mark.style.fontSize = `${Math.min((room / width) * 100, maxHeight)}px`;
+      }
     }
 
     const schedule = () => {
@@ -120,7 +158,18 @@ const headingId = `showcase-${collection}`;
     });
 
     window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
+    new ResizeObserver(() => {
+      sizeWordmarks();
+      schedule();
+    }).observe(stage);
+    // The names are measured again once the web font has loaded, since a
+    // fallback font sets a different width.
+    document.fonts?.ready.then(() => {
+      sizeWordmarks();
+      schedule();
+    });
+    document.fonts?.addEventListener("loadingdone", sizeWordmarks);
+    sizeWordmarks();
     update();
   }
 
@@ -158,22 +207,53 @@ const headingId = `showcase-${collection}`;
     flex: 1;
   }
 
-  /* The organisation's name, outlined, over the card's bottom-left corner. */
+  /* The organisation's name, outlined, pinned to the bottom-left corner of
+     the viewport. Script sets its size; this is the fallback. */
+  .showcase-stage {
+    --wordmark-margin: clamp(16px, 9vw, 128px);
+    /* Largest font size, as a share of the viewport's height. */
+    --wordmark-max: 0.24;
+  }
+
   .wordmark {
     position: absolute;
     z-index: 2;
-    left: max(16px, calc(50% - var(--card-w) / 2 - var(--card-w) * 150 / 769));
-    top: calc(50% + var(--card-h) / 2 - var(--card-h) * 103 / 577);
+    left: var(--wordmark-margin);
+    bottom: var(--wordmark-margin);
     margin: 0;
     font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: calc(var(--card-w) * 131 / 769);
+    font-size: 12vw;
     font-weight: 900;
-    line-height: 1.16;
+    /* About Inter's cap height, so the box hugs the capitals and the margin
+       is measured from the letters themselves. */
+    line-height: 0.73;
     text-transform: uppercase;
     white-space: nowrap;
     color: transparent;
     -webkit-text-stroke: 1px var(--color-heading);
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms ease-out;
+  }
+
+  .wordmark.is-current {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wordmark {
+      transition: none;
+    }
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .track {

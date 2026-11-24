@@ -89,6 +89,8 @@ const config = {
     curve: number;
   };
 
+  import { bowlScale } from "./bowl";
+
   type Cell = { x: number; y: number; start: number; hold: number };
 
   // Small seeded PRNG (mulberry32), so a seed gives a repeatable pattern.
@@ -152,10 +154,8 @@ const config = {
     function warp(x: number, y: number): [number, number] {
       const cx = width / 2;
       const cy = height / 2;
-      const dx = x - cx;
-      const dy = y - cy;
-      const scale = 1 + (curve * (dx * dx + dy * dy)) / (cx * cx + cy * cy);
-      return [(cx + dx * scale) * dpr, (cy + dy * scale) * dpr];
+      const scale = bowlScale(x, y, width, height, curve);
+      return [(cx + (x - cx) * scale) * dpr, (cy + (y - cy) * scale) * dpr];
     }
 
     const lineX = (i: number) => originX + i * cellSize;

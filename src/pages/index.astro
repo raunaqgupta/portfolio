@@ -21,33 +21,60 @@ const description =
       hold={[400, 1200]}
       curve={0.5}
     />
-    <LogoRing />
+    <div class="row">
+      <LogoRing />
 
-    <div class="content">
-      <div class="name">
-        <button
-          class="pronounce"
-          type="button"
-          aria-label="Play pronunciation of Raunaq"
-        >
-          <SpeakerLoudIcon aria-hidden="true" />
-        </button>
-        <h1>
-          <span class="visually-hidden">Raunaq, pronounced </span>
-          <span lang="en-fonipa">/ˈrɔː.nʌk/</span>
-        </h1>
-        <audio preload="auto" src={PRONUNCIATION_URL}></audio>
+      <div class="content">
+        <div class="name">
+          <button
+            class="pronounce"
+            type="button"
+            aria-label="Play pronunciation of Raunaq"
+          >
+            <SpeakerLoudIcon aria-hidden="true" />
+          </button>
+          <h1>
+            <span class="visually-hidden">Raunaq, pronounced </span>
+            <span lang="en-fonipa">/ˈrɔː.nʌk/</span>
+          </h1>
+          <audio preload="auto" src={PRONUNCIATION_URL}></audio>
+        </div>
+        <p>
+          I'm a product, and design specialist with over 10 years of experience shipping enterprise web
+          applications across startups and large organizations.
+        </p>
+        <p>Reach out at <a href="mailto:mail@raunaqgupta.com">mail@raunaqgupta.com</a> to discuss opportunities.</p>
       </div>
-      <p>
-        I'm a product, and design specialist with over 10 years of experience shipping enterprise web
-        applications across startups and large organizations.
-      </p>
-      <p>Reach out at <a href="mailto:mail@raunaqgupta.com">mail@raunaqgupta.com</a> to discuss opportunities.</p>
     </div>
   </body>
 </BaseLayout>
 
 <script>
+  // On desktop the logo stretches to the content height, so both sit as one
+  // row. Flexbox can't derive the logo's width from an auto-sized cross axis
+  // through aspect-ratio alone, so track the content height and mirror it.
+  {
+    const row = document.querySelector<HTMLElement>(".row");
+    const content = row?.querySelector<HTMLElement>(".content");
+    const logo = row?.querySelector<HTMLElement>(".logo-ring");
+    if (row && content && logo) {
+      const desktop = window.matchMedia("(min-width: 701px)");
+      const apply = () => {
+        if (desktop.matches) {
+          const h = content.offsetHeight;
+          logo.style.width = `${h}px`;
+          logo.style.height = `${h}px`;
+        } else {
+          logo.style.width = "";
+          logo.style.height = "";
+        }
+      };
+      new ResizeObserver(apply).observe(content);
+      desktop.addEventListener("change", apply);
+      apply();
+    }
+  }
+
   // The audio button plays the recorded pronunciation, from the start each
   // time it's pressed. The clip is small, so it's preloaded with the page.
   document.querySelectorAll<HTMLElement>(".name").forEach((name) => {
@@ -76,8 +103,9 @@ const description =
   body {
     box-sizing: border-box;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     background-color: var(--color-bg);
     color: var(--color-body-primary);
     font-family: sans-serif;
@@ -86,15 +114,29 @@ const description =
     max-width: 80ch;
     min-height: 100vh;
     min-height: 100dvh;
-    gap: 64px;
     margin: auto;
   }
 
+  /* The logo stretches to match the content height, so both sit as one row. */
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 64px;
+  }
+
   /* Above the grid background. */
-  body > :global(.logo-ring),
+  .row :global(.logo-ring),
   .content {
     position: relative;
     z-index: 1;
+  }
+
+  .row :global(.logo-ring) {
+    align-self: stretch;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: 1;
   }
 
   .content {
@@ -166,10 +208,19 @@ const description =
   @media only screen and (max-width: 700px) {
     body {
       padding: 2em;
+      align-items: flex-start;
+    }
+
+    .row {
       flex-direction: column;
       align-items: flex-start;
-      justify-content: center;
       gap: 32px;
+    }
+
+    .row :global(.logo-ring) {
+      align-self: auto;
+      max-width: var(--ring-size);
+      max-height: var(--ring-size);
     }
 
     .content {

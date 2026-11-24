@@ -25,6 +25,7 @@ export const CATEGORIES = {
   RECIPE: "recipe",
   POEM: "poem",
   POST: "post",
+  MICRO: "micro",
   AUDIO: "audio",
   PORTFOLIO: "portfolio",
   COLLECTION: "collection",

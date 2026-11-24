@@ -1,0 +1,123 @@
+---
+// An invisible card whose content bends with the bowl-shaped grid behind it
+// as the page scrolls. The card is flat while centred in the viewport; as it
+// moves away from the centre its corners follow the same warp as the grid
+// (bowl.ts), so a card leaving at the top widens along its top edge and
+// narrows along its bottom one, and a card arriving from the bottom does the
+// reverse. With reduced motion the card stays flat.
+interface Props {
+  /** The grid background's curve; 0 keeps the card flat. */
+  curve?: number;
+  class?: string;
+}
+
+const { curve = 0.5, class: className } = Astro.props;
+---
+
+<section class:list={["bowl-card", className]} data-curve={curve}>
+  <div class="bowl-card-surface">
+    <slot />
+  </div>
+</section>
+
+<script>
+  import { bowlScale } from "./bowl";
+
+  type Point = [number, number];
+
+  // The CSS matrix3d that maps a w × h box onto the quad p0..p3 (top-left,
+  // top-right, bottom-right, bottom-left), with the transform origin at the
+  // box's top-left. A projective (square-to-quad) mapping, after Heckbert.
+  function quadMatrix(w: number, h: number, [p0, p1, p2, p3]: Point[]) {
+    const [x0, y0] = p0;
+    const [x1, y1] = p1;
+    const [x2, y2] = p2;
+    const [x3, y3] = p3;
+    const dx1 = x1 - x2;
+    const dx2 = x3 - x2;
+    const dx3 = x0 - x1 + x2 - x3;
+    const dy1 = y1 - y2;
+    const dy2 = y3 - y2;
+    const dy3 = y0 - y1 + y2 - y3;
+    const det = dx1 * dy2 - dx2 * dy1;
+    const g = det ? (dx3 * dy2 - dx2 * dy3) / det : 0;
+    const k = det ? (dx1 * dy3 - dx3 * dy1) / det : 0;
+    const a = x1 - x0 + g * x1;
+    const b = x3 - x0 + k * x3;
+    const d = y1 - y0 + g * y1;
+    const e = y3 - y0 + k * y3;
+    // Scale from the unit square to the box, in column-major order.
+    const m = [a / w, d / w, 0, g / w, b / h, e / h, 0, k / h, 0, 0, 1, 0, x0, y0, 0, 1];
+    return `matrix3d(${m.map((n) => +n.toFixed(6)).join(",")})`;
+  }
+
+  const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+  const cards = [...document.querySelectorAll<HTMLElement>(".bowl-card")];
+  let frame = 0;
+
+  function update() {
+    frame = 0;
+    // The grid is fixed to the viewport, so its warp is centred there.
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+    const cx = vw / 2;
+    const cy = vh / 2;
+    for (const card of cards) {
+      const surface = card.firstElementChild as HTMLElement;
+      const curve = Number(card.dataset.curve) || 0;
+      if (!motion.matches || !curve) {
+        surface.style.transform = "";
+        continue;
+      }
+      // The card itself is never transformed, so this is its layout box.
+      const { left, top, width: w, height: h } = card.getBoundingClientRect();
+      if (top > vh * 2 || top + h < -vh) continue;
+      // How far the corners would be warped with the card centred in the
+      // viewport. Dividing by it keeps the card flat there.
+      const rest = bowlScale(cx - w / 2, cy - h / 2, vw, vh, curve);
+      const corners: Point[] = [
+        [left, top],
+        [left + w, top],
+        [left + w, top + h],
+        [left, top + h],
+      ];
+      const quad = corners.map(([x, y]): Point => {
+        const s = bowlScale(x, y, vw, vh, curve) / rest;
+        return [cx + (x - cx) * s - left, cy + (y - cy) * s - top];
+      });
+      surface.style.transform = quadMatrix(w, h, quad);
+    }
+  }
+
+  const schedule = () => {
+    if (!frame) frame = requestAnimationFrame(update);
+  };
+
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  motion.addEventListener("change", schedule);
+  update();
+</script>
+
+<style>
+  /* The surface fills the card, so its corners are the card's corners. */
+  .bowl-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bowl-card-surface {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transform-origin: 0 0;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bowl-card-surface {
+      will-change: auto;
+    }
+  }
+</style>

@@ -1,7 +1,17 @@
 ---
-import Logo from "@components/logo.astro";
+import LogoRing from "@components/logoRing.astro";
+import GridBackground from "@components/gridBackground.astro";
+import BowlCard from "@components/bowlCard.astro";
+import Showcase from "@components/showcase.astro";
+import SpeakerLoudIcon from "@icons/speaker-loud.svg";
 import BaseLayout from "../layouts/baseLayout.astro";
-import { ROUTES, SITE_URL } from "../constants";
+import { SITE_URL } from "../constants";
+
+// The grid's warp; the cards bend with it as they scroll.
+const CURVE = 0.5;
+
+const PRONUNCIATION_URL =
+  "https://audio.raunaqgupta.com/Pronunciation%3A%20Raunaq.m4a";
 
 const description =
   "Personal website of Raunaq Gupta - Design technologist with 10+ years of experience shipping enterprise web applications and developer tools.";
@@ -9,61 +19,245 @@ const description =
 
 <BaseLayout title="Home" description={description} canonicalUrl={SITE_URL}>
   <body>
-    <Logo mode="3d" size="large" />
+    <GridBackground
+      cellSize={10.5}
+      density={0.12}
+      rate={12}
+      hold={[400, 1200]}
+      curve={CURVE}
+    />
+    <main>
+      <BowlCard curve={CURVE} class="card intro">
+        <div class="intro-inner">
+          <div class="row">
+            <LogoRing />
 
-    <div class="content">
-      <h1>Hi, I'm Raunaq</h1>
-      <p>
-        If you are interested in hiring me, visit my <a href={ROUTES.PORTFOLIO}
-          >portfolio</a
-        >. Check out my <a href={ROUTES.BLOG}>blog</a>, and <a
-          href="https://raunaqgupta.substack.com/notes">Substack notes</a
-        > where I write about experiments in technology & design, recipes, and literature.
-        I'm machine readable at <a href="/raunaq-gupta.json"
-          >raunaq-gupta.json</a
-        >.
-      </p>
-    </div>
+            <div class="content">
+              <div class="name">
+                <button
+                  class="pronounce"
+                  type="button"
+                  aria-label="Play pronunciation of Raunaq"
+                >
+                  <SpeakerLoudIcon aria-hidden="true" />
+                </button>
+                <h1>
+                  <span class="visually-hidden">Raunaq, pronounced </span>
+                  <span lang="en-fonipa">/ˈrɔː.nʌk/</span>
+                </h1>
+                <audio preload="auto" src={PRONUNCIATION_URL}></audio>
+              </div>
+              <p>
+                I'm a product, and design specialist with over 10 years of experience shipping enterprise web
+                applications across startups and large organizations.
+              </p>
+              <p>Reach out at <a href="mailto:mail@raunaqgupta.com">mail@raunaqgupta.com</a> to discuss opportunities.</p>
+            </div>
+          </div>
+        </div>
+      </BowlCard>
+
+      <Showcase collections={["o11y", "planetscale"]} curve={CURVE} />
+    </main>
   </body>
 </BaseLayout>
 
+<script>
+  // On desktop the logo stretches to the content height, so both sit as one
+  // row. Flexbox can't derive the logo's width from an auto-sized cross axis
+  // through aspect-ratio alone, so track the content height and mirror it.
+  {
+    const row = document.querySelector<HTMLElement>(".row");
+    const content = row?.querySelector<HTMLElement>(".content");
+    const logo = row?.querySelector<HTMLElement>(".logo-ring");
+    if (row && content && logo) {
+      const desktop = window.matchMedia("(min-width: 701px)");
+      const apply = () => {
+        if (desktop.matches) {
+          const h = content.offsetHeight;
+          logo.style.width = `${h}px`;
+          logo.style.height = `${h}px`;
+        } else {
+          logo.style.width = "";
+          logo.style.height = "";
+        }
+      };
+      new ResizeObserver(apply).observe(content);
+      desktop.addEventListener("change", apply);
+      apply();
+    }
+  }
+
+  // The audio button plays the recorded pronunciation, from the start each
+  // time it's pressed. The clip is small, so it's preloaded with the page.
+  document.querySelectorAll<HTMLElement>(".name").forEach((name) => {
+    const button = name.querySelector<HTMLButtonElement>(".pronounce")!;
+    const audio = name.querySelector("audio")!;
+    button.addEventListener("click", () => {
+      // Rewind only once the clip has loaded: some browsers throw when
+      // seeking before that, which would stop play() from running.
+      try {
+        if (audio.readyState > 0) audio.currentTime = 0;
+      } catch {}
+      // play() runs inside the click, so autoplay rules allow it.
+      const playing = audio.play();
+      playing?.catch((error) => {
+        button.classList.remove("is-playing");
+        console.warn("Pronunciation audio didn't play:", error);
+      });
+    });
+    audio.addEventListener("play", () => button.classList.add("is-playing"));
+    for (const end of ["pause", "ended", "error"])
+      audio.addEventListener(end, () => button.classList.remove("is-playing"));
+  });
+</script>
+
 <style>
   body {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    margin: 0;
     background-color: var(--color-bg);
     color: var(--color-body-primary);
     font-family: sans-serif;
     font-size: 1.12em;
     line-height: 28px;
-    max-width: 80ch;
+  }
+
+  /* Above the grid background. Clipped, because the bent cards reach past
+     the viewport's sides and would otherwise make the page scroll sideways.
+     Clip, unlike hidden, doesn't make main a scroll container. */
+  main {
+    position: relative;
+    z-index: 1;
+    overflow: clip;
+  }
+
+  /* The intro fills the viewport; its content sits in the middle. */
+  main > :global(.intro) {
     min-height: 100vh;
     min-height: 100dvh;
-    gap: 64px;
+  }
+
+  .intro-inner {
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 80ch;
     margin: auto;
   }
 
-  .logo {
-    width: 512px;
+  /* The logo stretches to match the content height, so both sit as one row. */
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 64px;
   }
 
-  .logo img {
-    width: 100%;
-    height: 100%;
+  .row :global(.logo-ring) {
+    align-self: stretch;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: 1;
+  }
+
+  .content {
+    flex: 0 1 600px;
+  }
+
+  .content p {
+    margin: 19px 0 0;
+    font-size: var(--typography-body);
+  }
+
+  /* Pronunciation: an audio button beside the name in IPA. */
+  .name {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .pronounce {
+    all: unset;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-heading);
+    color: var(--color-bg);
+    cursor: pointer;
+    transition:
+      transform 150ms ease-out,
+      background-color 150ms;
+  }
+
+  .pronounce :global(svg) {
+    width: 24px;
+    height: 24px;
+  }
+
+  .pronounce:hover {
+    transform: scale(1.06);
+  }
+
+  .pronounce:active {
+    transform: scale(0.96);
+  }
+
+  .pronounce:focus-visible {
+    outline: 2px solid var(--color-highlight);
+    outline-offset: 3px;
+  }
+
+  /* While the recording plays. */
+  .pronounce.is-playing {
+    background-color: var(--color-highlight);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   @media only screen and (max-width: 700px) {
-    body {
+    .intro-inner {
       padding: 2em;
+      align-items: flex-start;
+    }
+
+    .row {
       flex-direction: column;
       align-items: flex-start;
       gap: 32px;
     }
 
-    .logo {
-      max-width: 128px;
+    .row :global(.logo-ring) {
+      align-self: auto;
+      max-width: var(--ring-size);
+      max-height: var(--ring-size);
+    }
+
+    .content {
+      flex: none;
+    }
+
+    h1 {
+      font-size: 2.56rem;
+    }
+
+    .name {
+      gap: var(--space-2);
     }
   }
 </style>

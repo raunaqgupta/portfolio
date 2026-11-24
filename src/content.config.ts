@@ -7,7 +7,7 @@ const articles = defineCollection({
     title: z.string(),
     date: z.date(),
     category: z
-      .enum(["recipe", "poem", "post", "audio", "portfolio", "collection"])
+      .enum(["recipe", "poem", "post", "micro", "audio", "portfolio", "collection"])
       .optional(),
     internal: z.boolean().optional(),
     // Case study specific fields

@@ -37,5 +37,13 @@ export default defineConfig({
       name: "Cal Sans",
       cssVariable: "--font-cal-sans",
     },
+    {
+      // Card titles and wordmarks on the home page.
+      provider: fontProviders.google(),
+      name: "Inter",
+      cssVariable: "--font-inter",
+      weights: [900],
+      styles: ["normal"],
+    },
   ],
 });

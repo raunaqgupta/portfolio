@@ -1,0 +1,175 @@
+---
+import { measureRing } from "./zdog/ring";
+
+// The logo and the ring of text round it, drawn as one Zdog scene: the name
+// is set in a small stroke font (zdog/glyphs.ts) so it can turn in 3D with
+// the logo. The ring's size follows from its text length, so the name goes
+// round twice to keep the logo a usable size.
+const NAME = ["Raunaq", "Gupta"];
+
+// --space-1/--space-2 in baseLayout.
+const RING = {
+  labels: [...NAME, ...NAME],
+  capHeight: 11.5,
+  weight: 1.6,
+  dot: 4,
+  gap: 8,
+  logoGap: 16,
+};
+
+const { size } = measureRing(RING);
+---
+
+<div class="logo-ring" style={`--ring-size: ${size}px;`}>
+  <canvas
+    width={size}
+    height={size}
+    role="img"
+    aria-label="Raunaq Gupta"
+    data-ring={JSON.stringify(RING)}></canvas>
+</div>
+
+<script>
+  import Zdog from "zdog";
+  import { addLogo, themeColors, onSchemeChange } from "./zdog/logo";
+  import { addRing, measureRing, type RingOptions } from "./zdog/ring";
+
+  // One turn of the ring every 20s, as the CSS spin it replaces.
+  const SPIN = Zdog.TAU / 20000;
+  // How long the model takes to settle back after a drag, in ms.
+  const SETTLE = 900;
+
+  function mount(canvas: HTMLCanvasElement) {
+    const options: RingOptions = JSON.parse(canvas.dataset.ring!);
+    const layout = measureRing(options);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    let dragging = false;
+    let hovering = false;
+    let settleFrom: Zdog.Vector | null = null;
+    let settleStart = 0;
+
+    // Dragging turns the ring; the sphere's surface follows it below.
+    const illo = new Zdog.Illustration({ element: canvas });
+    const model = new Zdog.Anchor({ addTo: illo });
+    // setDragRotate binds the drag listeners; it's missing from the types.
+    (illo as unknown as { setDragRotate(item: Zdog.Anchor): void }).setDragRotate(model);
+    illo.onDragStart = () => {
+      dragging = true;
+      settleFrom = null;
+      start();
+    };
+    illo.onDragEnd = () => {
+      dragging = false;
+      settleFrom = model.rotate.copy();
+      settleStart = performance.now();
+    };
+
+    const logo = addLogo(illo, layout.logo / 2);
+    const ring = addRing(model, options, layout);
+
+    const paint = () => {
+      const theme = themeColors(canvas);
+      const style = getComputedStyle(canvas);
+      logo.setColors(theme);
+      ring.setColors({
+        text: style.getPropertyValue("--color-body-secondary").trim(),
+        dot: style.getPropertyValue("--color-body-tertiary").trim(),
+      });
+    };
+    paint();
+
+    let frame = 0;
+    let last = 0;
+    let visible = true;
+    // Time the ring has spent moving; it stands still while paused, so the
+    // spin picks up where it stopped.
+    let clock = 0;
+
+    const animating = () =>
+      visible && (dragging || settleFrom || !reduceMotion.matches);
+
+    function tick(now: number) {
+      const dt = last ? Math.min(now - last, 100) : 0;
+      last = now;
+
+      if (!reduceMotion.matches && !hovering && !dragging) {
+        clock += dt;
+        ring.anchor.rotate.z = SPIN * clock;
+      }
+
+      // Ease back to facing front after a drag, so the logo reads again.
+      if (settleFrom) {
+        const t = Math.min((now - settleStart) / SETTLE, 1);
+        const k = 1 - Zdog.easeInOut(t, 3);
+        model.rotate.set({
+          x: settleFrom.x * k,
+          y: settleFrom.y * k,
+          z: settleFrom.z * k,
+        });
+        if (t === 1) settleFrom = null;
+      }
+
+      // The surface turns with the ring, plus a slow sway of its own.
+      const sway = reduceMotion.matches ? 0 : now / 1000;
+      logo.surface.rotate.set({
+        x: model.rotate.x + Math.sin(sway * 0.7) * 0.12,
+        y: model.rotate.y + Math.sin(sway * 0.5) * 0.3,
+        z: model.rotate.z,
+      });
+
+      illo.updateRenderGraph();
+      frame = animating() ? requestAnimationFrame(tick) : 0;
+      if (!frame) last = 0;
+    }
+
+    function start() {
+      if (!frame) frame = requestAnimationFrame(tick);
+    }
+
+    canvas.addEventListener("pointerenter", () => (hovering = true));
+    canvas.addEventListener("pointerleave", () => (hovering = false));
+    reduceMotion.addEventListener("change", start);
+    onSchemeChange(() => {
+      paint();
+      start();
+    });
+
+    // Stop drawing while the ring is off screen.
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) start();
+    }).observe(canvas);
+
+    // Draw once now, whatever the motion setting.
+    tick(performance.now());
+  }
+
+  document
+    .querySelectorAll<HTMLCanvasElement>(".logo-ring canvas")
+    .forEach(mount);
+</script>
+
+<style>
+  .logo-ring {
+    flex-shrink: 0;
+    aspect-ratio: 1;
+    max-width: var(--ring-size);
+    max-height: var(--ring-size);
+  }
+
+  canvas {
+    display: block;
+    /* Override the inline width/height Zdog writes, so the canvas stretches
+       to its container (e.g. when the ring is sized to match adjacent
+       content rather than to the ring's natural measure). */
+    width: 100% !important;
+    height: 100% !important;
+    cursor: grab;
+    touch-action: pan-y;
+  }
+
+  canvas:active {
+    cursor: grabbing;
+  }
+</style>

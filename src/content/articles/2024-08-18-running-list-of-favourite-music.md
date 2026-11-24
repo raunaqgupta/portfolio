@@ -1,7 +1,7 @@
 ---
 title: Running list of favourite music
 date: 2024-08-18
-category: post
+category: micro
 ---
 
 ## Albums

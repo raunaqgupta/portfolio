@@ -50,6 +50,31 @@ const description =
 </BaseLayout>
 
 <script>
+  // On desktop the logo stretches to the content height, so both sit as one
+  // row. Flexbox can't derive the logo's width from an auto-sized cross axis
+  // through aspect-ratio alone, so track the content height and mirror it.
+  {
+    const row = document.querySelector<HTMLElement>(".row");
+    const content = row?.querySelector<HTMLElement>(".content");
+    const logo = row?.querySelector<HTMLElement>(".logo-ring");
+    if (row && content && logo) {
+      const desktop = window.matchMedia("(min-width: 701px)");
+      const apply = () => {
+        if (desktop.matches) {
+          const h = content.offsetHeight;
+          logo.style.width = `${h}px`;
+          logo.style.height = `${h}px`;
+        } else {
+          logo.style.width = "";
+          logo.style.height = "";
+        }
+      };
+      new ResizeObserver(apply).observe(content);
+      desktop.addEventListener("change", apply);
+      apply();
+    }
+  }
+
   // The audio button plays the recorded pronunciation, from the start each
   // time it's pressed. The clip is small, so it's preloaded with the page.
   document.querySelectorAll<HTMLElement>(".name").forEach((name) => {
@@ -108,10 +133,10 @@ const description =
   }
 
   .row :global(.logo-ring) {
-    width: auto;
-    height: auto;
-    aspect-ratio: 1;
     align-self: stretch;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: 1;
   }
 
   .content {
@@ -193,10 +218,9 @@ const description =
     }
 
     .row :global(.logo-ring) {
-      width: var(--ring-size);
-      height: var(--ring-size);
-      aspect-ratio: auto;
       align-self: auto;
+      max-width: var(--ring-size);
+      max-height: var(--ring-size);
     }
 
     .content {

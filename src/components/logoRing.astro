@@ -153,14 +153,18 @@ const { size } = measureRing(RING);
 <style>
   .logo-ring {
     flex-shrink: 0;
-    width: var(--ring-size);
-    height: var(--ring-size);
+    aspect-ratio: 1;
+    max-width: var(--ring-size);
+    max-height: var(--ring-size);
   }
 
   canvas {
     display: block;
-    width: 100%;
-    height: 100%;
+    /* Override the inline width/height Zdog writes, so the canvas stretches
+       to its container (e.g. when the ring is sized to match adjacent
+       content rather than to the ring's natural measure). */
+    width: 100% !important;
+    height: 100% !important;
     cursor: grab;
     touch-action: pan-y;
   }

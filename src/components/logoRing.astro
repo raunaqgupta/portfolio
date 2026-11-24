@@ -38,10 +38,6 @@ const { size } = measureRing(RING);
   const SPIN = Zdog.TAU / 20000;
   // How long the model takes to settle back after a drag, in ms.
   const SETTLE = 900;
-  // The ring swivels by up to this much (radians) about each axis. The two
-  // axes run at different periods (ms) so the tilt never quite repeats.
-  const SWIVEL = { x: 0.45, y: 0.6 };
-  const SWIVEL_PERIOD = { x: 7000, y: 11000 };
 
   function mount(canvas: HTMLCanvasElement) {
     const options: RingOptions = JSON.parse(canvas.dataset.ring!);
@@ -70,9 +66,7 @@ const { size } = measureRing(RING);
     };
 
     const logo = addLogo(illo, layout.logo / 2);
-    // The swivel sits inside the drag, so a drag tilts the swivelling ring.
-    const swivel = new Zdog.Anchor({ addTo: model });
-    const ring = addRing(swivel, options, layout);
+    const ring = addRing(model, options, layout);
 
     const paint = () => {
       const theme = themeColors(canvas);
@@ -89,7 +83,7 @@ const { size } = measureRing(RING);
     let last = 0;
     let visible = true;
     // Time the ring has spent moving; it stands still while paused, so the
-    // spin and swivel pick up where they stopped.
+    // spin picks up where it stopped.
     let clock = 0;
 
     const animating = () =>
@@ -102,10 +96,6 @@ const { size } = measureRing(RING);
       if (!reduceMotion.matches && !hovering && !dragging) {
         clock += dt;
         ring.anchor.rotate.z = SPIN * clock;
-        swivel.rotate.set({
-          x: Math.sin((clock / SWIVEL_PERIOD.x) * Zdog.TAU) * SWIVEL.x,
-          y: Math.sin((clock / SWIVEL_PERIOD.y) * Zdog.TAU) * SWIVEL.y,
-        });
       }
 
       // Ease back to facing front after a drag, so the logo reads again.
@@ -163,14 +153,18 @@ const { size } = measureRing(RING);
 <style>
   .logo-ring {
     flex-shrink: 0;
-    width: var(--ring-size);
-    height: var(--ring-size);
+    aspect-ratio: 1;
+    max-width: var(--ring-size);
+    max-height: var(--ring-size);
   }
 
   canvas {
     display: block;
-    width: 100%;
-    height: 100%;
+    /* Override the inline width/height Zdog writes, so the canvas stretches
+       to its container (e.g. when the ring is sized to match adjacent
+       content rather than to the ring's natural measure). */
+    width: 100% !important;
+    height: 100% !important;
     cursor: grab;
     touch-action: pan-y;
   }

@@ -1,13 +1,14 @@
 ---
 // The resume, on the home page after the showcase. The section pins a
-// backdrop to the viewport and fills it, edge to edge, with rows of outlined
-// "RESUME" strings in a range of sizes; every row drifts right to left as the
-// page scrolls, the larger rows faster. The resume sheet then
-// scrolls up from the bottom over the strings, translucent at first and fully
-// opaque once its top reaches the middle of the viewport.
+// backdrop to the viewport, empty at first. Once it pins, rows of outlined
+// "RESUME" strings in a range of sizes all slide in together from the right
+// edge as the page scrolls, the larger rows faster, and keep drifting right
+// to left until they fill the viewport edge to edge. The resume sheet scrolls
+// up from the bottom over the strings at the same time, translucent at first
+// and fully opaque once its top reaches the middle of the viewport.
 //
-// With reduced motion the rows stay still; without JavaScript the sheet is
-// opaque from the start.
+// With reduced motion, or without JavaScript, the rows sit still and fill the
+// viewport from the start; without JavaScript the sheet is also opaque.
 import ResumeBody from "./resumeBody.astro";
 
 interface Props {
@@ -21,8 +22,9 @@ const { label = "Resume" } = Astro.props;
 // tall fill). Small in the middle and large at the edges, like the bowl of
 // the grid behind. Script scales them so the rows fill the viewport.
 const SIZES = [131, 96, 64, 42, 64, 96, 131];
-// Each row repeats the word often enough to cover the widest viewport.
-const REPEAT = 12;
+// Each row repeats the word often enough to cover the widest viewport plus
+// one more word, so wrapping never shows a gap.
+const REPEAT = 16;
 ---
 
 <section class="resume-fill" aria-label={label}>
@@ -72,8 +74,6 @@ const REPEAT = 12;
     const total = sizes.reduce((sum, size) => sum + size * LINE, 0);
     // Width of one word and its gap in each row, so the drift can wrap.
     let periods: number[] = [];
-    // Where each row starts, so neighbouring rows don't line up.
-    const offsets = rows.map((_, i) => (i * 0.37) % 1);
     let frame = 0;
     section.classList.add("is-enhanced");
 
@@ -98,13 +98,22 @@ const REPEAT = 12;
       const sheetTop = sheet.getBoundingClientRect().top;
       const animate = motion.matches;
 
+      // Every row starts just past the right edge, so nothing shows until the
+      // page scrolls. The smallest row crosses the viewport in about a
+      // viewport's height of scrolling, the largest in about half that.
+      const width = rowsBox.clientWidth;
       rows.forEach((row, i) => {
         const period = periods[i];
-        // Larger rows drift faster, right to left. Wrapping by one word keeps
-        // the row full, since the strip runs on past the right edge.
-        const speed = animate ? 0.25 + (sizes[i] / 131) * 0.35 : 0;
-        const travel = period ? (scrolled * speed + offsets[i] * period) % period : 0;
-        row.style.setProperty("--shift", `${-travel}px`);
+        if (!animate) {
+          row.style.setProperty("--shift", "0px");
+          return;
+        }
+        const speed = (width / vh) * (0.8 + (sizes[i] / 131) * 1.2);
+        let x = width - scrolled * speed;
+        // Once the strip's start passes the left edge, wrap by one word so
+        // the row stays full while it keeps drifting.
+        if (x < 0 && period) x = -(-x % period);
+        row.style.setProperty("--shift", `${x}px`);
       });
 
       // Translucent below the viewport, opaque at its middle.
@@ -186,11 +195,11 @@ const REPEAT = 12;
     paint-order: stroke;
   }
 
-  /* Scrolling before the sheet's top shows at the bottom: half a viewport
-     past the pin, so the rows drift on their own first. */
+  /* Puts the sheet's top at the bottom of the viewport just as the backdrop
+     pins, so the sheet rises while the rows slide in. */
   .resume-fill-lead {
-    height: 150vh;
-    height: 150dvh;
+    height: 100vh;
+    height: 100dvh;
   }
 
   .resume-sheet {

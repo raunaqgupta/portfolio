@@ -16,9 +16,10 @@ import DownloadIcon from "@icons/download.svg";
 interface Props {
   /** Accessible name for the section. */
   label?: string;
+  id?: string;
 }
 
-const { label = "Resume" } = Astro.props;
+const { label = "Resume", id } = Astro.props;
 
 // Font sizes of the rows, top to bottom, from the design (in px at its 704px
 // tall fill). Small in the middle and large at the edges, like the bowl of
@@ -29,7 +30,7 @@ const SIZES = [131, 96, 64, 42, 64, 96, 131];
 const REPEAT = 16;
 ---
 
-<section class="resume-fill" aria-label={label}>
+<section class="resume-fill" aria-label={label} id={id}>
   <div class="resume-fill-backdrop" aria-hidden="true">
     <div class="resume-fill-rows">
       {
@@ -48,7 +49,7 @@ const REPEAT = 16;
 
   <div class="resume-fill-lead"></div>
 
-  <article class="resume-sheet">
+  <article class="resume-sheet" data-page-target>
     <header class="resume-sheet-header">
       <h2 class="resume-sheet-title">Résumé</h2>
       <a class="resume-sheet-download" href="/resume.raunaqgupta.pdf" download>
@@ -169,6 +170,10 @@ const REPEAT = 16;
     position: relative;
     /* Room below the sheet, matching its stop from the top. */
     padding-bottom: 64px;
+    /* The pinned backdrop overhangs the section's end by its negative margin;
+       clip it there so it doesn't show behind the blog that follows. Clip,
+       unlike hidden, isn't a scroll container, so the pins still work. */
+    overflow: clip;
   }
 
   /* Pinned behind the sheet for the whole section. The negative margin takes
@@ -232,6 +237,8 @@ const REPEAT = 16;
     /* How far from the viewport's top the sheet's top stops while the
        resume scrolls. */
     --sheet-stop: 64px;
+    /* The page select jumps to the sheet at its stop. */
+    scroll-margin-top: var(--sheet-stop);
     margin: 0 auto;
     padding: var(--sheet-pad);
     border: 1px solid var(--color-heading);

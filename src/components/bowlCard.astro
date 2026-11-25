@@ -9,12 +9,13 @@ interface Props {
   /** The grid background's curve; 0 keeps the card flat. */
   curve?: number;
   class?: string;
+  id?: string;
 }
 
-const { curve = 0.5, class: className } = Astro.props;
+const { curve = 0.5, class: className, id } = Astro.props;
 ---
 
-<section class:list={["bowl-card", className]} data-curve={curve}>
+<section class:list={["bowl-card", className]} data-curve={curve} id={id}>
   <div class="bowl-card-surface">
     <slot />
   </div>

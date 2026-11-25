@@ -4,12 +4,22 @@ import GridBackground from "@components/gridBackground.astro";
 import BowlCard from "@components/bowlCard.astro";
 import Showcase from "@components/showcase.astro";
 import ResumeFill from "@components/resumeFill.astro";
+import BlogTimeline from "@components/blogTimeline.astro";
+import PageSelect from "@components/pageSelect.astro";
 import SpeakerLoudIcon from "@icons/speaker-loud.svg";
 import BaseLayout from "../layouts/baseLayout.astro";
 import { SITE_URL } from "../constants";
 
 // The grid's warp; the cards bend with it as they scroll.
 const CURVE = 0.5;
+
+// The sections of the page, in order, for the page select.
+const PAGES = [
+  { id: "home", label: "Home" },
+  { id: "portfolio", label: "Portfolio" },
+  { id: "resume", label: "Resume" },
+  { id: "blog", label: "Blog" },
+];
 
 const PRONUNCIATION_URL =
   "https://audio.raunaqgupta.com/Pronunciation%3A%20Raunaq.m4a";
@@ -27,8 +37,9 @@ const description =
       hold={[400, 1200]}
       curve={CURVE}
     />
+    <PageSelect pages={PAGES} />
     <main>
-      <BowlCard curve={CURVE} class="card intro">
+      <BowlCard curve={CURVE} class="card intro" id="home">
         <div class="intro-inner">
           <div class="row">
             <LogoRing />
@@ -58,9 +69,11 @@ const description =
         </div>
       </BowlCard>
 
-      <Showcase collections={["o11y", "planetscale"]} curve={CURVE} />
+      <Showcase collections={["o11y", "planetscale"]} curve={CURVE} id="portfolio" />
 
-      <ResumeFill />
+      <ResumeFill id="resume" />
+
+      <BlogTimeline id="blog" />
     </main>
   </body>
 </BaseLayout>

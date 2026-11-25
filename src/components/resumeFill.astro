@@ -1,8 +1,9 @@
 ---
 // The resume, on the home page after the showcase. The section pins a
 // backdrop to the viewport, empty at first. Once it pins, rows of outlined
-// "RESUME" strings in a range of sizes all slide in together from the right
-// edge as the page scrolls, the larger rows faster, and keep drifting right
+// "resume" strings in a range of sizes slide in from the right edge as the
+// page scrolls, each row a little after the one above it and the larger rows
+// faster, and keep drifting right
 // to left until they fill the viewport edge to edge. The resume sheet scrolls
 // up from the bottom over the strings at the same time, translucent at first
 // and fully opaque once its top reaches the middle of the viewport.
@@ -35,7 +36,7 @@ const REPEAT = 16;
           <div class="resume-fill-row" style={`--size: ${size};`}>
             <span class="resume-fill-strip">
               {Array.from({ length: REPEAT }, () => (
-                <span class="resume-fill-word">Resume</span>
+                <span class="resume-fill-word">resume</span>
               ))}
             </span>
           </div>
@@ -58,6 +59,9 @@ const REPEAT = 16;
 <script>
   // Sum of the rows' line heights in the design, in em of each row's size.
   const LINE = 1.2;
+  // How much later each row sets off than the one above it, in viewport
+  // heights of scrolling.
+  const ROW_DELAY = 0.05;
   // The sheet's opacity before it starts to rise, from the design.
   const START_OPACITY = 0.16;
 
@@ -99,7 +103,8 @@ const REPEAT = 16;
       const animate = motion.matches;
 
       // Every row starts just past the right edge, so nothing shows until the
-      // page scrolls. The smallest row crosses the viewport in about a
+      // page scrolls. The top row sets off first and each row below follows a
+      // little later. The smallest row crosses the viewport in about a
       // viewport's height of scrolling, the largest in about half that.
       const width = rowsBox.clientWidth;
       rows.forEach((row, i) => {
@@ -109,7 +114,8 @@ const REPEAT = 16;
           return;
         }
         const speed = (width / vh) * (0.8 + (sizes[i] / 131) * 1.2);
-        let x = width - scrolled * speed;
+        const moved = Math.max(0, scrolled - i * ROW_DELAY * vh);
+        let x = width - moved * speed;
         // Once the strip's start passes the left edge, wrap by one word so
         // the row stays full while it keeps drifting.
         if (x < 0 && period) x = -(-x % period);
@@ -188,8 +194,8 @@ const REPEAT = 16;
     display: inline-block;
     margin-right: 0.3em;
     font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-style: italic;
     font-weight: 900;
-    text-transform: uppercase;
     color: transparent;
     -webkit-text-stroke: 1px color-mix(in srgb, var(--color-heading) 23%, transparent);
     paint-order: stroke;

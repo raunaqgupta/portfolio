@@ -38,12 +38,13 @@ export default defineConfig({
       cssVariable: "--font-cal-sans",
     },
     {
-      // Card titles and wordmarks on the home page.
+      // Card titles and wordmarks on the home page; italic for the resume
+      // section's repeating rows.
       provider: fontProviders.google(),
       name: "Inter",
       cssVariable: "--font-inter",
       weights: [900],
-      styles: ["normal"],
+      styles: ["normal", "italic"],
     },
   ],
 });

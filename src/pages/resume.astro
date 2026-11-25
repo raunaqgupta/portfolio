@@ -1,44 +1,9 @@
 ---
 import WideLayout from "@layouts/WideLayout.astro";
-import RangeItem from "../components/rangeItem.astro";
+import ResumeBody from "@components/resumeBody.astro";
 import DownloadIcon from "@icons/download.svg";
 import LinkedInIcon from "@icons/linkedin.svg";
-import Olmdx from "@components/Ol.mdx.astro";
-
-import { getCollection, getEntries, render } from "astro:content";
 import { ROUTES, SITE_URL } from "../constants";
-
-let rawJobs = [];
-let education = [];
-
-try {
-  rawJobs = await getCollection("jobs");
-  education = await getCollection("education");
-} catch (error) {
-  console.error("Error fetching resume data:", error);
-}
-
-const jobs = await Promise.all(
-  rawJobs.map(async (job) => {
-    try {
-      const rendered = await render(job);
-      const caseStudies = job.data.caseStudies
-        ? await getEntries(job.data.caseStudies)
-        : [];
-      return { ...job, Content: rendered.Content, caseStudies };
-    } catch (error) {
-      console.error(`Error rendering job ${job.id}:`, error);
-      return { ...job, Content: null, caseStudies: [] };
-    }
-  }),
-);
-const sortedJobs = [...jobs].sort(
-  (a, b) => b.data.from.getTime() - a.data.from.getTime(),
-);
-
-const sortedEducation = [...education].sort(
-  (a, b) => b.data.from.getTime() - a.data.from.getTime(),
-);
 
 const actions = [
   {
@@ -66,63 +31,10 @@ const actions = [
   canonicalUrl={`${SITE_URL}${ROUTES.RESUME}`}
   actions={actions}
 >
-  <section id="summary">
-    <p>
-      I'm a design technologist with 10+ years of experience shipping enterprise
-      web applications and developer tools across startups and large
-      organizations.
-    </p>
-  </section>
-  <section>
-    <div class="heading">
-      <h2>Experience</h2>
-    </div>
-    {
-      sortedJobs.map((job) => (
-        <RangeItem
-          title={job.data.role}
-          org={job.data.organization}
-          from={job.data.from}
-          to={job.data.to}
-        >
-          {job.Content && <job.Content components={{ ol: Olmdx }} />}
-        </RangeItem>
-      ))
-    }
-  </section>
-  <section>
-    <div class="heading">
-      <h2>Education</h2>
-    </div>
-    {
-      sortedEducation.map((item) => (
-        <RangeItem
-          title={item.data.role}
-          org={item.data.organization}
-          from={item.data.from}
-          to={item.data.to}
-        />
-      ))
-    }
-  </section>
+  <ResumeBody />
 </WideLayout>
 
 <style>
-  .heading {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    column-gap: var(--space-2);
-  }
-
-  .heading h2 {
-    grid-column: 1;
-    color: var(--color-heading);
-    font-size: var(--typography-h4);
-    font-weight: 200;
-    font-style: italic;
-    margin-top: 2em;
-  }
-
   .projects {
     grid-column: 1;
     grid-row: 1;

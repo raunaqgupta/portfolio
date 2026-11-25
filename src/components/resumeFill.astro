@@ -1,0 +1,319 @@
+---
+// The resume, on the home page after the showcase. The section pins a
+// backdrop to the viewport, empty at first. Once the showcase is half way up
+// the viewport, rows of outlined "résumé" strings in a range of sizes slide
+// in from the right edge as the page scrolls, each row a little after the one
+// above it and the larger rows faster, and keep drifting right to left until
+// they fill the viewport edge to edge. The resume sheet scrolls up from the
+// bottom over the strings once the backdrop pins, translucent at first and
+// fully opaque once its top reaches the middle of the viewport.
+//
+// With reduced motion, or without JavaScript, the rows sit still and fill the
+// viewport from the start; without JavaScript the sheet is also opaque.
+import ResumeBody from "./resumeBody.astro";
+import DownloadIcon from "@icons/download.svg";
+
+interface Props {
+  /** Accessible name for the section. */
+  label?: string;
+}
+
+const { label = "Resume" } = Astro.props;
+
+// Font sizes of the rows, top to bottom, from the design (in px at its 704px
+// tall fill). Small in the middle and large at the edges, like the bowl of
+// the grid behind. Script scales them so the rows fill the viewport.
+const SIZES = [131, 96, 64, 42, 64, 96, 131];
+// Each row repeats the word often enough to cover the widest viewport plus
+// one more word, so wrapping never shows a gap.
+const REPEAT = 16;
+---
+
+<section class="resume-fill" aria-label={label}>
+  <div class="resume-fill-backdrop" aria-hidden="true">
+    <div class="resume-fill-rows">
+      {
+        SIZES.map((size) => (
+          <div class="resume-fill-row" style={`--size: ${size};`}>
+            <span class="resume-fill-strip">
+              {Array.from({ length: REPEAT }, () => (
+                <span class="resume-fill-word">résumé</span>
+              ))}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="resume-fill-lead"></div>
+
+  <article class="resume-sheet">
+    <header class="resume-sheet-header">
+      <h2 class="resume-sheet-title">Résumé</h2>
+      <a class="resume-sheet-download" href="/resume.raunaqgupta.pdf" download>
+        <DownloadIcon aria-hidden="true" />
+        Download PDF
+      </a>
+    </header>
+    <ResumeBody level={3} summary={false} />
+  </article>
+</section>
+
+<script>
+  // Sum of the rows' line heights in the design, in em of each row's size.
+  const LINE = 1.2;
+  // Where the section's top is when the rows set off, as a share of the
+  // viewport's height from its top: the showcase is half way up.
+  const ROWS_START = 0.5;
+  // How much later each row sets off than the one above it, in viewport
+  // heights of scrolling.
+  const ROW_DELAY = 0.05;
+  // The sheet's opacity before it starts to rise, from the design.
+  const START_OPACITY = 0.16;
+
+  const clamp = (v: number, min: number, max: number) =>
+    Math.min(max, Math.max(min, v));
+
+  const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+
+  function init(section: HTMLElement) {
+    const rowsBox = section.querySelector<HTMLElement>(".resume-fill-rows")!;
+    const rows = [...section.querySelectorAll<HTMLElement>(".resume-fill-row")];
+    const sheet = section.querySelector<HTMLElement>(".resume-sheet")!;
+    const sizes = rows.map((row) => Number(row.style.getPropertyValue("--size")));
+    const total = sizes.reduce((sum, size) => sum + size * LINE, 0);
+    // Width of one word and its gap in each row, so the drift can wrap.
+    let periods: number[] = [];
+    let frame = 0;
+    section.classList.add("is-enhanced");
+
+    // Scale the rows so together they fill the backdrop's height.
+    function size() {
+      const scale = rowsBox.clientHeight / total;
+      rows.forEach((row, i) => {
+        row.style.fontSize = `${sizes[i] * scale}px`;
+      });
+      periods = rows.map((row) => {
+        const words = row.querySelectorAll<HTMLElement>(".resume-fill-word");
+        return words.length > 1 ? words[1].offsetLeft - words[0].offsetLeft : 0;
+      });
+    }
+
+    function update() {
+      frame = 0;
+      const vh = window.innerHeight;
+      const rect = section.getBoundingClientRect();
+      // How far the page has scrolled since the section's top (the showcase's
+      // bottom) passed the middle of the viewport.
+      const scrolled = Math.max(0, vh * ROWS_START - rect.top);
+      const sheetTop = sheet.getBoundingClientRect().top;
+      const animate = motion.matches;
+
+      // Every row starts just past the right edge, so nothing shows until the
+      // page scrolls. The top row sets off first and each row below follows a
+      // little later. The smallest row crosses the viewport in about a
+      // viewport's height of scrolling, the largest in about half that.
+      const width = rowsBox.clientWidth;
+      rows.forEach((row, i) => {
+        const period = periods[i];
+        if (!animate) {
+          row.style.setProperty("--shift", "0px");
+          return;
+        }
+        const speed = (width / vh) * (0.8 + (sizes[i] / 131) * 1.2);
+        const moved = Math.max(0, scrolled - i * ROW_DELAY * vh);
+        let x = width - moved * speed;
+        // Once the strip's start passes the left edge, wrap by one word so
+        // the row stays full while it keeps drifting.
+        if (x < 0 && period) x = -(-x % period);
+        row.style.setProperty("--shift", `${x}px`);
+      });
+
+      // Translucent below the viewport, opaque at its middle.
+      const t = clamp((vh - sheetTop) / (vh / 2), 0, 1);
+      sheet.style.opacity = String(START_OPACITY + (1 - START_OPACITY) * t);
+
+      // Once the sheet's top reaches its stop, hide what scrolls above it, so
+      // the sheet looks like it halts there with the resume scrolling inside.
+      const stop = parseFloat(getComputedStyle(sheet).getPropertyValue("--sheet-stop")) || 0;
+      const hidden = Math.max(0, stop - sheetTop);
+      sheet.style.clipPath = hidden ? `inset(${hidden}px 0 0 0)` : "";
+    }
+
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    motion.addEventListener("change", schedule);
+    new ResizeObserver(() => {
+      size();
+      schedule();
+    }).observe(rowsBox);
+    document.fonts?.ready.then(() => {
+      size();
+      schedule();
+    });
+    size();
+    update();
+  }
+
+  document.querySelectorAll<HTMLElement>(".resume-fill").forEach(init);
+</script>
+
+<style>
+  .resume-fill {
+    /* Space between the viewport's edges and the sheet. */
+    --sheet-margin: clamp(16px, 10vw, 128px);
+    position: relative;
+    /* Room below the sheet, matching its stop from the top. */
+    padding-bottom: 64px;
+  }
+
+  /* Pinned behind the sheet for the whole section. The negative margin takes
+     it out of the flow, so the sheet scrolls up over it. */
+  .resume-fill-backdrop {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    margin-bottom: -100vh;
+    margin-bottom: -100dvh;
+    pointer-events: none;
+  }
+
+  .resume-fill-rows {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+
+  .resume-fill-row {
+    flex: none;
+    /* Script sets the size; this fallback keeps the design's proportions. */
+    font-size: calc(var(--size) * 0.1vh);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .resume-fill-strip {
+    display: inline-block;
+    transform: translateX(var(--shift, 0px));
+    will-change: transform;
+  }
+
+  .resume-fill-word {
+    display: inline-block;
+    margin-right: 0.3em;
+    font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--color-heading) 23%, transparent);
+    paint-order: stroke;
+  }
+
+  /* Puts the sheet's top at the bottom of the viewport just as the backdrop
+     pins, so the sheet rises while the rows slide in. */
+  .resume-fill-lead {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .resume-sheet {
+    --sheet-bg: #fff;
+    position: relative;
+    box-sizing: border-box;
+    width: min(1040px, 100% - 2 * var(--sheet-margin));
+    --sheet-pad: clamp(24px, 5vw, 56px);
+    /* How far from the viewport's top the sheet's top stops while the
+       resume scrolls. */
+    --sheet-stop: 64px;
+    margin: 0 auto;
+    padding: var(--sheet-pad);
+    border: 1px solid var(--color-heading);
+    background-color: var(--sheet-bg);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .resume-sheet {
+      --sheet-bg: var(--color-bg);
+    }
+  }
+
+  /* A tab at each top corner, laid over the sheet's border, as in the
+     design. It stops at the sheet's stop while the resume scrolls under it,
+     and its top border stands in for the sheet's, which script clips away
+     with everything else above the stop. The negative margins pull it out over the sheet's padding and
+     border; the row itself is see-through between the two tabs. */
+  .resume-sheet-header {
+    position: sticky;
+    top: var(--sheet-stop);
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: calc(-1 * var(--sheet-pad) - 1px) calc(-1 * var(--sheet-pad) - 1px) 0;
+    border-top: 1px solid var(--color-heading);
+    font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+  }
+
+  /* The tabs sit over the header's top border rather than below it. */
+  .resume-sheet-title,
+  .resume-sheet-download {
+    box-sizing: border-box;
+    margin-top: -1px;
+    border: 1px solid var(--color-heading);
+  }
+
+  .resume-sheet-title {
+    margin-bottom: 0;
+    padding: 6px 8px;
+    background-color: var(--color-heading);
+    color: var(--sheet-bg);
+    font: inherit;
+    text-transform: uppercase;
+  }
+
+  .resume-sheet-download {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    background: var(--sheet-bg);
+    color: var(--color-body-primary);
+    transition: border-color 150ms, color 150ms;
+  }
+
+  .resume-sheet-download :global(svg) {
+    flex: none;
+    width: 15px;
+    height: 15px;
+    color: var(--color-heading);
+  }
+
+  .resume-sheet-download:hover,
+  .resume-sheet-download:focus-visible {
+    background: var(--sheet-bg);
+    border-color: var(--color-highlight);
+    color: var(--color-highlight);
+    outline: none;
+  }
+
+  .resume-sheet-download:hover :global(svg),
+  .resume-sheet-download:focus-visible :global(svg) {
+    color: var(--color-highlight);
+  }
+
+  @media only screen and (max-width: 700px) {
+    .resume-sheet {
+      width: calc(100% - 2 * var(--space-2));
+    }
+  }
+</style>

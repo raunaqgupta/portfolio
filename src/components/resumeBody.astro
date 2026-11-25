@@ -1,0 +1,110 @@
+---
+// The resume itself: a summary, then experience and education, newest first.
+// Shared by the resume page and the resume section on the home page.
+import RangeItem from "./rangeItem.astro";
+import Olmdx from "./Ol.mdx.astro";
+import { getCollection, getEntries, render } from "astro:content";
+
+interface Props {
+  /** Heading level for "Experience" and "Education". */
+  level?: 2 | 3;
+  /** Whether to open with the one-paragraph summary. */
+  summary?: boolean;
+}
+
+const { level = 2, summary = true } = Astro.props;
+const Heading = `h${level}` as "h2" | "h3";
+
+let rawJobs: Awaited<ReturnType<typeof getCollection<"jobs">>> = [];
+let education: Awaited<ReturnType<typeof getCollection<"education">>> = [];
+
+try {
+  rawJobs = await getCollection("jobs");
+  education = await getCollection("education");
+} catch (error) {
+  console.error("Error fetching resume data:", error);
+}
+
+const jobs = await Promise.all(
+  rawJobs.map(async (job) => {
+    try {
+      const rendered = await render(job);
+      const caseStudies = job.data.caseStudies
+        ? await getEntries(job.data.caseStudies)
+        : [];
+      return { ...job, Content: rendered.Content, caseStudies };
+    } catch (error) {
+      console.error(`Error rendering job ${job.id}:`, error);
+      return { ...job, Content: null, caseStudies: [] };
+    }
+  }),
+);
+const sortedJobs = [...jobs].sort(
+  (a, b) => b.data.from.getTime() - a.data.from.getTime(),
+);
+
+const sortedEducation = [...education].sort(
+  (a, b) => b.data.from.getTime() - a.data.from.getTime(),
+);
+---
+
+{
+  summary && (
+    <section id="summary">
+      <p>
+        I'm a design technologist with 10+ years of experience shipping
+        enterprise web applications and developer tools across startups and
+        large organizations.
+      </p>
+    </section>
+  )
+}
+<section>
+  <div class="heading">
+    <Heading>Experience</Heading>
+  </div>
+  {
+    sortedJobs.map((job) => (
+      <RangeItem
+        title={job.data.role}
+        org={job.data.organization}
+        from={job.data.from}
+        to={job.data.to}
+      >
+        {job.Content && <job.Content components={{ ol: Olmdx }} />}
+      </RangeItem>
+    ))
+  }
+</section>
+<section>
+  <div class="heading">
+    <Heading>Education</Heading>
+  </div>
+  {
+    sortedEducation.map((item) => (
+      <RangeItem
+        title={item.data.role}
+        org={item.data.organization}
+        from={item.data.from}
+        to={item.data.to}
+      />
+    ))
+  }
+</section>
+
+<style>
+  .heading {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    column-gap: var(--space-2);
+  }
+
+  .heading :is(h2, h3) {
+    grid-column: 1;
+    color: var(--color-heading);
+    font-size: var(--typography-h4);
+    font-weight: 200;
+    font-style: italic;
+    margin-top: 2em;
+  }
+</style>

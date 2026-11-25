@@ -1,7 +1,7 @@
 ---
 // The resume, on the home page after the showcase. The section pins a
 // backdrop to the viewport, empty at first. Once the showcase is half way up
-// the viewport, rows of outlined "resume" strings in a range of sizes slide
+// the viewport, rows of outlined "résumé" strings in a range of sizes slide
 // in from the right edge as the page scrolls, each row a little after the one
 // above it and the larger rows faster, and keep drifting right to left until
 // they fill the viewport edge to edge. The resume sheet scrolls up from the
@@ -37,7 +37,7 @@ const REPEAT = 16;
           <div class="resume-fill-row" style={`--size: ${size};`}>
             <span class="resume-fill-strip">
               {Array.from({ length: REPEAT }, () => (
-                <span class="resume-fill-word">resume</span>
+                <span class="resume-fill-word">résumé</span>
               ))}
             </span>
           </div>
@@ -50,7 +50,7 @@ const REPEAT = 16;
 
   <article class="resume-sheet">
     <header class="resume-sheet-header">
-      <h2 class="resume-sheet-title">Resume</h2>
+      <h2 class="resume-sheet-title">Résumé</h2>
       <a class="resume-sheet-download" href="/resume.raunaqgupta.pdf" download>
         <DownloadIcon aria-hidden="true" />
         Download PDF
@@ -133,6 +133,12 @@ const REPEAT = 16;
       // Translucent below the viewport, opaque at its middle.
       const t = clamp((vh - sheetTop) / (vh / 2), 0, 1);
       sheet.style.opacity = String(START_OPACITY + (1 - START_OPACITY) * t);
+
+      // Once the sheet's top reaches its stop, hide what scrolls above it, so
+      // the sheet looks like it halts there with the resume scrolling inside.
+      const stop = parseFloat(getComputedStyle(sheet).getPropertyValue("--sheet-stop")) || 0;
+      const hidden = Math.max(0, stop - sheetTop);
+      sheet.style.clipPath = hidden ? `inset(${hidden}px 0 0 0)` : "";
     }
 
     const schedule = () => {
@@ -222,6 +228,9 @@ const REPEAT = 16;
     box-sizing: border-box;
     width: min(1040px, 100% - 2 * var(--sheet-margin));
     --sheet-pad: clamp(24px, 5vw, 56px);
+    /* How far from the viewport's top the sheet's top stops while the
+       resume scrolls. */
+    --sheet-stop: 64px;
     margin: 0 auto;
     padding: var(--sheet-pad);
     border: 1px solid var(--color-heading);
@@ -235,31 +244,35 @@ const REPEAT = 16;
   }
 
   /* A tab at each top corner, laid over the sheet's border, as in the
-     design. It sticks to the top of the viewport while the sheet scrolls
-     under it. The negative margins pull it out over the sheet's padding and
+     design. It stops at the sheet's stop while the resume scrolls under it,
+     and its top border stands in for the sheet's, which script clips away
+     with everything else above the stop. The negative margins pull it out over the sheet's padding and
      border; the row itself is see-through between the two tabs. */
   .resume-sheet-header {
     position: sticky;
-    top: 0;
+    top: var(--sheet-stop);
     z-index: 1;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin: calc(-1 * var(--sheet-pad) - 1px) calc(-1 * var(--sheet-pad) - 1px) 0;
+    border-top: 1px solid var(--color-heading);
     font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 20px;
   }
 
+  /* The tabs sit over the header's top border rather than below it. */
   .resume-sheet-title,
   .resume-sheet-download {
     box-sizing: border-box;
+    margin-top: -1px;
     border: 1px solid var(--color-heading);
   }
 
   .resume-sheet-title {
-    margin: 0;
+    margin-bottom: 0;
     padding: 6px 8px;
     background-color: var(--color-heading);
     color: var(--sheet-bg);

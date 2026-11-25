@@ -11,6 +11,7 @@
 // With reduced motion, or without JavaScript, the rows sit still and fill the
 // viewport from the start; without JavaScript the sheet is also opaque.
 import ResumeBody from "./resumeBody.astro";
+import DownloadIcon from "@icons/download.svg";
 
 interface Props {
   /** Accessible name for the section. */
@@ -49,10 +50,13 @@ const REPEAT = 16;
 
   <article class="resume-sheet">
     <header class="resume-sheet-header">
-      <h2>Resume</h2>
-      <a href="/resume.raunaqgupta.pdf" download>Download PDF</a>
+      <h2 class="resume-sheet-title">Resume</h2>
+      <a class="resume-sheet-download" href="/resume.raunaqgupta.pdf" download>
+        <DownloadIcon aria-hidden="true" />
+        Download PDF
+      </a>
     </header>
-    <ResumeBody level={3} />
+    <ResumeBody level={3} summary={false} />
   </article>
 </section>
 
@@ -217,8 +221,9 @@ const REPEAT = 16;
     position: relative;
     box-sizing: border-box;
     width: min(1040px, 100% - 2 * var(--sheet-margin));
+    --sheet-pad: clamp(24px, 5vw, 56px);
     margin: 0 auto;
-    padding: clamp(24px, 5vw, 56px);
+    padding: var(--sheet-pad);
     border: 1px solid var(--color-heading);
     background-color: var(--sheet-bg);
   }
@@ -229,25 +234,67 @@ const REPEAT = 16;
     }
   }
 
+  /* A tab at each top corner, laid over the sheet's border, as in the
+     design. It sticks to the top of the viewport while the sheet scrolls
+     under it. The negative margins pull it out over the sheet's padding and
+     border; the row itself is see-through between the two tabs. */
   .resume-sheet-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--space-1) var(--space-3);
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: calc(-1 * var(--sheet-pad) - 1px) calc(-1 * var(--sheet-pad) - 1px) 0;
+    font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
   }
 
-  .resume-sheet-header h2 {
-    flex: 1 1 auto;
+  .resume-sheet-title,
+  .resume-sheet-download {
+    box-sizing: border-box;
+    border: 1px solid var(--color-heading);
+  }
+
+  .resume-sheet-title {
     margin: 0;
-    font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: var(--typography-h2);
-    font-weight: 900;
+    padding: 6px 8px;
+    background-color: var(--color-heading);
+    color: var(--sheet-bg);
+    font: inherit;
     text-transform: uppercase;
+  }
+
+  .resume-sheet-download {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    background: var(--sheet-bg);
+    color: var(--color-body-primary);
+    transition: border-color 150ms, color 150ms;
+  }
+
+  .resume-sheet-download :global(svg) {
+    flex: none;
+    width: 15px;
+    height: 15px;
     color: var(--color-heading);
   }
 
-  .resume-sheet-header a {
-    font-size: var(--typography-body-small);
+  .resume-sheet-download:hover,
+  .resume-sheet-download:focus-visible {
+    background: var(--sheet-bg);
+    border-color: var(--color-highlight);
+    color: var(--color-highlight);
+    outline: none;
+  }
+
+  .resume-sheet-download:hover :global(svg),
+  .resume-sheet-download:focus-visible :global(svg) {
+    color: var(--color-highlight);
   }
 
   @media only screen and (max-width: 700px) {

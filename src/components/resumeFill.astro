@@ -1,0 +1,256 @@
+---
+// The resume, on the home page after the showcase. The section pins a
+// backdrop to the viewport and fills it, row by row from the bottom, with
+// outlined "RESUME" strings in a range of sizes; every row drifts left to
+// right as the page scrolls, the larger rows faster. The resume sheet then
+// scrolls up from the bottom over the strings, translucent at first and fully
+// opaque once its top reaches the middle of the viewport.
+//
+// Without JavaScript, or with reduced motion, every row shows at once and
+// stays still; without JavaScript the sheet is opaque from the start.
+import ResumeBody from "./resumeBody.astro";
+import { ROUTES } from "../constants";
+
+interface Props {
+  /** Accessible name for the section. */
+  label?: string;
+}
+
+const { label = "Resume" } = Astro.props;
+
+// Font sizes of the rows, top to bottom, from the design (in px at its 704px
+// tall fill). Small in the middle and large at the edges, like the bowl of
+// the grid behind. Script scales them so the rows fill the padded viewport.
+const SIZES = [131, 96, 64, 42, 64, 96, 131];
+// Each row repeats the word often enough to cover the widest viewport.
+const REPEAT = 12;
+---
+
+<section class="resume-fill" aria-label={label}>
+  <div class="resume-fill-backdrop" aria-hidden="true">
+    <div class="resume-fill-rows">
+      {
+        SIZES.map((size) => (
+          <div class="resume-fill-row" style={`--size: ${size};`}>
+            <span class="resume-fill-strip">
+              {Array.from({ length: REPEAT }, () => (
+                <span class="resume-fill-word">Resume</span>
+              ))}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="resume-fill-lead"></div>
+
+  <article class="resume-sheet">
+    <header class="resume-sheet-header">
+      <h2>Resume</h2>
+      <a href={ROUTES.RESUME}>Open as a page</a>
+      <a href="/resume.raunaqgupta.pdf" download>Download PDF</a>
+    </header>
+    <ResumeBody level={3} />
+  </article>
+</section>
+
+<script>
+  // Sum of the rows' line heights in the design, in em of each row's size.
+  const LINE = 1.2;
+  // The sheet's opacity before it starts to rise, from the design.
+  const START_OPACITY = 0.16;
+
+  const clamp = (v: number, min: number, max: number) =>
+    Math.min(max, Math.max(min, v));
+
+  const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+
+  function init(section: HTMLElement) {
+    const rowsBox = section.querySelector<HTMLElement>(".resume-fill-rows")!;
+    const rows = [...section.querySelectorAll<HTMLElement>(".resume-fill-row")];
+    const sheet = section.querySelector<HTMLElement>(".resume-sheet")!;
+    const sizes = rows.map((row) => Number(row.style.getPropertyValue("--size")));
+    const total = sizes.reduce((sum, size) => sum + size * LINE, 0);
+    // Width of one word and its gap in each row, so the drift can wrap.
+    let periods: number[] = [];
+    // Where each row starts, so neighbouring rows don't line up.
+    const offsets = rows.map((_, i) => (i * 0.37) % 1);
+    let frame = 0;
+    section.classList.add("is-enhanced");
+
+    // Scale the rows so together they fill the padded backdrop's height.
+    function size() {
+      const scale = rowsBox.clientHeight / total;
+      rows.forEach((row, i) => {
+        row.style.fontSize = `${sizes[i] * scale}px`;
+      });
+      periods = rows.map((row) => {
+        const words = row.querySelectorAll<HTMLElement>(".resume-fill-word");
+        return words.length > 1 ? words[1].offsetLeft - words[0].offsetLeft : 0;
+      });
+    }
+
+    function update() {
+      frame = 0;
+      const vh = window.innerHeight;
+      const rect = section.getBoundingClientRect();
+      // How far the page has scrolled since the backdrop pinned.
+      const scrolled = Math.max(0, -rect.top);
+      const sheetTop = sheet.getBoundingClientRect().top;
+      const animate = motion.matches;
+
+      // The rows fill in from the bottom until the sheet's top reaches the
+      // middle of the viewport.
+      const fillEnd = sheet.offsetTop - vh / 2;
+      const fill = animate && fillEnd > 0 ? clamp(scrolled / fillEnd, 0, 1) : 1;
+      const n = rows.length;
+      rows.forEach((row, i) => {
+        // Rows are counted from the bottom; the first shows before any scroll.
+        const fromBottom = n - 1 - i;
+        const shown = clamp(fill * n - fromBottom + 1, 0, 1);
+        row.style.opacity = String(shown);
+        const period = periods[i];
+        if (!animate || !period) {
+          row.style.setProperty("--shift", `${-offsets[i] * period}px`);
+          return;
+        }
+        // Larger rows drift faster. Wrapping by one word keeps the row full.
+        const speed = 0.25 + (sizes[i] / 131) * 0.35;
+        const travel = (scrolled * speed + offsets[i] * period) % period;
+        row.style.setProperty("--shift", `${travel - period}px`);
+      });
+
+      // Translucent below the viewport, opaque at its middle.
+      const t = clamp((vh - sheetTop) / (vh / 2), 0, 1);
+      sheet.style.opacity = String(START_OPACITY + (1 - START_OPACITY) * t);
+    }
+
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    motion.addEventListener("change", schedule);
+    new ResizeObserver(() => {
+      size();
+      schedule();
+    }).observe(rowsBox);
+    document.fonts?.ready.then(() => {
+      size();
+      schedule();
+    });
+    size();
+    update();
+  }
+
+  document.querySelectorAll<HTMLElement>(".resume-fill").forEach(init);
+</script>
+
+<style>
+  .resume-fill {
+    /* Space between the viewport's edges and the strings, from the design. */
+    --fill-pad: clamp(16px, 10vw, 128px);
+    position: relative;
+    padding-bottom: 25vh;
+  }
+
+  /* Pinned behind the sheet for the whole section. The negative margin takes
+     it out of the flow, so the sheet scrolls up over it. */
+  .resume-fill-backdrop {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    margin-bottom: -100vh;
+    margin-bottom: -100dvh;
+    box-sizing: border-box;
+    padding: var(--fill-pad);
+    pointer-events: none;
+  }
+
+  .resume-fill-rows {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+
+  .resume-fill-row {
+    flex: none;
+    /* Script sets the size; this fallback keeps the design's proportions. */
+    font-size: calc(var(--size) * 0.1vh);
+    line-height: 1.2;
+    white-space: nowrap;
+    opacity: 1;
+  }
+
+  .resume-fill-strip {
+    display: inline-block;
+    transform: translateX(var(--shift, 0px));
+    will-change: transform;
+  }
+
+  .resume-fill-word {
+    display: inline-block;
+    margin-right: 0.3em;
+    font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--color-heading) 23%, transparent);
+    paint-order: stroke;
+  }
+
+  /* Scrolling before the sheet's top shows at the bottom: half a viewport
+     past the pin, by which point the rows are half filled. */
+  .resume-fill-lead {
+    height: 150vh;
+    height: 150dvh;
+  }
+
+  .resume-sheet {
+    --sheet-bg: #fff;
+    position: relative;
+    box-sizing: border-box;
+    width: min(800px, 100% - 2 * var(--fill-pad));
+    margin: 0 auto;
+    padding: clamp(24px, 5vw, 56px);
+    border: 1px solid var(--color-heading);
+    background-color: var(--sheet-bg);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .resume-sheet {
+      --sheet-bg: var(--color-bg);
+    }
+  }
+
+  .resume-sheet-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .resume-sheet-header h2 {
+    flex: 1 1 auto;
+    margin: 0;
+    font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: var(--typography-h2);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--color-heading);
+  }
+
+  .resume-sheet-header a {
+    font-size: var(--typography-body-small);
+  }
+
+  @media only screen and (max-width: 700px) {
+    .resume-sheet {
+      width: calc(100% - 2 * var(--space-2));
+    }
+  }
+</style>

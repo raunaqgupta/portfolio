@@ -3,6 +3,7 @@ import LogoRing from "@components/logoRing.astro";
 import GridBackground from "@components/gridBackground.astro";
 import BowlCard from "@components/bowlCard.astro";
 import Showcase from "@components/showcase.astro";
+import ResumeFill from "@components/resumeFill.astro";
 import SpeakerLoudIcon from "@icons/speaker-loud.svg";
 import BaseLayout from "../layouts/baseLayout.astro";
 import { SITE_URL } from "../constants";
@@ -58,6 +59,8 @@ const description =
       </BowlCard>
 
       <Showcase collections={["o11y", "planetscale"]} curve={CURVE} />
+
+      <ResumeFill />
     </main>
   </body>
 </BaseLayout>

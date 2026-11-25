@@ -167,7 +167,8 @@ const REPEAT = 16;
     /* Space between the viewport's edges and the sheet. */
     --sheet-margin: clamp(16px, 10vw, 128px);
     position: relative;
-    padding-bottom: 25vh;
+    /* Room below the sheet, matching its stop from the top. */
+    padding-bottom: 64px;
   }
 
   /* Pinned behind the sheet for the whole section. The negative margin takes

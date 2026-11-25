@@ -1,12 +1,12 @@
 ---
 // The resume, on the home page after the showcase. The section pins a
-// backdrop to the viewport, empty at first. Once it pins, rows of outlined
-// "resume" strings in a range of sizes slide in from the right edge as the
-// page scrolls, each row a little after the one above it and the larger rows
-// faster, and keep drifting right
-// to left until they fill the viewport edge to edge. The resume sheet scrolls
-// up from the bottom over the strings at the same time, translucent at first
-// and fully opaque once its top reaches the middle of the viewport.
+// backdrop to the viewport, empty at first. Once the showcase is half way up
+// the viewport, rows of outlined "resume" strings in a range of sizes slide
+// in from the right edge as the page scrolls, each row a little after the one
+// above it and the larger rows faster, and keep drifting right to left until
+// they fill the viewport edge to edge. The resume sheet scrolls up from the
+// bottom over the strings once the backdrop pins, translucent at first and
+// fully opaque once its top reaches the middle of the viewport.
 //
 // With reduced motion, or without JavaScript, the rows sit still and fill the
 // viewport from the start; without JavaScript the sheet is also opaque.
@@ -59,6 +59,9 @@ const REPEAT = 16;
 <script>
   // Sum of the rows' line heights in the design, in em of each row's size.
   const LINE = 1.2;
+  // Where the section's top is when the rows set off, as a share of the
+  // viewport's height from its top: the showcase is half way up.
+  const ROWS_START = 0.5;
   // How much later each row sets off than the one above it, in viewport
   // heights of scrolling.
   const ROW_DELAY = 0.05;
@@ -97,8 +100,9 @@ const REPEAT = 16;
       frame = 0;
       const vh = window.innerHeight;
       const rect = section.getBoundingClientRect();
-      // How far the page has scrolled since the backdrop pinned.
-      const scrolled = Math.max(0, -rect.top);
+      // How far the page has scrolled since the section's top (the showcase's
+      // bottom) passed the middle of the viewport.
+      const scrolled = Math.max(0, vh * ROWS_START - rect.top);
       const sheetTop = sheet.getBoundingClientRect().top;
       const animate = motion.matches;
 

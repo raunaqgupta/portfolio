@@ -1,15 +1,14 @@
 ---
 // The resume, on the home page after the showcase. The section pins a
-// backdrop to the viewport and fills it, row by row from the bottom, with
-// outlined "RESUME" strings in a range of sizes; every row drifts left to
-// right as the page scrolls, the larger rows faster. The resume sheet then
+// backdrop to the viewport and fills it, edge to edge, with rows of outlined
+// "RESUME" strings in a range of sizes; every row drifts right to left as the
+// page scrolls, the larger rows faster. The resume sheet then
 // scrolls up from the bottom over the strings, translucent at first and fully
 // opaque once its top reaches the middle of the viewport.
 //
-// Without JavaScript, or with reduced motion, every row shows at once and
-// stays still; without JavaScript the sheet is opaque from the start.
+// With reduced motion the rows stay still; without JavaScript the sheet is
+// opaque from the start.
 import ResumeBody from "./resumeBody.astro";
-import { ROUTES } from "../constants";
 
 interface Props {
   /** Accessible name for the section. */
@@ -20,7 +19,7 @@ const { label = "Resume" } = Astro.props;
 
 // Font sizes of the rows, top to bottom, from the design (in px at its 704px
 // tall fill). Small in the middle and large at the edges, like the bowl of
-// the grid behind. Script scales them so the rows fill the padded viewport.
+// the grid behind. Script scales them so the rows fill the viewport.
 const SIZES = [131, 96, 64, 42, 64, 96, 131];
 // Each row repeats the word often enough to cover the widest viewport.
 const REPEAT = 12;
@@ -48,7 +47,6 @@ const REPEAT = 12;
   <article class="resume-sheet">
     <header class="resume-sheet-header">
       <h2>Resume</h2>
-      <a href={ROUTES.RESUME}>Open as a page</a>
       <a href="/resume.raunaqgupta.pdf" download>Download PDF</a>
     </header>
     <ResumeBody level={3} />
@@ -79,7 +77,7 @@ const REPEAT = 12;
     let frame = 0;
     section.classList.add("is-enhanced");
 
-    // Scale the rows so together they fill the padded backdrop's height.
+    // Scale the rows so together they fill the backdrop's height.
     function size() {
       const scale = rowsBox.clientHeight / total;
       rows.forEach((row, i) => {
@@ -100,25 +98,13 @@ const REPEAT = 12;
       const sheetTop = sheet.getBoundingClientRect().top;
       const animate = motion.matches;
 
-      // The rows fill in from the bottom until the sheet's top reaches the
-      // middle of the viewport.
-      const fillEnd = sheet.offsetTop - vh / 2;
-      const fill = animate && fillEnd > 0 ? clamp(scrolled / fillEnd, 0, 1) : 1;
-      const n = rows.length;
       rows.forEach((row, i) => {
-        // Rows are counted from the bottom; the first shows before any scroll.
-        const fromBottom = n - 1 - i;
-        const shown = clamp(fill * n - fromBottom + 1, 0, 1);
-        row.style.opacity = String(shown);
         const period = periods[i];
-        if (!animate || !period) {
-          row.style.setProperty("--shift", `${-offsets[i] * period}px`);
-          return;
-        }
-        // Larger rows drift faster. Wrapping by one word keeps the row full.
-        const speed = 0.25 + (sizes[i] / 131) * 0.35;
-        const travel = (scrolled * speed + offsets[i] * period) % period;
-        row.style.setProperty("--shift", `${travel - period}px`);
+        // Larger rows drift faster, right to left. Wrapping by one word keeps
+        // the row full, since the strip runs on past the right edge.
+        const speed = animate ? 0.25 + (sizes[i] / 131) * 0.35 : 0;
+        const travel = period ? (scrolled * speed + offsets[i] * period) % period : 0;
+        row.style.setProperty("--shift", `${-travel}px`);
       });
 
       // Translucent below the viewport, opaque at its middle.
@@ -149,8 +135,8 @@ const REPEAT = 12;
 
 <style>
   .resume-fill {
-    /* Space between the viewport's edges and the strings, from the design. */
-    --fill-pad: clamp(16px, 10vw, 128px);
+    /* Space between the viewport's edges and the sheet. */
+    --sheet-margin: clamp(16px, 10vw, 128px);
     position: relative;
     padding-bottom: 25vh;
   }
@@ -164,8 +150,6 @@ const REPEAT = 12;
     height: 100dvh;
     margin-bottom: -100vh;
     margin-bottom: -100dvh;
-    box-sizing: border-box;
-    padding: var(--fill-pad);
     pointer-events: none;
   }
 
@@ -183,7 +167,6 @@ const REPEAT = 12;
     font-size: calc(var(--size) * 0.1vh);
     line-height: 1.2;
     white-space: nowrap;
-    opacity: 1;
   }
 
   .resume-fill-strip {
@@ -204,7 +187,7 @@ const REPEAT = 12;
   }
 
   /* Scrolling before the sheet's top shows at the bottom: half a viewport
-     past the pin, by which point the rows are half filled. */
+     past the pin, so the rows drift on their own first. */
   .resume-fill-lead {
     height: 150vh;
     height: 150dvh;
@@ -214,7 +197,7 @@ const REPEAT = 12;
     --sheet-bg: #fff;
     position: relative;
     box-sizing: border-box;
-    width: min(800px, 100% - 2 * var(--fill-pad));
+    width: min(800px, 100% - 2 * var(--sheet-margin));
     margin: 0 auto;
     padding: clamp(24px, 5vw, 56px);
     border: 1px solid var(--color-heading);

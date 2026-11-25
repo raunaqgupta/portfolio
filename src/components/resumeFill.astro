@@ -6,7 +6,9 @@
 // above it and the larger rows faster, and keep drifting right to left until
 // they fill the viewport edge to edge. The resume sheet scrolls up from the
 // bottom over the strings once the backdrop pins, translucent at first and
-// fully opaque once its top reaches the middle of the viewport.
+// fully opaque once its top reaches the middle of the viewport. Once the
+// sheet's bottom comes into view, the rows stop wrapping: each keeps the words
+// it has on screen and drifts on until its last word leaves at the left.
 //
 // With reduced motion, or without JavaScript, the rows sit still and fill the
 // viewport from the start; without JavaScript the sheet is also opaque.
@@ -86,6 +88,9 @@ const REPEAT = 16;
     const total = sizes.reduce((sum, size) => sum + size * LINE, 0);
     // Width of one word and its gap in each row, so the drift can wrap.
     let periods: number[] = [];
+    const words = rows.map((row) => [...row.querySelectorAll<HTMLElement>(".resume-fill-word")]);
+    // How many words of each row are showing.
+    const kept = words.map((list) => list.length);
     let frame = 0;
     section.classList.add("is-enhanced");
 
@@ -108,7 +113,10 @@ const REPEAT = 16;
       // How far the page has scrolled since the section's top (the showcase's
       // bottom) passed the middle of the viewport.
       const scrolled = Math.max(0, vh * ROWS_START - rect.top);
-      const sheetTop = sheet.getBoundingClientRect().top;
+      const sheetBox = sheet.getBoundingClientRect();
+      const sheetTop = sheetBox.top;
+      // How far the page has scrolled since the sheet's bottom came into view.
+      const over = Math.max(0, vh - sheetBox.bottom);
       const animate = motion.matches;
 
       // Every row starts just past the right edge, so nothing shows until the
@@ -120,14 +128,35 @@ const REPEAT = 16;
         const period = periods[i];
         if (!animate) {
           row.style.setProperty("--shift", "0px");
+          if (kept[i] !== words[i].length) {
+            kept[i] = words[i].length;
+            words[i].forEach((word) => (word.style.visibility = ""));
+          }
           return;
         }
         const speed = (width / vh) * (0.8 + (sizes[i] / 131) * 1.2);
-        const moved = Math.max(0, scrolled - i * ROW_DELAY * vh);
-        let x = width - moved * speed;
+        const delay = i * ROW_DELAY * vh;
+        const moved = Math.max(0, scrolled - delay);
         // Once the strip's start passes the left edge, wrap by one word so
         // the row stays full while it keeps drifting.
-        if (x < 0 && period) x = -(-x % period);
+        const wrap = (x: number) => (x < 0 && period ? -(-x % period) : x);
+        let x = wrap(width - moved * speed);
+        let keep = words[i].length;
+        if (over > 0) {
+          // Where the row was as the sheet's bottom came into view. From
+          // there it no longer wraps, and keeps only the words that had
+          // reached the viewport, so its last word leaves at the left.
+          const settled = Math.max(0, scrolled - over - delay);
+          const start = wrap(width - settled * speed);
+          x = start - (moved - settled) * speed;
+          if (period) keep = Math.max(0, Math.ceil((width - start) / period));
+        }
+        if (keep !== kept[i]) {
+          kept[i] = keep;
+          words[i].forEach((word, w) => {
+            word.style.visibility = w < keep ? "" : "hidden";
+          });
+        }
         row.style.setProperty("--shift", `${x}px`);
       });
 
@@ -174,6 +203,15 @@ const REPEAT = 16;
        clip it there so it doesn't show behind the blog that follows. Clip,
        unlike hidden, isn't a scroll container, so the pins still work. */
     overflow: clip;
+  }
+
+  /* Once the sheet has gone by, the backdrop stays pinned for another
+     viewport of scrolling while the rows' last words leave at the left. */
+  @media (prefers-reduced-motion: no-preference) {
+    .resume-fill.is-enhanced {
+      padding-bottom: 100vh;
+      padding-bottom: 100dvh;
+    }
   }
 
   /* Pinned behind the sheet for the whole section. The negative margin takes

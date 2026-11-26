@@ -5,17 +5,23 @@
 // (bowl.ts), so a card leaving at the top widens along its top edge and
 // narrows along its bottom one, and a card arriving from the bottom does the
 // reverse. With reduced motion the card stays flat.
-interface Props {
+//
+// A card taller than the viewport is flat while it covers the viewport. As it
+// arrives or leaves, it warps like a viewport-tall card lined up with the
+// edge that's in view, and everything past that card's far edge is clipped:
+// it's off screen, and a perspective warp stretched that far would distort it.
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"section"> {
   /** The grid background's curve; 0 keeps the card flat. */
   curve?: number;
   class?: string;
-  id?: string;
 }
 
-const { curve = 0.5, class: className, id } = Astro.props;
+const { curve = 0.5, class: className, ...attrs } = Astro.props;
 ---
 
-<section class:list={["bowl-card", className]} data-curve={curve} id={id}>
+<section class:list={["bowl-card", className]} data-curve={curve} {...attrs}>
   <div class="bowl-card-surface">
     <slot />
   </div>
@@ -68,25 +74,48 @@ const { curve = 0.5, class: className, id } = Astro.props;
       const curve = Number(card.dataset.curve) || 0;
       if (!motion.matches || !curve) {
         surface.style.transform = "";
+        surface.style.clipPath = "";
         continue;
       }
       // The card itself is never transformed, so this is its layout box.
-      const { left, top, width: w, height: h } = card.getBoundingClientRect();
-      if (top > vh * 2 || top + h < -vh) continue;
-      // How far the corners would be warped with the card centred in the
-      // viewport. Dividing by it keeps the card flat there.
+      const { left, top, width: w, height } = card.getBoundingClientRect();
+      if (top > vh * 2 || top + height < -vh) continue;
+      // The box that warps: the whole card, or for a tall card a
+      // viewport-tall stretch of it from the edge in view. `offset` is where
+      // that box starts, down from the card's top.
+      let h = height;
+      let offset = 0;
+      if (height > vh) {
+        h = vh;
+        if (top > 0) offset = 0;
+        else if (top + height < vh) offset = height - vh;
+        else {
+          // Covering the viewport: flat.
+          surface.style.transform = "";
+          surface.style.clipPath = "";
+          continue;
+        }
+      }
+      const boxTop = top + offset;
+      // How far the corners would be warped with the box centred in the
+      // viewport. Dividing by it keeps the box flat there.
       const rest = bowlScale(cx - w / 2, cy - h / 2, vw, vh, curve);
       const corners: Point[] = [
-        [left, top],
-        [left + w, top],
-        [left + w, top + h],
-        [left, top + h],
+        [left, boxTop],
+        [left + w, boxTop],
+        [left + w, boxTop + h],
+        [left, boxTop + h],
       ];
       const quad = corners.map(([x, y]): Point => {
         const s = bowlScale(x, y, vw, vh, curve) / rest;
         return [cx + (x - cx) * s - left, cy + (y - cy) * s - top];
       });
-      surface.style.transform = quadMatrix(w, h, quad);
+      // Move the box to the surface's origin, then warp it.
+      surface.style.transform = offset
+        ? `${quadMatrix(w, h, quad)} translateY(${-offset}px)`
+        : quadMatrix(w, h, quad);
+      surface.style.clipPath =
+        height > h ? `inset(${offset}px 0 ${height - offset - h}px 0)` : "";
     }
   }
 

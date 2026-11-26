@@ -6,22 +6,27 @@
 // above it and the larger rows faster, and keep drifting right to left until
 // they fill the viewport edge to edge. The resume sheet scrolls up from the
 // bottom over the strings once the backdrop pins, translucent at first and
-// fully opaque once its top reaches the middle of the viewport. Once the
+// fully opaque once its top reaches the middle of the viewport. The sheet
+// bends with the grid as it arrives and leaves (a BowlCard); the strings
+// behind it stay flat. Once the
 // sheet's bottom comes into view, the rows stop wrapping: each keeps the words
 // it has on screen and drifts on until its last word leaves at the left.
 //
 // With reduced motion, or without JavaScript, the rows sit still and fill the
 // viewport from the start; without JavaScript the sheet is also opaque.
 import ResumeBody from "./resumeBody.astro";
+import BowlCard from "./bowlCard.astro";
 import DownloadIcon from "@icons/download.svg";
 
 interface Props {
   /** Accessible name for the section. */
   label?: string;
   id?: string;
+  /** The grid background's curve, which the sheet bends with. */
+  curve?: number;
 }
 
-const { label = "Resume", id } = Astro.props;
+const { label = "Resume", id, curve } = Astro.props;
 
 // Font sizes of the rows, top to bottom, from the design (in px at its 704px
 // tall fill). Small in the middle and large at the edges, like the bowl of
@@ -51,16 +56,18 @@ const REPEAT = 16;
 
   <div class="resume-fill-lead"></div>
 
-  <article class="resume-sheet" data-page-target>
-    <header class="resume-sheet-header">
-      <h2 class="resume-sheet-title">Résumé</h2>
-      <a class="resume-sheet-download" href="/resume.raunaqgupta.pdf" download>
-        <DownloadIcon aria-hidden="true" />
-        Download PDF
-      </a>
-    </header>
-    <ResumeBody level={3} summary={false} />
-  </article>
+  <BowlCard curve={curve} class="resume-sheet-card" data-page-target>
+    <article class="resume-sheet">
+      <header class="resume-sheet-header">
+        <h2 class="resume-sheet-title">Résumé</h2>
+        <a class="resume-sheet-download" href="/resume.raunaqgupta.pdf" download>
+          <DownloadIcon aria-hidden="true" />
+          Download PDF
+        </a>
+      </header>
+      <ResumeBody level={3} summary={false} />
+    </article>
+  </BowlCard>
 </section>
 
 <script>
@@ -84,6 +91,9 @@ const REPEAT = 16;
     const rowsBox = section.querySelector<HTMLElement>(".resume-fill-rows")!;
     const rows = [...section.querySelectorAll<HTMLElement>(".resume-fill-row")];
     const sheet = section.querySelector<HTMLElement>(".resume-sheet")!;
+    // The sheet's card is never transformed, so it gives the sheet's place
+    // on the page without the warp.
+    const card = sheet.closest<HTMLElement>(".bowl-card") ?? sheet;
     const sizes = rows.map((row) => Number(row.style.getPropertyValue("--size")));
     const total = sizes.reduce((sum, size) => sum + size * LINE, 0);
     // Width of one word and its gap in each row, so the drift can wrap.
@@ -113,7 +123,7 @@ const REPEAT = 16;
       // How far the page has scrolled since the section's top (the showcase's
       // bottom) passed the middle of the viewport.
       const scrolled = Math.max(0, vh * ROWS_START - rect.top);
-      const sheetBox = sheet.getBoundingClientRect();
+      const sheetBox = card.getBoundingClientRect();
       const sheetTop = sheetBox.top;
       // How far the page has scrolled since the sheet's bottom came into view.
       const over = Math.max(0, vh - sheetBox.bottom);
@@ -196,6 +206,9 @@ const REPEAT = 16;
   .resume-fill {
     /* Space between the viewport's edges and the sheet. */
     --sheet-margin: clamp(16px, 10vw, 128px);
+    /* How far from the viewport's top the sheet's top stops while the
+       resume scrolls. */
+    --sheet-stop: 64px;
     position: relative;
     /* Room below the sheet, matching its stop from the top. */
     padding-bottom: 64px;
@@ -266,17 +279,17 @@ const REPEAT = 16;
     height: 100dvh;
   }
 
+  /* The page select jumps to the sheet at its stop. */
+  .resume-fill :global(.resume-sheet-card) {
+    scroll-margin-top: var(--sheet-stop);
+  }
+
   .resume-sheet {
     --sheet-bg: #fff;
     position: relative;
     box-sizing: border-box;
     width: min(1040px, 100% - 2 * var(--sheet-margin));
     --sheet-pad: clamp(24px, 5vw, 56px);
-    /* How far from the viewport's top the sheet's top stops while the
-       resume scrolls. */
-    --sheet-stop: 64px;
-    /* The page select jumps to the sheet at its stop. */
-    scroll-margin-top: var(--sheet-stop);
     margin: 0 auto;
     padding: var(--sheet-pad);
     border: 1px solid var(--color-heading);

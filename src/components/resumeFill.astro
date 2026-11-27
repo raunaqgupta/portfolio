@@ -56,7 +56,7 @@ const REPEAT = 16;
 
   <div class="resume-fill-lead"></div>
 
-  <BowlCard curve={curve} class="resume-sheet-card" data-page-target>
+  <BowlCard curve={curve} class="resume-sheet-card">
     <article class="resume-sheet">
       <header class="resume-sheet-header">
         <h2 class="resume-sheet-title">Résumé</h2>
@@ -277,11 +277,6 @@ const REPEAT = 16;
   .resume-fill-lead {
     height: 100vh;
     height: 100dvh;
-  }
-
-  /* The page select jumps to the sheet at its stop. */
-  .resume-fill :global(.resume-sheet-card) {
-    scroll-margin-top: var(--sheet-stop);
   }
 
   .resume-sheet {

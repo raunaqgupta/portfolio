@@ -5,7 +5,7 @@ import BowlCard from "@components/bowlCard.astro";
 import Showcase from "@components/showcase.astro";
 import ResumeFill from "@components/resumeFill.astro";
 import BlogTimeline from "@components/blogTimeline.astro";
-import PageSelect from "@components/pageSelect.astro";
+import PageHeader from "@components/pageHeader.astro";
 import SpeakerLoudIcon from "@icons/speaker-loud.svg";
 import BaseLayout from "../layouts/baseLayout.astro";
 import { SITE_URL } from "../constants";
@@ -13,7 +13,7 @@ import { SITE_URL } from "../constants";
 // The grid's warp; the cards bend with it as they scroll.
 const CURVE = 0.5;
 
-// The sections of the page, in order, for the page select.
+// The sections of the page, in order, for the page header.
 const PAGES = [
   { id: "home", label: "Home" },
   { id: "portfolio", label: "Portfolio" },
@@ -37,7 +37,7 @@ const description =
       hold={[400, 1200]}
       curve={CURVE}
     />
-    <PageSelect pages={PAGES} />
+    <PageHeader sections={PAGES} />
     <main>
       <BowlCard curve={CURVE} class="card intro" id="home">
         <div class="intro-inner">

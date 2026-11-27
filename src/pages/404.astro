@@ -1,6 +1,7 @@
 ---
 import Logo from "@components/logo.astro";
 import BaseLayout from "../layouts/baseLayout.astro";
+import PageHeader from "@components/pageHeader.astro";
 import { ROUTES, SITE_URL } from "../constants";
 
 const description =
@@ -9,6 +10,7 @@ const description =
 
 <BaseLayout title="Home" description={description} canonicalUrl={SITE_URL}>
   <body>
+    <PageHeader />
     <div class="hello">
       <Logo size="large" />
       <div class="content">

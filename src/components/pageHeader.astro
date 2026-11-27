@@ -1,0 +1,95 @@
+---
+// A tab hanging from the top centre of the viewport that names the page:
+// Home, Portfolio, Resume or Blog. It stays in place as the page scrolls.
+//
+// On the home page, pass the page's sections: each one's id names a section
+// on the page, and the tab follows the section that covers the middle of
+// the viewport. Elsewhere it names the part of the site the page is in.
+import { ROUTES } from "../constants";
+
+interface Props {
+  sections?: Array<{ id: string; label: string }>;
+}
+
+const { sections } = Astro.props;
+
+const path = Astro.url.pathname;
+const sitePage = (() => {
+  if (path.startsWith(ROUTES.PORTFOLIO) || path.startsWith("/collection")) return "Portfolio";
+  if (path.startsWith(ROUTES.RESUME)) return "Resume";
+  if (path.startsWith(ROUTES.BLOG)) return "Blog";
+  if (path.startsWith(ROUTES.INTERNAL)) return "Internal";
+  return "Home";
+})();
+
+const label = sections?.[0]?.label ?? sitePage;
+const data = sections ? JSON.stringify(sections) : undefined;
+---
+
+<div class="page-header" data-sections={data}>
+  <span class="page-header-label">{label}</span>
+</div>
+
+<script>
+  const header = document.querySelector<HTMLElement>(".page-header[data-sections]");
+  const label = header?.querySelector<HTMLElement>(".page-header-label");
+
+  if (header && label) {
+    const sections = (JSON.parse(header.dataset.sections!) as Array<{ id: string; label: string }>)
+      .map(({ id, label }) => ({ label, el: document.getElementById(id) }))
+      .filter((s): s is { label: string; el: HTMLElement } => s.el !== null);
+
+    let frame = 0;
+
+    function update() {
+      frame = 0;
+      // The last section whose top is at or above the viewport's middle.
+      const middle = window.innerHeight / 2;
+      let current = sections[0];
+      for (const section of sections) {
+        if (section.el.getBoundingClientRect().top <= middle) current = section;
+      }
+      if (current && label!.textContent !== current.label) label!.textContent = current.label;
+    }
+
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    update();
+  }
+</script>
+
+<style>
+  /* 140 × 25, rounded at the bottom, as in the design. */
+  .page-header {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    z-index: 10;
+    translate: -50% 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 25px;
+    padding: 4px 8px;
+    border-radius: 0 0 6px 6px;
+    background-color: var(--color-heading);
+    color: var(--color-bg);
+    pointer-events: none;
+  }
+
+  .page-header-label {
+    overflow: hidden;
+    font-family: system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+</style>

@@ -19,9 +19,10 @@ interface Props {
   curve?: number;
   /** Accessible name for the section. */
   label?: string;
+  id?: string;
 }
 
-const { collections, curve, label = "Work" } = Astro.props;
+const { collections, curve, label = "Work", id } = Astro.props;
 
 const groups = await Promise.all(
   collections.map(async (id) => {
@@ -39,7 +40,7 @@ const slides = groups.flatMap((group, g) =>
 );
 ---
 
-<section class="showcase" aria-label={label} style={`--count: ${slides.length};`}>
+<section class="showcase" aria-label={label} id={id} style={`--count: ${slides.length};`}>
   <div class="showcase-pin">
     <BowlCard curve={curve} class="showcase-panel">
       <div class="showcase-stage">

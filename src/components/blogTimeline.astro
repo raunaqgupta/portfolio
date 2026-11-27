@@ -1,0 +1,109 @@
+---
+// The blog, on the home page after the resume: every post, newest first, as a
+// centred column. Each post is its date in a light weight over its title, and
+// a short vertical line joins one post to the next. The section bends with
+// the grid as it arrives and leaves (a BowlCard).
+import { getBlogPosts } from "../blogPosts";
+import BowlCard from "./bowlCard.astro";
+
+interface Props {
+  /** Accessible name for the section. */
+  label?: string;
+  id?: string;
+  /** The grid background's curve, which the section bends with. */
+  curve?: number;
+}
+
+const { label = "Blog", id, curve } = Astro.props;
+
+const posts = await getBlogPosts();
+// 11/18/2026 becomes 11.18.2026, as in the design. Dates are written as
+// days, which parse to midnight UTC, so read them back in UTC.
+const dotted = (date: Date) =>
+  date
+    .toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: "UTC" })
+    .replaceAll("/", ".");
+---
+
+<BowlCard curve={curve} class="blog-timeline-card" aria-label={label} id={id}>
+  <div class="blog-timeline">
+    <ol class="blog-timeline-list">
+      {
+        posts.map((post) => (
+          <li class="blog-timeline-item">
+            <a class="blog-timeline-link no-decoration" href={post.id}>
+              <time class="blog-timeline-date" datetime={post.data.date.toISOString()}>
+                {dotted(post.data.date)}
+              </time>
+              <span class="blog-timeline-title">{post.data.title}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</BowlCard>
+
+<style>
+  /* Fills the card, so the whole section bends rather than just the list. */
+  .blog-timeline {
+    flex: 1;
+    box-sizing: border-box;
+    min-height: 100vh;
+    min-height: 100dvh;
+    /* Clear of the page header at the top, as in the design. */
+    padding: 120px 64px 64px;
+  }
+
+  .blog-timeline-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 655px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+
+  .blog-timeline-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* The line from the post above: 26px long, 8px clear of each post. */
+  .blog-timeline-item + .blog-timeline-item::before {
+    content: "";
+    width: 2px;
+    height: 26px;
+    margin: 8px 0;
+    background-color: var(--color-border);
+  }
+
+  .blog-timeline-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--color-heading);
+    font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+  }
+
+  .blog-timeline-date {
+    color: inherit;
+    font-weight: 100;
+  }
+
+  .blog-timeline-link:focus-visible {
+    outline: 2px solid var(--color-highlight);
+    outline-offset: 4px;
+  }
+
+  @media only screen and (max-width: 700px) {
+    .blog-timeline {
+      padding-inline: 1.5em;
+    }
+  }
+</style>

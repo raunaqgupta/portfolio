@@ -39,6 +39,7 @@ import Heading from "@components/Heading.astro";
 import PostDetails from "@components/PostDetails.astro";
 import Modal from "@components/modal.astro";
 import Header from "@components/header.astro";
+import PageHeader from "@components/pageHeader.astro";
 import { formatDate } from "@src/utils";
 ---
 
@@ -55,6 +56,7 @@ import { formatDate } from "@src/utils";
   frontmatter={frontmatter}
 >
   <body>
+    <PageHeader />
     <Header />
     <main>
       <Modal />

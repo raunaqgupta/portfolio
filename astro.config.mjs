@@ -39,11 +39,12 @@ export default defineConfig({
     },
     {
       // Card titles and wordmarks on the home page; italic for the resume
-      // section's repeating rows, and regular for its sheet's header.
+      // section's repeating rows, regular for its sheet's header, and thin
+      // for the blog section's dates.
       provider: fontProviders.google(),
       name: "Inter",
       cssVariable: "--font-inter",
-      weights: [400, 900],
+      weights: [100, 400, 900],
       styles: ["normal", "italic"],
     },
   ],

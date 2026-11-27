@@ -3,37 +3,11 @@ import Toolbar from "@components/toolbar.astro";
 import WideLayout from "@layouts/WideLayout.astro";
 import Olmdx from "@components/Ol.mdx.astro";
 import Input from "@components/input.astro";
-import { getCollection } from "astro:content";
-import { CATEGORIES, ROUTES, SITE_URL } from "../constants";
+import { ROUTES, SITE_URL } from "../constants";
 import { formatDate } from "../utils";
+import { getBlogPosts } from "../blogPosts";
 
-const HIDDEN_CATEGORIES: string[] = [
-  CATEGORIES.PORTFOLIO,
-  CATEGORIES.RECIPE,
-  CATEGORIES.POEM,
-  CATEGORIES.AUDIO,
-  CATEGORIES.COLLECTION,
-  CATEGORIES.MICRO,
-];
-
-let blog = [];
-try {
-  blog = await getCollection("articles", ({ data }) => {
-    return (
-      data.internal !== true &&
-      !HIDDEN_CATEGORIES.includes(data.category ?? "")
-    );
-  });
-} catch (error) {
-  console.error("Error fetching blog posts:", error);
-}
-
-const newBlog = blog
-  .map(({ id, ...rest }) => ({
-    id: `${ROUTES.BLOG}/` + id,
-    ...rest,
-  }))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const newBlog = await getBlogPosts();
 ---
 
 <WideLayout

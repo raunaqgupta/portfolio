@@ -216,6 +216,10 @@ const REPEAT = 16;
        clip it there so it doesn't show behind the blog that follows. Clip,
        unlike hidden, isn't a scroll container, so the pins still work. */
     overflow: clip;
+    /* A link to the section (/#resume) lands on the sheet at its stop, past
+       the viewport-tall lead before it, rather than on the empty rows. */
+    scroll-margin-top: calc(var(--sheet-stop) - 100vh);
+    scroll-margin-top: calc(var(--sheet-stop) - 100dvh);
   }
 
   /* Once the sheet has gone by, the backdrop stays pinned for another

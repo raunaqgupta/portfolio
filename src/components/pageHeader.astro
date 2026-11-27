@@ -4,7 +4,8 @@
 //
 // On the home page, pass the page's sections: each one's id names a section
 // on the page, and the tab follows the section that covers the middle of
-// the viewport. Elsewhere it names the part of the site the page is in.
+// the viewport. The URL's hash follows it too, so the address links to the
+// section in view. Elsewhere it names the part of the site the page is in.
 import { ROUTES } from "../constants";
 
 interface Props {
@@ -36,12 +37,14 @@ const data = sections ? JSON.stringify(sections) : undefined;
 
   if (header && label) {
     const sections = (JSON.parse(header.dataset.sections!) as Array<{ id: string; label: string }>)
-      .map(({ id, label }) => ({ label, el: document.getElementById(id) }))
-      .filter((s): s is { label: string; el: HTMLElement } => s.el !== null);
+      .map(({ id, label }) => ({ id, label, el: document.getElementById(id) }))
+      .filter((s): s is { id: string; label: string; el: HTMLElement } => s.el !== null);
 
     let frame = 0;
 
-    function update() {
+    // Only scrolling moves the hash: on load it's left alone, so the browser
+    // can still scroll to the section a link's hash names.
+    function update(syncHash = true) {
       frame = 0;
       // The last section whose top is at or above the viewport's middle.
       const middle = window.innerHeight / 2;
@@ -49,16 +52,23 @@ const data = sections ? JSON.stringify(sections) : undefined;
       for (const section of sections) {
         if (section.el.getBoundingClientRect().top <= middle) current = section;
       }
-      if (current && label!.textContent !== current.label) label!.textContent = current.label;
+      if (!current) return;
+      if (label!.textContent !== current.label) label!.textContent = current.label;
+      // The first section is the top of the page, so it needs no hash.
+      // Replacing the entry keeps scrolling out of the history.
+      const hash = current === sections[0] ? "" : `#${current.id}`;
+      if (syncHash && location.hash !== hash) {
+        history.replaceState(history.state, "", `${location.pathname}${location.search}${hash}`);
+      }
     }
 
     const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(update);
+      if (!frame) frame = requestAnimationFrame(() => update());
     };
 
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
-    update();
+    update(false);
   }
 </script>
 
